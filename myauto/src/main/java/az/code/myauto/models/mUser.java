@@ -25,6 +25,8 @@ public class mUser {
     private String email;
     @Column(nullable = false, unique = true)
     private String username;
+    private String fullname;
+    private String phonenumber;
 
     private BigDecimal balance;
     private LocalDateTime createdAt = LocalDateTime.now();
