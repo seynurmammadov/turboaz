@@ -19,7 +19,7 @@ public class Make {
 
     String name;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "Make")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "make")
     private List<Model> models;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "make")
