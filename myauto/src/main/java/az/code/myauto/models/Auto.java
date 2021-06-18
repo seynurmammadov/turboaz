@@ -1,26 +1,40 @@
 package az.code.myauto.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import az.code.myauto.models.enums.BodyType;
+import az.code.myauto.models.enums.Color;
+import az.code.myauto.models.enums.FuelType;
+import az.code.myauto.models.enums.GearBox;
+import lombok.*;
 
-@Data
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "autos")
 public class Auto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToOne
+    @JoinColumn(name="makeId")
     private Make make;
     private int year;
     private int price;
-    private int milage;
+    private int mileage;
     private FuelType fueltype;
     private BodyType bodyType;
     private Color color;
     private GearBox gearBox;
-    private boolean creditOption;
-    private boolean barterOption;
-    private boolean leaseOption;
-
+    @OneToOne(mappedBy = "auto")
+    private Listing listing;
+    @ManyToMany
+    @JoinTable(name="auto_equipment",
+            joinColumns=@JoinColumn(name="autoId"),
+            inverseJoinColumns=@JoinColumn(name="equipmentId"))
+    List<Equipment> equipments;
 }
