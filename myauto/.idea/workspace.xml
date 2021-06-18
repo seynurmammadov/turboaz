@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e8f51787-0edb-4ccc-90a0-16fcdcd217df" name="Default Changelist" comment="MYAUT-61-creating-transactiontype-enum" />
+    <list default="true" id="e8f51787-0edb-4ccc-90a0-16fcdcd217df" name="Default Changelist" comment="MYAUT-61-creating-transactiontype-enum">
+      <change afterPath="$PROJECT_DIR$/src/main/java/az/code/myauto/models/Auto.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -90,6 +92,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="MYAUT-61-creating-transactiontype-enum" />
