@@ -3,7 +3,8 @@ package az.code.myauto.models.dtos;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ListingGetDTO { // detail
+
+public class ListingGetDTO {
     private Long id;
     private UserDto user;
     private MakeDTO make;
