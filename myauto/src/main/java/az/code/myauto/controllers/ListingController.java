@@ -29,9 +29,11 @@ public class ListingController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getListings() {
+    public ResponseEntity<?> getListings(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
+                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                         @RequestParam(required = false, defaultValue = "update_time") String sortBy) {
         logger.info("Getting listings by unregistered user");
-        return new ResponseEntity<>(listingService.getListings(), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.getListings(pageNo, pageSize, sortBy), HttpStatus.OK);
     }
 
     @GetMapping("/user/{slug}")
