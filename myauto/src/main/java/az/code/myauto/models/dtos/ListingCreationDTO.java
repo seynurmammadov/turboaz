@@ -1,25 +1,35 @@
 package az.code.myauto.models.dtos;
 
+import az.code.myauto.models.Listing;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.List;
 
-public class ListingCreationDTO {      // CREATE OLDUQDAN SONRA RESPONSE ListingGetDTO OLARAQ QAYIDACAQ
-    Long makeId;
-    Long modelId;
-    int year;
-    int price;
-    int mileage;
-    String fuelType; // enum
-    String bodyType; // enum
-    String color; // enum
-    Long cityId;
-    String gearBox; // enum
-    boolean auto_pay; // default false---
-    boolean creditOption; // nullable-----
-    boolean barterOption; // nullable-----
-    boolean leaseOption; // nullable----
-    boolean cashOption; // nullable-----
-    String description;//------
-    String type; //enum ->  new, standart, vip---
-    String thymbnailUrl;  //----
-    List<Integer> carSpecIds;
+@Builder
+@Setter
+@Getter
+@ToString
+public class ListingCreationDTO {
+    private Long makeId;
+    private Long modelId;
+    private int year;
+    private int price;
+    private int mileage;
+    private String fuelType;
+    private String bodyType;
+    private String color;
+    private Long cityId;
+    private String gearBox;
+    private boolean auto_pay;
+    private Boolean creditOption;
+    private Boolean barterOption;
+    private Boolean leaseOption;
+    private Boolean cashOption;
+    private String description;
+    private String type;
+    private String thymbnailUrl;
+    private List<Integer> carSpecIds;
 }

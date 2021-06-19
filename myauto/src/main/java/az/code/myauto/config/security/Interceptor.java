@@ -1,4 +1,4 @@
-package az.code.myauto.security;
+package az.code.myauto.config.security;
 
 import az.code.myauto.models.UserData;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,8 +8,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Base64;
 
 @Component

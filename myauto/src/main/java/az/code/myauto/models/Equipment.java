@@ -21,4 +21,5 @@ public class Equipment {
 
     @ManyToMany(mappedBy = "equipments")
     private List<Auto> autos;
+
 }

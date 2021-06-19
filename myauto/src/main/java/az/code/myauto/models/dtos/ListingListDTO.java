@@ -1,8 +1,17 @@
 package az.code.myauto.models.dtos;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
-public class ListingListDTO { // list dtos ,  search return dtos
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+public class ListingListDTO {
     Long id;
     String makeName;
     String modelName;

@@ -1,6 +1,7 @@
-package az.code.myauto.services.interfaces;
+package az.code.myauto.services;
 
 import az.code.myauto.models.Transaction;
+import az.code.myauto.services.interfaces.TransactionService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

@@ -10,5 +10,4 @@ public interface TransactionDAO {
     List<Transaction> getTransactionByUsername(String username);
     List<Transaction> getTransactionByType(TransactionType transactionType);
     Transaction getTransactionById(Long id);
-
 }

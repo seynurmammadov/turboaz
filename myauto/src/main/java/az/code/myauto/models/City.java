@@ -18,7 +18,8 @@ public class City {
     private long id;
 
     String name;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "city")
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
     private List<Listing> listings;
 
 }
