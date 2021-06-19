@@ -1,5 +1,6 @@
 package az.code.myauto.controllers;
 
+import az.code.myauto.models.UserData;
 import az.code.myauto.models.dtos.ListingGetDTO;
 import az.code.myauto.services.interfaces.ListingService;
 import org.slf4j.Logger;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/listings")
+@RequestMapping("api/v1/")
 public class ListingController {
     final
     ListingService listingService;
@@ -22,13 +23,13 @@ public class ListingController {
 
     Logger logger = LoggerFactory.getLogger(ListingController.class);
 
-    @GetMapping("/{id}")
+    @GetMapping("listings/{id}")
     public ResponseEntity<ListingGetDTO> getListingById(@PathVariable long id) {
         logger.info("Getting listing (by id) by unregistered user");
         return new ResponseEntity<>(listingService.getById(id), HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("listings")
     public ResponseEntity<?> getListings(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
                                          @RequestParam(required = false, defaultValue = "10") Integer pageSize,
                                          @RequestParam(required = false, defaultValue = "updatedAt") String sortBy) {
@@ -36,13 +37,18 @@ public class ListingController {
         return new ResponseEntity<>(listingService.getListings(pageNo, pageSize, sortBy), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{slug}")
-    public ResponseEntity<?> getListings(@PathVariable String username) {
+    @GetMapping("user/{username}/listings")
+    public ResponseEntity<?> getListings( @RequestParam(required = false, defaultValue = "0") Integer pageNo,
+                                          @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                          @RequestParam(required = false, defaultValue = "updatedAt") String sortBy,
+                                          @PathVariable String username) {
         logger.info("Getting listings (by username) by unregistered user");
-        return new ResponseEntity<>(listingService.getUserListingsByUsername(), HttpStatus.OK);
+        return new ResponseEntity<>(
+                listingService.getUserListings(pageNo, pageSize, sortBy, UserData.builder().username(username).build())
+                , HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/images/{imageId}")
+    @GetMapping("listings/{id}/images/{imageId}")
     public ResponseEntity<ListingGetDTO> getListingImageById(@PathVariable long id,
                                                              @PathVariable long imageId) {
         logger.info("Getting listing image by unregistered user");

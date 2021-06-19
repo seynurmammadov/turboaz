@@ -70,10 +70,6 @@ public class ListingServiceImpl implements ListingService {
         return getResult(pages.map(ListingListDTO::new));
     }
 
-    @Override
-    public List<ListingListDTO> getUserListingsByUsername() {
-        return null;
-    }
 
     @Override
     public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy,UserData userData) {
