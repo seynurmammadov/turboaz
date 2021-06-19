@@ -1,14 +1,12 @@
 package az.code.myauto.models.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder(toBuilder = true)
 public class LoginResponseDTO {
     String token;
 }

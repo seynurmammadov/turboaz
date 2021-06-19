@@ -1,15 +1,13 @@
 package az.code.myauto.models.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder(toBuilder = true)
 public class TransactionListDto {
     private int id;
     private Long listingid; // nullable
