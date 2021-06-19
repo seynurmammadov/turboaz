@@ -5,5 +5,7 @@ import az.code.myauto.models.Transaction;
 import java.math.BigDecimal;
 
 public interface TransactionService {
-    Transaction increaseBalance(BigDecimal amount);
+    void increaseBalance(BigDecimal amount);
+    void decreaseBalance(BigDecimal amount);
+
 }
