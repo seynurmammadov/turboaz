@@ -1,5 +1,6 @@
 package az.code.myauto.services;
 
+import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.UserData;
 import az.code.myauto.models.dtos.ListingCreationDTO;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static az.code.myauto.utils.PaginationUtil.getResult;
 import static az.code.myauto.utils.PaginationUtil.preparePage;
@@ -37,9 +39,9 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public ListingGetDTO delete(long id, UserData user) {
-
-        return null;
+    public void delete(long id, UserData user)throws ListingNotFoundException {
+        getUserListingById(id,user);
+        listingRepo.deleteById(id);
     }
 
     @Override
@@ -75,8 +77,12 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public ListingGetDTO getUserListingById(long id, UserData userData) {
-        return new ListingGetDTO(listingRepo.getUserListinbById(id,userData.getUsername()));
+    public ListingGetDTO getUserListingById(long id, UserData userData) throws ListingNotFoundException {
+        Optional<Listing> listing = Optional.ofNullable(listingRepo.getUserListinbById(id, userData.getUsername()));
+        if(listing.isPresent()){
+            return new ListingGetDTO(listing.get());
+        }
+        throw new ListingNotFoundException();
     }
 
 
