@@ -1,6 +1,5 @@
 package az.code.myauto.models.dtos;
 
-import az.code.myauto.models.Listing;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

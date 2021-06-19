@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 public class TransactionListDto {
     private int id;
-    private Long listingid; // nullable
+    private Long listingId; // nullable
     private double amount;
     private LocalDateTime createdAt;
 }

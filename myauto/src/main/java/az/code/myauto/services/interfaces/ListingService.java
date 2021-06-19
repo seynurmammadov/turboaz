@@ -16,7 +16,7 @@ public interface ListingService {
     ListingGetDTO makePaid(long id, UserData user);
 
     ListingGetDTO getById(long id);
-    List<ListingListDTO> getListings();
+    List<ListingListDTO> getListings(Integer pageNo, Integer pageSize, String sortBy);
     List<ListingListDTO> getUserListingsByUsername();
 
     List<ListingListDTO> getUserListings(UserData userData);
