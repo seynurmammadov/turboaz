@@ -30,6 +30,6 @@ public class Interceptor implements HandlerInterceptor {
             request.setAttribute("user", user);
             return true;
         }
-        return false;
+        return true;
     }
 }

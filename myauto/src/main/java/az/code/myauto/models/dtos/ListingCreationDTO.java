@@ -30,6 +30,6 @@ public class ListingCreationDTO {
     private Boolean cashOption;
     private String description;
     private String type;
-    private String thymbnailUrl;
+    private String thumbnailUrl;
     private List<Integer> carSpecIds;
 }

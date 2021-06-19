@@ -56,7 +56,7 @@ public class Listing {
         this.city = City.builder().id(data.getCityId()).build();
         this.auto_pay = data.isAuto_pay();
         this.description = data.getDescription();
-        this.thumbnails.add(Thumbnail.builder().url(data.getThymbnailUrl()).build());
+        this.thumbnails.add(Thumbnail.builder().url(data.getThumbnailUrl()).listing(this).build());
         this.User = new User(user);
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -73,4 +73,5 @@ public class Listing {
         this.auto.addEquipments(data.getCarSpecIds());
         this.auto.setModel(Model.builder().id(data.getModelId()).build());
     }
+
 }

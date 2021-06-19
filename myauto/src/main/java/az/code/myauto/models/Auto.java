@@ -5,6 +5,8 @@ import az.code.myauto.models.enums.Color;
 import az.code.myauto.models.enums.FuelType;
 import az.code.myauto.models.enums.GearBox;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -33,7 +35,8 @@ public class Auto {
     private GearBox gearBox;
     @OneToOne(mappedBy = "auto")
     private Listing listing;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "auto_equipment",
             joinColumns = @JoinColumn(name = "autoId"),
             inverseJoinColumns = @JoinColumn(name = "equipmentId"))

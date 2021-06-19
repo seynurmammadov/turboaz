@@ -45,7 +45,6 @@ public class ProfileController {
         logger.info("Deleting listing by registered user");
 //        new ResponseEntity<>(listingService.delete(id, user), HttpStatus.OK);
         listingService.delete(id, user);
-
     }
 
     @PutMapping("/listings/{id}/makevip")

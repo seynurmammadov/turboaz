@@ -62,7 +62,7 @@ public class ListingServiceImpl implements ListingService {
     @Override
     public List<ListingListDTO> getListings(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = preparePage(pageNo,pageSize,sortBy);
-        Page<Listing> pages= listingRepo.findAll(pageable);
+        Page<Listing> pages= listingRepo.findAllActive(pageable);
         return getResult(pages.map(ListingListDTO::new));
     }
 
@@ -78,13 +78,10 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public ListingGetDTO getUserListingById(long id, UserData userData) throws ListingNotFoundException {
-        Optional<Listing> listing = Optional.ofNullable(listingRepo.getUserListinbById(id, userData.getUsername()));
+        Optional<Listing> listing = Optional.ofNullable(listingRepo.getUserListingById(id, userData.getUsername()));
         if(listing.isPresent()){
             return new ListingGetDTO(listing.get());
         }
         throw new ListingNotFoundException();
     }
-
-
-
 }

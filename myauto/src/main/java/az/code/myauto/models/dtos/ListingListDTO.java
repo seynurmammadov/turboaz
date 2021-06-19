@@ -24,8 +24,8 @@ public class ListingListDTO {
     public ListingListDTO(Listing listing) {
         this.id = listing.getId();
         this.makeName = listing.getAuto().getMake().getName();
-        this.modelName = listing.getAuto().getMake().getName();
-        this.modelName = listing.getThumbnails().get(0).getUrl();
+        this.modelName = listing.getAuto().getModel().getName();
+        this.thumbnailUrl = listing.getThumbnails().get(0).getUrl();
         this.cityName = listing.getCity().getName();
         this.price = listing.getAuto().getPrice();
         this.mileage = listing.getAuto().getMileage();
