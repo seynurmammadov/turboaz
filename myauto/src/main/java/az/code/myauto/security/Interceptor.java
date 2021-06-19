@@ -14,22 +14,21 @@ import java.util.Base64;
 
 @Component
 public class Interceptor implements HandlerInterceptor {
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String auth = request.getHeader("Authorization");
         if (auth != null) {
-            UserData user = new UserData();
             String[] chunks = auth.split("\\.");
-            Base64.Decoder decoder = Base64.getDecoder();
-            String data = new String(decoder.decode(chunks[1]));
+            String data = new String(Base64.getDecoder().decode(chunks[1]));
             JsonNode payload = new ObjectMapper().readValue(data, JsonNode.class);
+
+            UserData user = new UserData();
+
             user.setFullName(payload.get("name").textValue());
             user.setPhoneNumber(payload.get("phoneNumber").textValue());
+            user.setUsername(payload.get("preferred_username").textValue());
             user.setEmail(payload.get("email").textValue());
-            user.setRegisterTime(
-                    LocalDateTime.ofEpochSecond(payload.get("createdDate").longValue(),
-                            0,
-                            ZoneOffset.ofHours(4)));
             request.setAttribute("user", user);
             return true;
         }
