@@ -1,7 +1,7 @@
 package az.code.myauto.config;
 
 
-import az.code.myauto.security.Interceptor;
+import az.code.myauto.config.security.Interceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

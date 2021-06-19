@@ -24,6 +24,6 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    private mUser mUser;
+    private User User;
 
 }

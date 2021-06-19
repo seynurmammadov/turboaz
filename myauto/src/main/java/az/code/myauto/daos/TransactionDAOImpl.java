@@ -1,5 +1,6 @@
-package az.code.myauto.daos.interfaces;
+package az.code.myauto.daos;
 
+import az.code.myauto.daos.interfaces.TransactionDAO;
 import az.code.myauto.models.Transaction;
 import az.code.myauto.models.enums.TransactionType;
 import az.code.myauto.repositories.TransactionRepo;
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Component
-public class TransactionDAOImpl implements TransactionDAO{
+public class TransactionDAOImpl implements TransactionDAO {
     TransactionRepo transactionRepo;
 
     public TransactionDAOImpl(TransactionRepo transactionRepo) {
@@ -18,7 +19,7 @@ public class TransactionDAOImpl implements TransactionDAO{
 
     @Override
     public List<Transaction> getTransactionByUsername(String username) {
-        return transactionRepo.getTransactionsByMUser_Username(username);
+        return transactionRepo.getTransactionByUserId(username);
     }
 
     @Override

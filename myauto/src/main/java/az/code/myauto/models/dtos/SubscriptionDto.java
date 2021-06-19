@@ -15,8 +15,8 @@ public class SubscriptionDto {
     private int maxPrice;
     private double minMileage;
     private double maxMileage;
-    private int fuelType;
-    private int bodyType;
+    private String fuelType;
+    private String bodyType;
     private boolean loanOption;
     private boolean leaseOption;
     private boolean cashOption;

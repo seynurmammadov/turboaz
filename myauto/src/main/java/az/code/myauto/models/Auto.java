@@ -7,6 +7,7 @@ import az.code.myauto.models.enums.GearBox;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,5 +37,12 @@ public class Auto {
     @JoinTable(name="auto_equipment",
             joinColumns=@JoinColumn(name="autoId"),
             inverseJoinColumns=@JoinColumn(name="equipmentId"))
-    List<Equipment> equipments;
+    List<Equipment> equipments = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "model_id", referencedColumnName = "id")
+    Model model;
+
+    public void addEquipments(List<Integer> equipmentList){
+        equipmentList.forEach(e->equipments.add(Equipment.builder().id(e).build()));
+    }
 }

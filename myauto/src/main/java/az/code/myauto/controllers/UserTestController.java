@@ -13,5 +13,4 @@ public class UserTestController {
     public ResponseEntity<String> getUser(@RequestAttribute UserData user) {
         return ResponseEntity.ok(user.toString());
     }
-
 }

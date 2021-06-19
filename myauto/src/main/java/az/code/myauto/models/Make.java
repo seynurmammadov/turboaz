@@ -3,6 +3,7 @@ package az.code.myauto.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +21,11 @@ public class Make {
     String name;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "make")
-    private List<Model> models;
+    private List<Model> models = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "make")
     private List<Auto> autos;
+    public void addModel(long id){
+        models.add(Model.builder().id(id).build());
+    }
 }

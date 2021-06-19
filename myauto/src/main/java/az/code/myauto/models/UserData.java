@@ -10,5 +10,4 @@ public class UserData {
     private String username;
     private String phoneNumber;
     private String email;
-    private LocalDateTime createdAt;
 }
