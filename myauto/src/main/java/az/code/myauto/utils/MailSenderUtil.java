@@ -6,11 +6,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MailSender {
+public class MailSenderUtil {
     final
     JavaMailSender javaMailSender;
-
-    public MailSender(JavaMailSender javaMailSender) {
+    @Autowired
+    public MailSenderUtil(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
