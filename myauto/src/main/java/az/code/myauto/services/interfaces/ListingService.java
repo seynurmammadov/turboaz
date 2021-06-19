@@ -19,7 +19,7 @@ public interface ListingService {
     List<ListingListDTO> getListings(Integer pageNo, Integer pageSize, String sortBy);
     List<ListingListDTO> getUserListingsByUsername();
 
-    List<ListingListDTO> getUserListings(UserData userData);
+    List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy,UserData userData);
     ListingGetDTO getUserListingById(long id,UserData userData);
 
 

@@ -76,8 +76,10 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public List<ListingListDTO> getUserListings(UserData userData) {
-        return null;
+    public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy,UserData userData) {
+        Pageable pageable = preparePage(pageNo,pageSize,sortBy);
+        Page<Listing> pages= listingRepo.findAllUser(pageable,userData.getUsername());
+        return getResult(pages.map(ListingListDTO::new));
     }
 
     @Override
