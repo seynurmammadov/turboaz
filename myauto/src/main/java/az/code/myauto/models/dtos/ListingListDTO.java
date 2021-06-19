@@ -1,10 +1,7 @@
 package az.code.myauto.models.dtos;
 
 import az.code.myauto.models.Listing;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 

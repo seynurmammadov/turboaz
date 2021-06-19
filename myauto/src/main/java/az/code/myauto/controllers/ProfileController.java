@@ -37,11 +37,15 @@ public class ProfileController {
         return new ResponseEntity<>(listingService.update(id, listingCreationDTO, user), HttpStatus.OK);
     }
 
+    //TODO Delete must return deleted listing. Should be fixed in ListingService
+
     @DeleteMapping("/listings/{id}")
-    public ResponseEntity<ListingGetDTO> deleteUser(@PathVariable long id,
+    public void deleteUser(@PathVariable long id,
                                                     @RequestAttribute UserData user) {
         logger.info("Deleting listing by registered user");
-        return new ResponseEntity<>(listingService.delete(id, user), HttpStatus.OK);
+//        new ResponseEntity<>(listingService.delete(id, user), HttpStatus.OK);
+        listingService.delete(id, user);
+
     }
 
     @PutMapping("/listings/{id}/makevip")
