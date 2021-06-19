@@ -1,10 +1,7 @@
 package az.code.myauto.models.dtos;
 
 import az.code.myauto.models.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder(toBuilder = true)
 public class ListingGetDTO {
     private Long id;
     private UserDto user;

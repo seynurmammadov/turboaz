@@ -7,9 +7,10 @@ import lombok.ToString;
 
 import java.util.List;
 
-@Builder
+
 @Setter
 @Getter
+@Builder(toBuilder = true)
 @ToString
 public class ListingCreationDTO {
     private Long makeId;

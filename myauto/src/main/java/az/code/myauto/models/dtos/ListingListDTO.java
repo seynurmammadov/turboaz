@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder(toBuilder = true)
 public class ListingListDTO {
     Long id;
     String makeName;
