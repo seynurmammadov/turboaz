@@ -21,8 +21,8 @@ public class Auto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="makeId")
+    @ManyToOne
+    @JoinColumn(name = "makeId")
     private Make make;
     private int year;
     private int price;
@@ -34,15 +34,16 @@ public class Auto {
     @OneToOne(mappedBy = "auto")
     private Listing listing;
     @ManyToMany
-    @JoinTable(name="auto_equipment",
-            joinColumns=@JoinColumn(name="autoId"),
-            inverseJoinColumns=@JoinColumn(name="equipmentId"))
+    @JoinTable(name = "auto_equipment",
+            joinColumns = @JoinColumn(name = "autoId"),
+            inverseJoinColumns = @JoinColumn(name = "equipmentId"))
     List<Equipment> equipments = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "model_id", referencedColumnName = "id")
     Model model;
 
-    public void addEquipments(List<Integer> equipmentList){
-        equipmentList.forEach(e->equipments.add(Equipment.builder().id(e).build()));
+    public void addEquipments(List<Integer> equipmentList) {
+        equipmentList.forEach(e -> equipments.add(Equipment.builder().id(e).build()));
     }
 }

@@ -20,7 +20,6 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public ListingGetDTO create(ListingCreationDTO listing, UserData user) {
-
         return new ListingGetDTO(listingDAO.create(new Listing(listing,user)));
     }
 

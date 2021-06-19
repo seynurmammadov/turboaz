@@ -12,24 +12,24 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-public class ListingCreationDTO {      // CREATE OLDUQDAN SONRA RESPONSE ListingGetDTO OLARAQ QAYIDACAQ
+public class ListingCreationDTO {
     private Long makeId;
     private Long modelId;
     private int year;
     private int price;
     private int mileage;
-    private String fuelType; // enum
-    private String bodyType; // enum
-    private String color; // enum
+    private String fuelType;
+    private String bodyType;
+    private String color;
     private Long cityId;
-    private String gearBox; // enum
-    private boolean auto_pay; // default false---
-    private Boolean creditOption; // nullable-----
-    private Boolean barterOption; // nullable-----
-    private Boolean leaseOption; // nullable----
-    private Boolean cashOption; // nullable-----
-    private String description;//------
-    private String type; //enum ->  new, standart, vip---
-    private String thymbnailUrl;  //----
+    private String gearBox;
+    private boolean auto_pay;
+    private Boolean creditOption;
+    private Boolean barterOption;
+    private Boolean leaseOption;
+    private Boolean cashOption;
+    private String description;
+    private String type;
+    private String thymbnailUrl;
     private List<Integer> carSpecIds;
 }

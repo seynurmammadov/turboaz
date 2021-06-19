@@ -40,7 +40,7 @@ public class ListingGetDTO {
     private boolean isActive;
 
     public ListingGetDTO(Listing data){
-         this.id = data.getId();
+        this.id = data.getId();
         this.user=new UserDto(data.getUser());
         this.make=new MakeDTO(data.getAuto().getMake());
         this.model= new ModelDTO(data.getAuto().getModel());

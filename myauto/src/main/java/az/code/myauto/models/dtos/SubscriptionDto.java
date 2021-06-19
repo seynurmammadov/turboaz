@@ -25,10 +25,10 @@ public class SubscriptionDto {
     private double maxMileage;
     private String fuelType;
     private String bodyType;
-    private boolean loanOption;
-    private boolean leaseOption;
-    private boolean cashOption;
-    private boolean barterOption;
+    private Boolean loanOption;
+    private Boolean leaseOption;
+    private Boolean cashOption;
+    private Boolean barterOption;
     private String color;
     private List<Long> specs;
 }

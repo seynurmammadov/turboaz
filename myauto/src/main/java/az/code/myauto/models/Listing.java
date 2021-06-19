@@ -33,7 +33,6 @@ public class Listing {
     private String description;
     ListingType type;
 
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "listing")
     private List<Thumbnail> thumbnails = new ArrayList<>();
     private LocalDateTime createdAt;

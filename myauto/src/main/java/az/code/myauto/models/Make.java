@@ -20,12 +20,10 @@ public class Make {
 
     String name;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "make")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "make")
     private List<Model> models = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "make")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "make")
     private List<Auto> autos;
-    public void addModel(long id){
-        models.add(Model.builder().id(id).build());
-    }
+
 }

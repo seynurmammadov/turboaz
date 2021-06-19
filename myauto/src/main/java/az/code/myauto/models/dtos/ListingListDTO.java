@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class ListingListDTO {
-    // list dtos ,  search return dtos
     Long id;
     String makeName;
     String modelName;
