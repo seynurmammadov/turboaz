@@ -56,7 +56,11 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public ListingGetDTO getById(long id) {
-        return null;
+        Optional<Listing> listing =listingRepo.findById(id);
+        if(listing.isPresent()){
+            return new ListingGetDTO(listing.get());
+        }
+        throw new ListingNotFoundException();
     }
 
     @Override
