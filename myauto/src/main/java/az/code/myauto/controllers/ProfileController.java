@@ -41,7 +41,7 @@ public class ProfileController {
 
     @DeleteMapping("/listings/{id}")
     public void deleteUser(@PathVariable long id,
-                                                    @RequestAttribute UserData user) {
+                           @RequestAttribute UserData user) {
         logger.info("Deleting listing by registered user");
 //        new ResponseEntity<>(listingService.delete(id, user), HttpStatus.OK);
         listingService.delete(id, user);
@@ -69,9 +69,13 @@ public class ProfileController {
     }
 
     @GetMapping("/listings")
-    public ResponseEntity<?> getUserListingsById(@RequestAttribute UserData user) {
+    public ResponseEntity<?> getUserListingsById(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
+                                                 @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                                 @RequestParam(required = false,
+                                                         defaultValue = "updatedAt") String sortBy,
+                                                 @RequestAttribute UserData user) {
         logger.info("Getting user listings by registered user");
-        return new ResponseEntity<>(listingService.getUserListings(user), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.getUserListings(pageNo, pageSize, sortBy, user), HttpStatus.OK);
     }
 
 
