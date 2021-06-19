@@ -4,12 +4,14 @@ import az.code.myauto.models.Listing;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Builder
 @Setter
 @Getter
+@ToString
 public class ListingCreationDTO {      // CREATE OLDUQDAN SONRA RESPONSE ListingGetDTO OLARAQ QAYIDACAQ
     private Long makeId;
     private Long modelId;

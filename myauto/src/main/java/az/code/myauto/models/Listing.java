@@ -23,7 +23,7 @@ public class Listing {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "autoId")
-    private Auto auto;
+    private Auto auto = new Auto();
 
     private boolean auto_pay;
     private Boolean creditOption;
@@ -57,7 +57,7 @@ public class Listing {
         this.city = City.builder().id(data.getCityId()).build();
         this.auto_pay = data.isAuto_pay();
         this.description = data.getDescription();
-        this.thumbnails.add(Thumbnail.builder().name(data.getThymbnailUrl()).build());
+        this.thumbnails.add(Thumbnail.builder().url(data.getThymbnailUrl()).build());
         this.User = new User(user);
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

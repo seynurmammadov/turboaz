@@ -1,8 +1,16 @@
 package az.code.myauto.models.dtos;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.List;
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class SubscriptionDto {
     private long subId;
     private String name;

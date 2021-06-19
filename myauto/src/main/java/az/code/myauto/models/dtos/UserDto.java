@@ -1,11 +1,15 @@
 package az.code.myauto.models.dtos;
 
 import az.code.myauto.models.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
+@Getter
 public class UserDto {
     private String fullName;
     private String username;

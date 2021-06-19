@@ -1,16 +1,19 @@
 package az.code.myauto.models.dtos;
 
 import az.code.myauto.models.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
+@Getter
 public class ListingGetDTO {
     private Long id;
     private UserDto user;
@@ -25,10 +28,10 @@ public class ListingGetDTO {
     private CityDTO city;
     private String gearBox;
     private boolean autoPay;
-    private boolean creditOption;
-    private boolean barterOption;
-    private boolean leaseOption;
-    private boolean cashOption;
+    private Boolean creditOption;
+    private Boolean barterOption;
+    private Boolean leaseOption;
+    private Boolean cashOption;
     private String description;
     private String type;
     private List<String> thumbnailUrl;
@@ -56,7 +59,7 @@ public class ListingGetDTO {
         this.cashOption=data.getCashOption();
         this.description=data.getDescription();
         this.type=data.getType().name();
-        this.thumbnailUrl= data.getThumbnails().stream().map(Thumbnail::getName).collect(Collectors.toList());
+        this.thumbnailUrl= data.getThumbnails().stream().map(Thumbnail::getUrl).collect(Collectors.toList());
         this.carSpecs= data.getAuto().getEquipments().stream().map(CarSpecDTO::new).collect(Collectors.toList());
         this.updatedAt=data.getUpdatedAt();
         this.isActive=data.isActive();

@@ -20,7 +20,6 @@ public class ProfileController {
 
     @PostMapping("/listings")
     public ResponseEntity<ListingGetDTO> getUser(@RequestBody ListingCreationDTO listingCreationDTO, @RequestAttribute UserData user) {
-
         return new ResponseEntity<>(listingService.create(listingCreationDTO,user), HttpStatus.CREATED);
     }
 }
