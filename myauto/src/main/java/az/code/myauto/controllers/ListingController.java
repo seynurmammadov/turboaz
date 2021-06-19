@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/listings")
 public class ListingController {
-
+    final
     ListingService listingService;
 
     public ListingController(ListingService listingService) {
@@ -28,10 +28,16 @@ public class ListingController {
         return new ResponseEntity<>(listingService.getById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getListings() {
         logger.info("Getting listings by unregistered user");
         return new ResponseEntity<>(listingService.getListings(), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{slug}")
+    public ResponseEntity<?> getListings(@PathVariable String username) {
+        logger.info("Getting listings (by username) by unregistered user");
+        return new ResponseEntity<>(listingService.getUserListingsByUsername(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/images/{imageId}")
