@@ -38,6 +38,7 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public ListingGetDTO delete(long id, UserData user) {
+
         return null;
     }
 
@@ -75,7 +76,7 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public ListingGetDTO getUserListingById(long id, UserData userData) {
-        return null;
+        return new ListingGetDTO(listingRepo.getUserListinbById(id,userData.getUsername()));
     }
 
 
