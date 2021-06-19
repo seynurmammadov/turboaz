@@ -10,7 +10,7 @@ import java.util.List;
 public interface ListingService {
     ListingGetDTO create(ListingCreationDTO listing, UserData user);
     ListingGetDTO update(long id,ListingCreationDTO listing, UserData user);
-    ListingGetDTO delete(long id, UserData user);
+    void delete(long id, UserData user);
 
     ListingGetDTO makeVip(long id, UserData user);
     ListingGetDTO makePaid(long id, UserData user);
