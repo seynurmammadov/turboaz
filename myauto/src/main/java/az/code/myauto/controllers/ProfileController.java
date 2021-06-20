@@ -1,5 +1,6 @@
 package az.code.myauto.controllers;
 
+import az.code.myauto.exceptions.FreeListingAlreadyPostedException;
 import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
@@ -28,7 +29,7 @@ public class ProfileController {
     @PostMapping("/listings")
     public ResponseEntity<ListingGetDTO> getUser(@RequestBody ListingCreationDTO listingCreationDTO,
                                                  @RequestAttribute UserData user) {
-        logger.info("Posting new listing by registered user");
+        logger.info("Post: New listing by user");
         return new ResponseEntity<>(listingService.create(listingCreationDTO, user), HttpStatus.CREATED);
     }
 

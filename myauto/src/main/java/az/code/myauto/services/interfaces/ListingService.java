@@ -1,5 +1,6 @@
 package az.code.myauto.services.interfaces;
 
+import az.code.myauto.exceptions.FreeListingAlreadyPostedException;
 import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
@@ -11,7 +12,7 @@ import az.code.myauto.models.dtos.ListingListDTO;
 import java.util.List;
 
 public interface ListingService {
-    ListingGetDTO create(ListingCreationDTO listing, UserData user);
+    ListingGetDTO create(ListingCreationDTO listing, UserData user) throws FreeListingAlreadyPostedException;
     ListingGetDTO update(long id,ListingCreationDTO listing, UserData user) throws ListingNotFoundException;
     void delete(long id, UserData user) throws ListingNotFoundException;
 
