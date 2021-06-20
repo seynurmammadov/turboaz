@@ -30,7 +30,7 @@ public interface ListingRepo extends JpaRepository<Listing, Long> {
     @Query("select l from Listing l where l.User.username=:username")
     Page<Listing> findAllUser(Pageable pageable,String username);
 
-    @Query("SELECT count(l) from Listing l where l.updatedAt >=:dateTime and l.type=:type and l.User.username=:username")
+    @Query("select count(l) from Listing l where l.updatedAt >=:dateTime and l.type=:type and l.User.username=:username")
     int getDefaultInMonth(String username, LocalDateTime dateTime, ListingType type);
 
 }

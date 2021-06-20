@@ -17,6 +17,8 @@ public class Subscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String name;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "autoId")
     private Auto auto = new Auto();
