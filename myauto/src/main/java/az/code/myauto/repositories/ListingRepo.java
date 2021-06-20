@@ -17,10 +17,16 @@ public interface ListingRepo extends JpaRepository<Listing, Long> {
     @Modifying
     @Query("update Listing l set l.isActive=false where l.id=:id")
     void deleteById(Long id);
+
     @Query("select l from Listing l where l.id=:id and l.User.username=:username ")
     Optional<Listing> getUserListingById(Long id,String username);
+
     @Query("select l from Listing l where l.isActive=true")
     Page<Listing> findAllActive(Pageable pageable);
+
+    @Query("select l from Listing l where l.isActive=true and l.type=:type")
+    Page<Listing> findAllActiveVIP(Pageable pageable,ListingType type);
+
     @Query("select l from Listing l where l.User.username=:username")
     Page<Listing> findAllUser(Pageable pageable,String username);
 

@@ -21,6 +21,7 @@ public interface ListingService {
 
     ListingGetDTO getById(long id) throws ListingNotFoundException;
     List<ListingListDTO> getListings(Integer pageNo, Integer pageSize, String sortBy);
+    List<ListingListDTO> getVIPListings(Integer pageNo, Integer pageSize, String sortBy);
 
     List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy,UserData userData);
     ListingGetDTO getUserListingById(long id,UserData userData) throws ListingNotFoundException;

@@ -108,6 +108,13 @@ public class ListingServiceImpl implements ListingService {
         return getResult(pages.map(ListingListDTO::new));
     }
 
+    @Override
+    public List<ListingListDTO> getVIPListings(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable pageable = preparePage(pageNo, pageSize, sortBy);
+        Page<Listing> pages = listingRepo.findAllActiveVIP(pageable,ListingType.VIP);
+        return getResult(pages.map(ListingListDTO::new));
+    }
+
 
     @Override
     public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy, UserData userData) {
