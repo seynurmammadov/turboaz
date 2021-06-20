@@ -21,8 +21,4 @@ public class City {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
     private List<Listing> listings;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
-    private List<Subscription> subscriptions;
-
 }
