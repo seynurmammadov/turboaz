@@ -1,6 +1,7 @@
 package az.code.myauto.services;
 
 import az.code.myauto.exceptions.SubscriptionLimitException;
+import az.code.myauto.models.Subscription;
 import az.code.myauto.models.UserData;
 import az.code.myauto.models.dtos.SubscriptionDto;
 import az.code.myauto.models.dtos.SubscriptionListDto;
@@ -27,8 +28,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public SubscriptionDto addSubscription(UserData userData, SubscriptionDto subscription) {
-
-        return null;
+        if(subscriptionRepo.getUserSubsCount(userData.getUsername())>=5) {
+            throw new SubscriptionLimitException();
+        }
+        return new SubscriptionDto(subscriptionRepo.save(new Subscription(subscription, userData.getUsername())));
     }
 
     @Override
