@@ -31,6 +31,10 @@ public class User {
     private List<Transaction> transactions;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "User")
     private List<Listing> listings;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "User")
+    private List<Subscription> subscriptions;
+
     public  User(UserData data){
         this.username = data.getUsername();
         this.fullname = data.getFullName();
