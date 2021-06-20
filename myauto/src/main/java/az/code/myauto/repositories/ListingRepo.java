@@ -21,5 +21,8 @@ public interface ListingRepo extends JpaRepository<Listing, Long> {
     Page<Listing> findAllActive(Pageable pageable);
     @Query("select l from Listing l where l.User.username=:username")
     Page<Listing> findAllUser(Pageable pageable,String username);
+/*
+    @Query("SELECT count(l) from Listing l where l.updatedAt >= ")
+    int getStandartForInMonth(String username);*/
 
 }

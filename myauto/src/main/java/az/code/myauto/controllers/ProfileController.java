@@ -1,5 +1,8 @@
 package az.code.myauto.controllers;
 
+import az.code.myauto.exceptions.ListingNotFoundException;
+import az.code.myauto.exceptions.TransactionIncorrectAmountException;
+import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.UserData;
 import az.code.myauto.models.dtos.ListingCreationDTO;
 import az.code.myauto.models.dtos.ListingGetDTO;
@@ -32,7 +35,7 @@ public class ProfileController {
     @PutMapping("/listings/{id}")
     public ResponseEntity<ListingGetDTO> updateUser(@PathVariable long id,
                                                     @RequestBody ListingCreationDTO listingCreationDTO,
-                                                    @RequestAttribute UserData user) {
+                                                    @RequestAttribute UserData user) throws ListingNotFoundException {
         logger.info("Updating listing by registered user");
         return new ResponseEntity<>(listingService.update(id, listingCreationDTO, user), HttpStatus.OK);
     }
@@ -41,7 +44,7 @@ public class ProfileController {
 
     @DeleteMapping("/listings/{id}")
     public void deleteUser(@PathVariable long id,
-                           @RequestAttribute UserData user) {
+                           @RequestAttribute UserData user) throws ListingNotFoundException {
         logger.info("Deleting listing by registered user");
 //        new ResponseEntity<>(listingService.delete(id, user), HttpStatus.OK);
         listingService.delete(id, user);
@@ -49,7 +52,7 @@ public class ProfileController {
 
     @PutMapping("/listings/{id}/makevip")
     public ResponseEntity<ListingGetDTO> makeVip(@PathVariable long id,
-                                                 @RequestAttribute UserData user) {
+                                                 @RequestAttribute UserData user) throws TransactionIncorrectAmountException, ListingNotFoundException, TransactionInsufficientFundsException {
         logger.info("Making listing vip by registered user");
         return new ResponseEntity<>(listingService.makeVip(id, user), HttpStatus.OK);
     }
@@ -63,7 +66,7 @@ public class ProfileController {
 
     @GetMapping("/listings/{id}")
     public ResponseEntity<ListingGetDTO> getUserListingsById(@PathVariable long id,
-                                                             @RequestAttribute UserData user) {
+                                                             @RequestAttribute UserData user) throws ListingNotFoundException {
         logger.info("Getting user listing (by id) by registered user");
         return new ResponseEntity<>(listingService.getUserListingById(id, user), HttpStatus.OK);
     }
