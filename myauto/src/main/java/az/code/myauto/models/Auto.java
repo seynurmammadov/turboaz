@@ -46,6 +46,9 @@ public class Auto {
     @JoinColumn(name = "model_id", referencedColumnName = "id")
     Model model;
 
+    @OneToOne(mappedBy = "auto")
+    private Subscription subscription;
+
     public void addEquipments(List<Integer> equipmentList) {
         equipmentList.forEach(e -> equipments.add(Equipment.builder().id(e).build()));
     }
