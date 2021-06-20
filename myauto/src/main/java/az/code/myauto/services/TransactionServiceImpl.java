@@ -6,14 +6,21 @@ import az.code.myauto.models.Listing;
 import az.code.myauto.models.Transaction;
 import az.code.myauto.models.User;
 import az.code.myauto.models.UserData;
+import az.code.myauto.models.dtos.ListingListDTO;
 import az.code.myauto.models.dtos.TransactionListDto;
 import az.code.myauto.models.enums.TransactionType;
 import az.code.myauto.repositories.TransactionRepo;
 import az.code.myauto.repositories.UserRepo;
 import az.code.myauto.services.interfaces.TransactionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static az.code.myauto.utils.PaginationUtil.getResult;
+import static az.code.myauto.utils.PaginationUtil.preparePage;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -63,6 +70,13 @@ public class TransactionServiceImpl implements TransactionService {
             throw new TransactionInsufficientFundsException();
         }
         throw new TransactionIncorrectAmountException();
+    }
+
+    @Override
+    public List<TransactionListDto> getTransactions(Integer pageNo, Integer pageSize, String sortBy, UserData userData) {
+        Pageable pageable = preparePage(pageNo, pageSize, sortBy);
+        Page<Transaction> pages = transactionRepo.getTransactionsById(pageable,userData.getUsername());
+        return getResult(pages.map(TransactionListDto::new));
     }
 
     @Override
