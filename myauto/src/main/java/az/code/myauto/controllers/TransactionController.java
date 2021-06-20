@@ -1,9 +1,8 @@
 package az.code.myauto.controllers;
 
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
-import az.code.myauto.models.Transaction;
 import az.code.myauto.models.UserData;
-import az.code.myauto.models.dtos.Amount;
+import az.code.myauto.models.dtos.AmountDTO;
 import az.code.myauto.models.dtos.TransactionListDto;
 import az.code.myauto.services.interfaces.TransactionService;
 import org.slf4j.Logger;
@@ -44,7 +43,7 @@ public class TransactionController {
     }
     @PutMapping("/wallet/increase")
     public ResponseEntity<TransactionListDto> increaseBalance(@RequestAttribute UserData user,
-                                                              @RequestBody Amount amount ) throws TransactionIncorrectAmountException {
+                                                              @RequestBody AmountDTO amount ) throws TransactionIncorrectAmountException {
         logger.info("Increasing balance by registered user");
 
         return new ResponseEntity<>(transactionService.increaseBalance(amount.getAmount(), user), HttpStatus.OK);

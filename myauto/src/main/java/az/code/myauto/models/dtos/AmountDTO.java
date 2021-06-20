@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Amount {
+public class AmountDTO {
     private double amount;
 }
