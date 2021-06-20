@@ -19,7 +19,7 @@ import java.util.List;
 public class Listing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "autoId")
@@ -55,7 +55,7 @@ public class Listing {
         this.barterOption = data.getBarterOption();
         this.leaseOption = data.getLeaseOption();
         this.cashOption = data.getCashOption();
-        this.type = ListingType.valueOf(data.getType());
+        this.type = ListingType.DEFAULT;
         this.city = City.builder().id(data.getCityId()).build();
         this.auto_pay = data.isAuto_pay();
         this.description = data.getDescription();

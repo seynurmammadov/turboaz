@@ -1,7 +1,6 @@
 package az.code.myauto.services.interfaces;
 
 import az.code.myauto.models.UserData;
-import az.code.myauto.models.dtos.ListingListDTO;
 import az.code.myauto.models.dtos.SubscriptionDto;
 import az.code.myauto.models.dtos.SubscriptionListDto;
 
@@ -9,13 +8,13 @@ import java.util.List;
 
 public interface SubscriptionService {
 
-    List<SubscriptionListDto> getUserSubscriptions(Integer pageNo, Integer pageSize, String sortBy, UserData userData);
+    List<SubscriptionListDto> getUserSubscriptions(UserData userData);
 
-    SubscriptionDto addSubscription(UserData userData, SubscriptionDto subscription);
+    SubscriptionListDto addSubscription(UserData userData, SubscriptionDto subscription);
 
-    SubscriptionDto getSubscriptionById(UserData userData, long id);
+    SubscriptionListDto getSubscriptionById( long id,UserData userData);
 
-    SubscriptionDto updateSubscriptionById(UserData userData, long id, SubscriptionDto subscription);
+    SubscriptionListDto updateSubscriptionById( long id, SubscriptionDto subscription,UserData userData);
 
-    SubscriptionDto deleteSubscriptionById(UserData userData, long id, SubscriptionDto subscription);
+    SubscriptionListDto deactiveSubscriptionById( long id,UserData userData);
 }

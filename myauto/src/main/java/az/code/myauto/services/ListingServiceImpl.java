@@ -1,5 +1,6 @@
 package az.code.myauto.services;
 
+import az.code.myauto.exceptions.FreeListingAlreadyPostedException;
 import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
@@ -7,11 +8,11 @@ import az.code.myauto.models.*;
 import az.code.myauto.models.dtos.ListingCreationDTO;
 import az.code.myauto.models.dtos.ListingGetDTO;
 import az.code.myauto.models.dtos.ListingListDTO;
+import az.code.myauto.models.dtos.ThumbnailDTO;
 import az.code.myauto.models.enums.*;
 import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.services.interfaces.ListingService;
 import az.code.myauto.services.interfaces.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,10 @@ public class ListingServiceImpl implements ListingService {
 
 
     @Override
-    public ListingGetDTO create(ListingCreationDTO listing, UserData user) {
-
+    public ListingGetDTO create(ListingCreationDTO listing, UserData user) throws FreeListingAlreadyPostedException {
+        if (listingRepo.getDefaultInMonth(user.getUsername(), LocalDateTime.now().minusMonths(1), ListingType.DEFAULT) > 1) {
+            throw new FreeListingAlreadyPostedException();
+        }
         return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
     }
 
@@ -71,9 +74,9 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public void delete(long id, UserData user) throws ListingNotFoundException {
+    public ListingGetDTO delete(long id, UserData user) throws ListingNotFoundException {
         listingCheck(id, user);
-        listingRepo.deleteById(id);
+        return new ListingGetDTO(listingRepo.deactiveListing(id));
     }
 
     @Override
@@ -81,13 +84,24 @@ public class ListingServiceImpl implements ListingService {
         Listing dbListing = listingCheck(id, user);
         transactionService.decreaseBalance(ListingType.VIP.getAmount(), user, dbListing.getId());
         dbListing.setType(ListingType.VIP);
-        dbListing.setUpdatedAt(LocalDateTime.now());
+        if (dbListing.getUpdatedAt().plusMonths(1).isAfter(LocalDateTime.now())) {
+            dbListing.setUpdatedAt(LocalDateTime.now().plusMonths(1));
+        } else {
+            dbListing.setUpdatedAt(dbListing.getUpdatedAt().plusMonths(1));
+        }
         return new ListingGetDTO(listingRepo.save(dbListing));
     }
 
     @Override
     public ListingGetDTO makePaid(long id, UserData user) {
         return null;
+    }
+
+    @Override
+    public ListingGetDTO setNewThumbnail(long id, UserData user, ThumbnailDTO thumbnailDTO) {
+        Listing listing = listingCheck(id, user);
+        listing.getThumbnails().get(0).setUrl(thumbnailDTO.getThumbnail());
+        return new ListingGetDTO(listingRepo.save(listing));
     }
 
     @Override
@@ -103,6 +117,13 @@ public class ListingServiceImpl implements ListingService {
     public List<ListingListDTO> getListings(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
         Page<Listing> pages = listingRepo.findAllActive(pageable);
+        return getResult(pages.map(ListingListDTO::new));
+    }
+
+    @Override
+    public List<ListingListDTO> getVIPListings(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable pageable = preparePage(pageNo, pageSize, sortBy);
+        Page<Listing> pages = listingRepo.findAllActiveVIP(pageable, ListingType.VIP);
         return getResult(pages.map(ListingListDTO::new));
     }
 

@@ -1,5 +1,6 @@
 package az.code.myauto.models.dtos;
 
+import az.code.myauto.models.Transaction;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -9,8 +10,16 @@ import java.time.LocalDateTime;
 @Getter
 @Builder(toBuilder = true)
 public class TransactionListDto {
-    private int id;
+    private Long id;
     private Long listingId; // nullable
     private double amount;
     private LocalDateTime createdAt;
+
+    public TransactionListDto(Transaction transaction) {
+        this.id = transaction.getId();
+        if(transaction.getListing()!=null)
+        this.listingId = transaction.getListing().getId();
+        this.amount = transaction.getAmount();
+        this.createdAt = transaction.getCreatedAt();
+    }
 }

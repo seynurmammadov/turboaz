@@ -43,6 +43,13 @@ public class ListingController {
         logger.info("Getting listings by unregistered user");
         return new ResponseEntity<>(listingService.getListings(pageNo, pageSize, sortBy), HttpStatus.OK);
     }
+    @GetMapping("listings/vip")
+    public ResponseEntity<?> getVIPListings(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
+                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                         @RequestParam(required = false, defaultValue = "updatedAt") String sortBy) {
+        logger.info("Getting VIP listings by unregistered user");
+        return new ResponseEntity<>(listingService.getVIPListings(pageNo, pageSize, sortBy), HttpStatus.OK);
+    }
 
     @GetMapping("user/{username}/listings")
     public ResponseEntity<?> getListings( @RequestParam(required = false, defaultValue = "0") Integer pageNo,
