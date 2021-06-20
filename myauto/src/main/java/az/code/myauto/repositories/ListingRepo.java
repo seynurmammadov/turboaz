@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface ListingRepo extends JpaRepository<Listing, Long> {
     @Modifying
     @Query("update Listing l set l.isActive=false where l.id=:id")
-    void deleteById(Long id);
+    Listing deactiveListing(Long id);
 
     @Query("select l from Listing l where l.id=:id and l.User.username=:username ")
     Optional<Listing> getUserListingById(Long id,String username);
