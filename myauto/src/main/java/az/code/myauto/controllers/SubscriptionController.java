@@ -41,24 +41,21 @@ public class SubscriptionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubscriptionDto> updateSubscription(@PathVariable long id) {
+    public ResponseEntity<SubscriptionListDto> updateSubscription(@RequestBody SubscriptionDto subscriptionDto,@PathVariable long id,@RequestAttribute UserData user) {
         logger.info("Updating subscription (by id) by registered user");
-        //TODO after updating SubscriptionService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.updateSubscriptionById(id,subscriptionDto,user), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionDto> getSubscriptionById(@PathVariable long id) {
+    public ResponseEntity<SubscriptionListDto> getSubscriptionById(@PathVariable long id,@RequestAttribute UserData user) {
         logger.info("Getting subscription (by id) by registered user");
-        //TODO after updating SubscriptionService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.getSubscriptionById(id,user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SubscriptionDto> deleteSubscriptionById(@PathVariable long id) {
+    public ResponseEntity<SubscriptionListDto> deleteSubscriptionById(@PathVariable long id,@RequestAttribute UserData user) {
         logger.info("Deleting subscription (by id) by registered user");
-        //TODO after updating SubscriptionService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.deactiveSubscriptionById(id,user), HttpStatus.OK);
     }
 
 }
