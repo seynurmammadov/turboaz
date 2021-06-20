@@ -83,7 +83,12 @@ public class ListingServiceImpl implements ListingService {
         Listing dbListing = listingCheck(id, user);
         transactionService.decreaseBalance(ListingType.VIP.getAmount(), user, dbListing.getId());
         dbListing.setType(ListingType.VIP);
-        dbListing.setUpdatedAt(LocalDateTime.now());
+        if(dbListing.getUpdatedAt().plusMonths(1).isAfter(LocalDateTime.now())){
+            dbListing.setUpdatedAt(LocalDateTime.now().plusMonths(1));
+        }
+        else {
+            dbListing.setUpdatedAt(dbListing.getUpdatedAt().plusMonths(1));
+        }
         return new ListingGetDTO(listingRepo.save(dbListing));
     }
 
