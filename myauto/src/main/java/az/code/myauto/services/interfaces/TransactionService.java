@@ -4,9 +4,10 @@ import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.Transaction;
 import az.code.myauto.models.UserData;
+import az.code.myauto.models.dtos.TransactionListDto;
 
 public interface TransactionService {
-    Transaction increaseBalance(double amount, UserData userData) throws TransactionIncorrectAmountException;
-    Transaction decreaseBalance(double amount, UserData userData, long listingId) throws TransactionIncorrectAmountException, TransactionInsufficientFundsException;
+    TransactionListDto increaseBalance(double amount, UserData userData) throws TransactionIncorrectAmountException;
+    TransactionListDto decreaseBalance(double amount, UserData userData, long listingId) throws TransactionIncorrectAmountException, TransactionInsufficientFundsException;
     double getBalance(UserData userData);
 }
