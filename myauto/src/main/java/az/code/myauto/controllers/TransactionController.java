@@ -27,7 +27,7 @@ public class TransactionController {
     @PutMapping("/wallet/increase")
     public ResponseEntity<Transaction> increaseBalance(@RequestAttribute UserData user,
                                                        @RequestParam Double amount ) {
-        logger.info("Getting balance by registered user");
+        logger.info("Increasing balance by registered user");
         //TODO after updating TransactionService, 'null' must be changed.
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
