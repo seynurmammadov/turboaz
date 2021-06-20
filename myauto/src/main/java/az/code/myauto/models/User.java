@@ -4,7 +4,6 @@ package az.code.myauto.models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class User {
     private String fullname;
     private String phonenumber;
 
-    private BigDecimal balance = BigDecimal.valueOf(0);
+    private double balance = 0;
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "User")

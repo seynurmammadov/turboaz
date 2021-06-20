@@ -39,6 +39,9 @@ public class Listing {
     private LocalDateTime updatedAt;
     private boolean isActive = true;
 
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "listing")
+    private List<Transaction> transactions;
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User User;

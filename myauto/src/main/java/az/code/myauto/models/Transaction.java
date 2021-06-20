@@ -20,10 +20,13 @@ public class Transaction {
 
     TransactionType transactionType;
 
-    BigDecimal amount;
+    double amount;
 
     @ManyToOne
     @JoinColumn(name = "userId")
     private User User;
 
+    @ManyToOne
+    @JoinColumn(name = "listingId")
+    private Listing listing;
 }

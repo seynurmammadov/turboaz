@@ -1,5 +1,6 @@
 package az.code.myauto.controllers;
 
+import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.models.UserData;
 import az.code.myauto.models.dtos.ListingGetDTO;
 import az.code.myauto.services.interfaces.ListingService;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/")
@@ -24,7 +24,7 @@ public class ListingController {
     Logger logger = LoggerFactory.getLogger(ListingController.class);
 
     @GetMapping("listings/{id}")
-    public ResponseEntity<ListingGetDTO> getListingById(@PathVariable long id) {
+    public ResponseEntity<ListingGetDTO> getListingById(@PathVariable long id) throws ListingNotFoundException {
         logger.info("Getting listing (by id) by unregistered user");
         return new ResponseEntity<>(listingService.getById(id), HttpStatus.OK);
     }

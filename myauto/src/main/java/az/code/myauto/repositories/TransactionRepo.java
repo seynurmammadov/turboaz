@@ -1,6 +1,7 @@
 package az.code.myauto.repositories;
 
 import az.code.myauto.models.Transaction;
+import az.code.myauto.models.User;
 import az.code.myauto.models.enums.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
