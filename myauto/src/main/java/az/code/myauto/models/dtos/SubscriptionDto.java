@@ -41,31 +41,7 @@ public class SubscriptionDto {
     private Boolean barterOption;
     private LocalDateTime createdAt;
 
-    public SubscriptionDto(Subscription data) {
-        this.minYear=data.getMinYear();
-        this.maxYear=data.getMaxYear();
-        this.minPrice=data.getMinPrice();
-        this.maxPrice=data.getMaxPrice();
-        this.minMileage=data.getMinMileage();
-        this.maxMileage=data.getMaxMileage();
 
-        this.loanOption=data.getLoanOption();
-        this.leaseOption=data.getLeaseOption();
-        this.cashOption=data.getCashOption();
-        this.barterOption=data.getBarterOption();
-
-        this.name=data.getName();
-        this.makeId=data.getMakeId();
-        this.modelId=data.getModelId();
-        this.cityId=data.getCityId();
-        this.subId=data.getId();
-
-        this.fuelType= data.getFuelType().name();
-        this.bodyType= data.getBodyType().name();
-        this.color= data.getColor().name();/*
-        data.getEquipments().forEach(e -> specs.add(e.getId()));*/
-        this.createdAt=data.getCreatedAt();
-    }
 
 
 }

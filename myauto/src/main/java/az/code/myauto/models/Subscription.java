@@ -28,10 +28,15 @@ public class Subscription {
     private long id;
 
     private String name;
-
-    private long makeId;
-    private long modelId;
-    private long cityId;
+    @ManyToOne
+    @JoinColumn(name = "makeId")
+    private Make make = new Make();
+    @ManyToOne
+    @JoinColumn(name = "modelId")
+    private Model model= new Model();
+    @ManyToOne
+    @JoinColumn(name = "cityId")
+    private City city= new City();
 
     private FuelType fuelType;
     private BodyType bodyType;
@@ -74,9 +79,9 @@ public class Subscription {
         this.cashOption = data.getCashOption();
         this.barterOption = data.getBarterOption();
         this.name = data.getName();
-        this.makeId = data.getMakeId();
-        this.modelId = data.getModelId();
-        this.cityId = data.getCityId();
+        this.make.setId(data.getMakeId());
+        this.model.setId(data.getModelId());
+        this.city.setId(data.getCityId());
         this.fuelType = FuelType.valueOf(data.getFuelType());
         this.bodyType = BodyType.valueOf(data.getBodyType());
         this.color = Color.valueOf(data.getColor());

@@ -1,7 +1,6 @@
 package az.code.myauto.services.interfaces;
 
 import az.code.myauto.models.UserData;
-import az.code.myauto.models.dtos.ListingListDTO;
 import az.code.myauto.models.dtos.SubscriptionDto;
 import az.code.myauto.models.dtos.SubscriptionListDto;
 
@@ -11,11 +10,11 @@ public interface SubscriptionService {
 
     List<SubscriptionListDto> getUserSubscriptions(UserData userData);
 
-    SubscriptionDto addSubscription(UserData userData, SubscriptionDto subscription);
+    SubscriptionListDto addSubscription(UserData userData, SubscriptionDto subscription);
 
-    SubscriptionDto getSubscriptionById(UserData userData, long id);
+    SubscriptionListDto getSubscriptionById(UserData userData, long id);
 
-    SubscriptionDto updateSubscriptionById(UserData userData, long id, SubscriptionDto subscription);
+    SubscriptionListDto updateSubscriptionById(UserData userData, long id, SubscriptionDto subscription);
 
-    SubscriptionDto deleteSubscriptionById(UserData userData, long id, SubscriptionDto subscription);
+    SubscriptionListDto deactiveSubscriptionById(UserData userData, long id);
 }
