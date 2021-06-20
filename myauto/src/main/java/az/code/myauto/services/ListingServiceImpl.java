@@ -37,6 +37,7 @@ public class ListingServiceImpl implements ListingService {
         this.transactionService = transactionService;
     }
 
+
     @Override
     public ListingGetDTO create(ListingCreationDTO listing, UserData user) throws FreeListingAlreadyPostedException {
         if (listingRepo.getDefaultInMonth(user.getUsername(), LocalDateTime.now().minusMonths(1), ListingType.DEFAULT) > 1) {
