@@ -3,6 +3,7 @@ package az.code.myauto.controllers;
 import az.code.myauto.models.dtos.*;
 import az.code.myauto.models.enums.BodyType;
 import az.code.myauto.models.enums.FuelType;
+import az.code.myauto.services.interfaces.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1")
 public class SearchController {
+
+    final
+    SearchService searchService;
+
+    public SearchController(SearchService searchService) {
+        this.searchService = searchService;
+    }
 
     Logger logger = LoggerFactory.getLogger(SearchController.class);
 
