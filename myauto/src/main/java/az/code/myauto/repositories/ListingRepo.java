@@ -1,6 +1,7 @@
 package az.code.myauto.repositories;
 
 import az.code.myauto.models.Listing;
+import az.code.myauto.models.enums.ListingType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +23,8 @@ public interface ListingRepo extends JpaRepository<Listing, Long> {
     Page<Listing> findAllActive(Pageable pageable);
     @Query("select l from Listing l where l.User.username=:username")
     Page<Listing> findAllUser(Pageable pageable,String username);
-/*
-    @Query("SELECT count(l) from Listing l where l.updatedAt >= ")
-    int getStandartForInMonth(String username);*/
+
+    @Query("SELECT count(l) from Listing l where l.updatedAt >=:dateTime and l.type=:type and l.User.username=:username")
+    int getDefaultInMonth(String username, LocalDateTime dateTime, ListingType type);
 
 }

@@ -1,5 +1,6 @@
 package az.code.myauto.services;
 
+import az.code.myauto.exceptions.FreeListingAlreadyPostedException;
 import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
@@ -37,8 +38,10 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public ListingGetDTO create(ListingCreationDTO listing, UserData user) {
-
+    public ListingGetDTO create(ListingCreationDTO listing, UserData user) throws FreeListingAlreadyPostedException {
+        if(listingRepo.getDefaultInMonth(user.getUsername(),LocalDateTime.now().minusMonths(1),ListingType.DEFAULT)>1){
+            throw new FreeListingAlreadyPostedException();
+        }
         return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
     }
 
