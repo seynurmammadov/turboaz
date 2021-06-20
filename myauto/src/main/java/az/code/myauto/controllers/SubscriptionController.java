@@ -2,6 +2,7 @@ package az.code.myauto.controllers;
 
 import az.code.myauto.models.dtos.ListingGetDTO;
 import az.code.myauto.models.dtos.SubscriptionDto;
+import az.code.myauto.models.dtos.SubscriptionListDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class SubscriptionController {
     Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
 
     @GetMapping("/")
-    public ResponseEntity<List<SubscriptionDto>> getAllSubscriptions() {
+    public ResponseEntity<List<SubscriptionListDto>> getAllSubscriptions() {
         logger.info("Getting all subscriptions by registered user");
         //TODO after updating SubscriptionService, 'null' must be changed.
         return new ResponseEntity<>(null, HttpStatus.OK);
