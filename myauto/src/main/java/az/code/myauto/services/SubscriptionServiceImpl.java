@@ -7,10 +7,10 @@ import az.code.myauto.models.dtos.SubscriptionDto;
 import az.code.myauto.models.dtos.SubscriptionListDto;
 import az.code.myauto.repositories.SubscriptionRepo;
 import az.code.myauto.services.interfaces.SubscriptionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -23,29 +23,29 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public List<SubscriptionListDto> getUserSubscriptions(UserData userData) {
-        return null;
+        return subscriptionRepo.getUserSubs(userData.getUsername()).stream().map(SubscriptionListDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public SubscriptionDto addSubscription(UserData userData, SubscriptionDto subscription) {
+    public SubscriptionListDto addSubscription(UserData userData, SubscriptionDto subscription) {
         if(subscriptionRepo.getUserSubsCount(userData.getUsername())>=5) {
             throw new SubscriptionLimitException();
         }
-        return new SubscriptionDto(subscriptionRepo.save(new Subscription(subscription, userData.getUsername())));
+        return new SubscriptionListDto(subscriptionRepo.save(new Subscription(subscription, userData.getUsername())));
     }
 
     @Override
-    public SubscriptionDto getSubscriptionById(UserData userData, long id) {
+    public SubscriptionListDto getSubscriptionById(UserData userData, long id) {
         return null;
     }
 
     @Override
-    public SubscriptionDto updateSubscriptionById(UserData userData, long id, SubscriptionDto subscription) {
+    public SubscriptionListDto updateSubscriptionById(UserData userData, long id, SubscriptionDto subscription) {
         return null;
     }
 
     @Override
-    public SubscriptionDto deleteSubscriptionById(UserData userData, long id, SubscriptionDto subscription) {
+    public SubscriptionListDto deactiveSubscriptionById(UserData userData, long id) {
         return null;
     }
 }

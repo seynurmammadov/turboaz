@@ -29,14 +29,13 @@ public class SubscriptionController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<SubscriptionListDto>> getAllSubscriptions() {
+    public ResponseEntity<List<SubscriptionListDto>> getAllSubscriptions(@RequestAttribute UserData user) {
         logger.info("Getting all subscriptions by registered user");
-        //TODO after updating SubscriptionService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.getUserSubscriptions(user)  , HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<SubscriptionDto> addSubscription(@RequestBody SubscriptionDto subscriptionDto, @RequestAttribute UserData user) {
+    public ResponseEntity<SubscriptionListDto> addSubscription(@RequestBody SubscriptionDto subscriptionDto, @RequestAttribute UserData user) {
         logger.info("Creating subscription by registered user");
         return new ResponseEntity<>(subscriptionService.addSubscription( user,subscriptionDto), HttpStatus.CREATED);
     }
