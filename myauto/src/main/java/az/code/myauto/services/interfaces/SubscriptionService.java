@@ -12,9 +12,9 @@ public interface SubscriptionService {
 
     SubscriptionListDto addSubscription(UserData userData, SubscriptionDto subscription);
 
-    SubscriptionListDto getSubscriptionById(UserData userData, long id);
+    SubscriptionListDto getSubscriptionById( long id,UserData userData);
 
-    SubscriptionListDto updateSubscriptionById(UserData userData, long id, SubscriptionDto subscription);
+    SubscriptionListDto updateSubscriptionById( long id, SubscriptionDto subscription,UserData userData);
 
-    SubscriptionListDto deactiveSubscriptionById(UserData userData, long id);
+    SubscriptionListDto deactiveSubscriptionById( long id,UserData userData);
 }
