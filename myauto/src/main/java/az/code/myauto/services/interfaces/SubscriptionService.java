@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SubscriptionService {
 
-    List<SubscriptionListDto> getUserSubscriptions(Integer pageNo, Integer pageSize, String sortBy, UserData userData);
+    List<SubscriptionListDto> getUserSubscriptions(UserData userData);
 
     SubscriptionDto addSubscription(UserData userData, SubscriptionDto subscription);
 

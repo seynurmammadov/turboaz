@@ -26,6 +26,7 @@ public class ProfileController {
     }
 
     Logger logger = LoggerFactory.getLogger(ProfileController.class);
+
     @GetMapping("/listings/{id}")
     public ResponseEntity<ListingGetDTO> getUserListingsById(@PathVariable long id,
                                                              @RequestAttribute UserData user) throws ListingNotFoundException {
@@ -42,6 +43,7 @@ public class ProfileController {
         logger.info("Getting user listings by registered user");
         return new ResponseEntity<>(listingService.getUserListings(pageNo, pageSize, sortBy, user), HttpStatus.OK);
     }
+
     @PostMapping("/listings")
     public ResponseEntity<ListingGetDTO> getUser(@RequestBody ListingCreationDTO listingCreationDTO,
                                                  @RequestAttribute UserData user) {
@@ -56,12 +58,13 @@ public class ProfileController {
         logger.info("Updating listing by registered user");
         return new ResponseEntity<>(listingService.update(id, listingCreationDTO, user), HttpStatus.OK);
     }
+
     @PutMapping("/listings/{id}/setThumbnail")
     public ResponseEntity<ListingGetDTO> setThumbnail(@PathVariable long id,
-                                                    @RequestBody ThumbnailDTO thumbnailDTO,
-                                                    @RequestAttribute UserData user) throws ListingNotFoundException {
+                                                      @RequestBody ThumbnailDTO thumbnailDTO,
+                                                      @RequestAttribute UserData user) throws ListingNotFoundException {
         logger.info("Set thumbnail for register user");
-        return new ResponseEntity<>(listingService.setNewThumbnail(id, user,thumbnailDTO), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.setNewThumbnail(id, user, thumbnailDTO), HttpStatus.OK);
     }
 
     @PutMapping("/listings/{id}/makevip")
@@ -77,11 +80,12 @@ public class ProfileController {
         logger.info("Making listing paid by registered user");
         return new ResponseEntity<>(listingService.makePaid(id, user), HttpStatus.OK);
     }
+
     @DeleteMapping("/listings/{id}")
-    public   ResponseEntity<ListingGetDTO>  deleteUser(@PathVariable long id,
-                           @RequestAttribute UserData user) throws ListingNotFoundException {
+    public ResponseEntity<ListingGetDTO> deleteUser(@PathVariable long id,
+                                                    @RequestAttribute UserData user) throws ListingNotFoundException {
         logger.info("Deleting listing by registered user");
-       return new ResponseEntity<>(listingService.delete(id, user), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.delete(id, user), HttpStatus.OK);
     }
 
 }
