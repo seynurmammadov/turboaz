@@ -1,23 +1,44 @@
 package az.code.myauto.controllers;
 
 import az.code.myauto.exceptions.ListingNotFoundException;
+import az.code.myauto.exceptions.ThumbnailNotFoundException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
+import az.code.myauto.models.Listing;
+import az.code.myauto.models.Thumbnail;
 import az.code.myauto.models.UserData;
 import az.code.myauto.models.dtos.ListingCreationDTO;
 import az.code.myauto.models.dtos.ListingGetDTO;
+import az.code.myauto.repositories.ListingRepo;
+import az.code.myauto.repositories.ThumbnailRepo;
+import az.code.myauto.services.FileService;
+import az.code.myauto.services.ThumbnailService;
 import az.code.myauto.services.interfaces.ListingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/profile")
 public class ProfileController {
     final
     ListingService listingService;
+    @Autowired
+    ListingRepo listingRepo;
+    @Autowired
+    FileService fileService;
+    @Autowired
+    ThumbnailService thumbnailService;
+    @Autowired
+    ThumbnailRepo thumbnailRepo;
+
 
     public ProfileController(ListingService listingService) {
         this.listingService = listingService;
@@ -80,6 +101,7 @@ public class ProfileController {
         logger.info("Getting user listings by registered user");
         return new ResponseEntity<>(listingService.getUserListings(pageNo, pageSize, sortBy, user), HttpStatus.OK);
     }
+
 
 
 }

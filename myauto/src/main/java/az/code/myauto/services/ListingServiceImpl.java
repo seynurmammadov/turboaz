@@ -36,6 +36,7 @@ public class ListingServiceImpl implements ListingService {
         this.transactionService = transactionService;
     }
 
+
     @Override
     public ListingGetDTO create(ListingCreationDTO listing, UserData user) {
 
