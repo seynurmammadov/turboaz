@@ -23,7 +23,6 @@ public class TransactionController {
     Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
 
-
     @GetMapping("/wallet")
     public ResponseEntity<Double> getBalance(@RequestAttribute UserData user) {
         logger.info("Getting balance by registered user");
