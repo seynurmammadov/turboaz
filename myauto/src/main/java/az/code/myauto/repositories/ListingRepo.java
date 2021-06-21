@@ -33,4 +33,7 @@ public interface ListingRepo extends JpaRepository<Listing, Long> {
     @Query("select count(l) from Listing l where l.updatedAt >=:dateTime and l.type=:type and l.User.username=:username")
     int getDefaultInMonth(String username, LocalDateTime dateTime, ListingType type);
 
+    @Query("select l from Listing l where l.isActive=true")
+    List<Listing> getAllActiveListings();
+
 }
