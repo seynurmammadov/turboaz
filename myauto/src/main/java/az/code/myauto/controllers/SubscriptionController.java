@@ -50,9 +50,10 @@ public class SubscriptionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SubscriptionListDto> deleteSubscriptionById(@PathVariable long id,@RequestAttribute UserData user) {
+    public ResponseEntity deleteSubscriptionById(@PathVariable long id,@RequestAttribute UserData user) {
         logger.info("Deleting subscription (by id) by registered user");
-        return new ResponseEntity<>(subscriptionService.deleteSubscriptionById(id,user), HttpStatus.OK);
+        subscriptionService.deleteSubscriptionById(id,user);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
 }
