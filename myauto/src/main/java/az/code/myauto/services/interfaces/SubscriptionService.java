@@ -16,5 +16,5 @@ public interface SubscriptionService {
 
     SubscriptionListDto updateSubscriptionById( long id, SubscriptionDto subscription,UserData userData);
 
-    SubscriptionListDto deleteSubscriptionById(long id, UserData userData);
+    void deleteSubscriptionById(long id, UserData userData);
 }

@@ -19,6 +19,6 @@ public interface SubscriptionRepo extends JpaRepository<Subscription, Long> {
     Optional<Subscription> getUserSubById( long id,String username);
     @Modifying
     @Transactional
-    @Query("delete from Subscription s where s.id =: id and s.User.username =: username")
-    Subscription deleteById(long id, String username);
+    @Query("delete from Subscription s where s.id =:id and s.User.username =:username")
+    void deleteById(long id, String username);
 }

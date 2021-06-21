@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Component
 public class ListingAutoPaySchedule {
@@ -23,32 +24,28 @@ public class ListingAutoPaySchedule {
     @Autowired
     TransactionService transactionService;
 
-    @Scheduled(cron = "0 0 23 * * ?", zone="Asia/Baku")
+    @Scheduled(cron = "0 0 23 * * ?", zone = "Asia/Baku")
     public void expireDateSendMail() {
         List<Listing> allListings = listingRepo.getAllActiveListings();
-        for(Listing listing : allListings){
+        for (Listing listing : allListings) {
             LocalDateTime today = LocalDateTime.now();
             LocalDateTime oneDayBeforeExpire = listing.getUpdatedAt().plusMonths(1).minusDays(1);
             LocalDateTime paymentDate = listing.getUpdatedAt().plusMonths(1);
-            if(today.isAfter(oneDayBeforeExpire)){
-                mailSenderUtil.sendEmail(listing.getUser().getEmail(), "Attention !", "Tomorrow you have to pay for listing  "+ listing.getUpdatedAt().plusMonths(1)+ " -payment date");
+            if (today.isAfter(oneDayBeforeExpire)) {
+                mailSenderUtil.sendEmail(listing.getUser().getEmail(), "Attention !", "Tomorrow you have to pay for listing  " + listing.getUpdatedAt().plusMonths(1) + " -payment date");
             }
-            if(today.isAfter(paymentDate)){
+            if (today.isAfter(paymentDate)) {
                 UserData userData = new UserData();
                 userData.setUsername(listing.getUser().getUsername());
-                try{
+                try {
                     transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), userData, listing.getId());
                     listing.setUpdatedAt(today);
                     listingRepo.save(listing);
-                }catch (TransactionInsufficientFundsException e){
+                } catch (Exception e) {
                     listing.setActive(false);
                     listingRepo.save(listing);
-                    throw new TransactionInsufficientFundsException();
                 }
-
             }
-
-
         }
     }
 
