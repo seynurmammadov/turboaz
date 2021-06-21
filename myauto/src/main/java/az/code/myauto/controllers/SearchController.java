@@ -1,9 +1,6 @@
 package az.code.myauto.controllers;
 
-import az.code.myauto.models.City;
 import az.code.myauto.models.dtos.*;
-import az.code.myauto.models.enums.BodyType;
-import az.code.myauto.models.enums.FuelType;
 import az.code.myauto.services.interfaces.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
