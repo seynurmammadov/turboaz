@@ -33,10 +33,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<String> getAllBodyTypes() {
-        List<String> bodyTypes = Stream.of(BodyType.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
-        return bodyTypes;
+        return EnumSet.allOf(BodyType.class).stream().map(BodyType::getName).collect(Collectors.toList());
     }
 
     @Override
