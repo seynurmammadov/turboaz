@@ -50,8 +50,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionListDto deactiveSubscriptionById(long id, UserData userData) {
-        return null;
+    public SubscriptionListDto deleteSubscriptionById(long id, UserData userData) {
+        Subscription subscription = subscriptionRepo.deleteById(id, userData.getUsername());
+        return new SubscriptionListDto(subscription);
     }
 
     public Subscription subsCheck(long id, UserData user) throws SubscriptionNotFoundException {
