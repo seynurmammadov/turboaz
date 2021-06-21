@@ -36,28 +36,28 @@ public class FileService {
     private static final String MY_URL = "https://firebasestorage.googleapis.com/v0/b/my-auto-5679d.appspot.com/o/%s?alt=media";
     private static String TEMP_URL = "";
 
-@EventListener
-public void init(ApplicationReadyEvent event) {
+    @EventListener
+    public void init(ApplicationReadyEvent event) {
 
-    // initialize Firebase
+        // initialize Firebase
 
-    try {
+        try {
 
-        ClassPathResource serviceAccount = new ClassPathResource("firebase.json");
+            ClassPathResource serviceAccount = new ClassPathResource("firebase.json");
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
-                .setStorageBucket(properties.getBucketName())
-                .build();
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+                    .setStorageBucket(properties.getBucketName())
+                    .build();
 
-        FirebaseApp.initializeApp(options);
+            FirebaseApp.initializeApp(options);
 
-    } catch (Exception ex) {
+        } catch (Exception ex) {
 
-        ex.printStackTrace();
+            ex.printStackTrace();
 
+        }
     }
-}
 
 
     private String uploadFile(File file, String fileName) throws IOException {
@@ -105,13 +105,13 @@ public void init(ApplicationReadyEvent event) {
         blob.delete();
     }
 
-@Data
-@Configuration
-@ConfigurationProperties(prefix = "firebase")
-public class Properties {
+    @Data
+    @Configuration
+    @ConfigurationProperties(prefix = "firebase")
+    public class Properties {
 
-    private String bucketName;
+        private String bucketName;
 
-    private String imageUrl;
-}
+        private String imageUrl;
+    }
 }

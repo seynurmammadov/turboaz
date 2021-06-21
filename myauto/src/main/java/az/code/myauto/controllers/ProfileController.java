@@ -111,4 +111,20 @@ public class ProfileController {
         logger.info("Deleting listing by registered user");
         return new ResponseEntity<>(listingService.delete(id, user), HttpStatus.OK);
     }
+    @PutMapping("/listings/{id}/image")
+    public ResponseEntity addImageToListing(@PathVariable long id,
+                                            @RequestParam("file") MultipartFile multipartFile) throws ThumbnailNotFoundException, ListingNotFoundException {
+
+        String url = fileService.upload(multipartFile);
+
+        Thumbnail thumbnail = new Thumbnail();
+
+        Optional<Listing> listing = listingRepo.findById(id);
+        thumbnail.setUrl(url);
+        thumbnail.setListing(listing.get());
+
+        thumbnailRepo.save(thumbnail);
+
+        return new ResponseEntity(thumbnail, HttpStatus.OK);
+    }
 }
