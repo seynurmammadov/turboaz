@@ -1,5 +1,6 @@
 package az.code.myauto.utils;
 
+import az.code.myauto.config.Properties;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
@@ -97,11 +98,5 @@ public class FileUploadUtil {
         blob.delete();
     }
 
-    @Data
-    @Configuration
-    @ConfigurationProperties(prefix = "firebase")
-    public class Properties {
-        private String bucketName;
-        private String imageUrl;
-    }
+
 }
