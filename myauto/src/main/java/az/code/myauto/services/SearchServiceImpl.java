@@ -1,12 +1,12 @@
 package az.code.myauto.services;
 
 import az.code.myauto.models.City;
-import az.code.myauto.models.dtos.CityDTO;
-import az.code.myauto.models.dtos.MakeDTO;
+import az.code.myauto.models.Make;
 import az.code.myauto.models.dtos.ModelDTO;
 import az.code.myauto.models.enums.BodyType;
 import az.code.myauto.models.enums.FuelType;
 import az.code.myauto.repositories.search_repos.CityRepo;
+import az.code.myauto.repositories.search_repos.MakeRepo;
 import az.code.myauto.services.interfaces.SearchService;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +19,12 @@ public class SearchServiceImpl implements SearchService {
     final
     CityRepo cityRepo;
 
-    public SearchServiceImpl(CityRepo cityRepo) {
+    final
+    MakeRepo makeRepo;
+
+    public SearchServiceImpl(CityRepo cityRepo, MakeRepo makeRepo) {
         this.cityRepo = cityRepo;
+        this.makeRepo = makeRepo;
     }
 
     @Override
@@ -29,9 +33,8 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<MakeDTO> getAllMakes() {
-
-        return null;
+    public List<String> getAllMakes() {
+        return makeRepo.findAll().stream().map(Make::getName).collect(Collectors.toList());
     }
 
     @Override
@@ -46,8 +49,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<String> getAllCities() {
-        List<City> cities = cityRepo.findAll();
-        List<String> cityNames = cities.stream().map(City::getName).collect(Collectors.toList());
-        return cityNames;
+        return cityRepo.findAll().stream().map(City::getName).collect(Collectors.toList());
     }
 }

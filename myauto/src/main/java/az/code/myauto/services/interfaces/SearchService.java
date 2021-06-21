@@ -14,7 +14,7 @@ public interface SearchService {
 
     List<ModelDTO> getAllModelsByMake(long makeId);
 
-    List<MakeDTO> getAllMakes();
+    List<String> getAllMakes();
 
     List<String> getAllFuelTypes();
 

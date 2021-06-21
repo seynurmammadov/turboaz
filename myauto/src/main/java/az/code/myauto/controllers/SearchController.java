@@ -34,10 +34,10 @@ public class SearchController {
     }
 
     @GetMapping("/listings/dictionaries/makes")
-    public ResponseEntity<List<MakeDTO>> getAllMakes() {
+    public ResponseEntity<List<String>> getAllMakes() {
         logger.info("Getting all makes by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllMakes(), HttpStatus.OK);
     }
 
     @GetMapping("/listings/dictionaries/fuelTypes")
