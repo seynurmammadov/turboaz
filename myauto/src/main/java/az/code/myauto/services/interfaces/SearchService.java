@@ -15,7 +15,7 @@ public interface SearchService {
 
     List<MakeDTO> getAllMakes();
 
-    List<FuelType> getAllFuelTypes();
+    List<String> getAllFuelTypes();
 
     List<BodyType> getAllBodyTypes();
 

@@ -9,6 +9,8 @@ import az.code.myauto.services.interfaces.SearchService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -19,12 +21,16 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<MakeDTO> getAllMakes() {
+
         return null;
     }
 
     @Override
-    public List<FuelType> getAllFuelTypes() {
-        return null;
+    public List<String> getAllFuelTypes() {
+        List<String> fuelTypes = Stream.of(FuelType.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+        return fuelTypes;
     }
 
     @Override

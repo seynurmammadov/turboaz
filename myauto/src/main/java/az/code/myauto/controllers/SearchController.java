@@ -40,10 +40,10 @@ public class SearchController {
     }
 
     @GetMapping("/listings/dictionaries/fuelTypes")
-    public ResponseEntity<List<FuelType>> getAllFuelTypes() {
+    public ResponseEntity<List<String>> getAllFuelTypes() {
         logger.info("Getting all fuel types by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllFuelTypes(), HttpStatus.OK);
     }
 
     @GetMapping("/listings/dictionaries/bodyTypes")
