@@ -8,6 +8,7 @@ import az.code.myauto.models.enums.FuelType;
 import az.code.myauto.services.interfaces.SearchService;
 import org.springframework.stereotype.Service;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,10 +28,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<String> getAllFuelTypes() {
-        List<String> fuelTypes = Stream.of(FuelType.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
-        return fuelTypes;
+          return EnumSet.allOf(FuelType.class).stream().map(FuelType::getName).collect(Collectors.toList());
     }
 
     @Override
