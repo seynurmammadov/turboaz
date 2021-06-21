@@ -1,5 +1,6 @@
 package az.code.myauto.controllers;
 
+import az.code.myauto.models.City;
 import az.code.myauto.models.dtos.*;
 import az.code.myauto.models.enums.BodyType;
 import az.code.myauto.models.enums.FuelType;
@@ -54,10 +55,10 @@ public class SearchController {
     }
 
     @GetMapping("/listings/dictionaries/locations")
-    public ResponseEntity<List<CityDTO>> getAllCities() {
+    public ResponseEntity<List<String>> getAllCities() {
         logger.info("Getting all cities by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllCities(), HttpStatus.OK);
     }
 
     @GetMapping("/car/search")
