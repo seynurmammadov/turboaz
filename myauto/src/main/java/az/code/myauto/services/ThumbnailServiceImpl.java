@@ -10,34 +10,35 @@ import az.code.myauto.repositories.ThumbnailRepo;
 import az.code.myauto.services.interfaces.ListingService;
 import az.code.myauto.services.interfaces.ThumbnailService;
 import az.code.myauto.utils.FileUploadUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ThumbnailServiceImpl implements ThumbnailService {
-    @Autowired
+    final
     ThumbnailRepo thumbnailRepo;
-    @Autowired
+    final
     FileUploadUtil fileService;
-    @Autowired
+    final
     ListingService listingService;
-    @Autowired
+    final
     ListingRepo listingRepo;
+
+    public ThumbnailServiceImpl(ThumbnailRepo thumbnailRepo, FileUploadUtil fileService, ListingService listingService, ListingRepo listingRepo) {
+        this.thumbnailRepo = thumbnailRepo;
+        this.fileService = fileService;
+        this.listingService = listingService;
+        this.listingRepo = listingRepo;
+    }
 
     public List<ThumbnailDTO> getThumbnailsByListingId(Long id) throws ThumbnailNotFoundException {
         Optional<List<Thumbnail>> t = thumbnailRepo.findThumbnailByListingId(id);
         if (t.isPresent()) {
-            List<Thumbnail> thumbnails = t.get();
-            List<ThumbnailDTO> thumbnailDTOList = new ArrayList<>();
-            for(int i = 0; i < thumbnails.size(); i++){
-                thumbnailDTOList.add(new ThumbnailDTO(thumbnails.get(i)));
-            }
-            return thumbnailDTOList;
+            return t.get().stream().map(thumbnail -> new ThumbnailDTO(thumbnail)).collect(Collectors.toList());
         }
         throw new ThumbnailNotFoundException();
     }
@@ -55,10 +56,9 @@ public class ThumbnailServiceImpl implements ThumbnailService {
     }
 
     @Override
-    public Thumbnail uploadImageToListing(long id, UserData user, String url) {
+    public ThumbnailDTO uploadImageToListing(long id, UserData user, String url) {
         Listing listing = listingService.listingCheck(id,user);
-        listing.getThumbnails().add(Thumbnail.builder().url(url).build());
-        listingRepo.save(listing);
-        return listing.getThumbnails().get(listing.getThumbnails().size()-1);
+        listing.getThumbnails().add(Thumbnail.builder().url(url).listing(listing).build());
+        return new ThumbnailDTO(listingRepo.save(listing).getThumbnails().get(listing.getThumbnails().size()-1));
     }
 }
