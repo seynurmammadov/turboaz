@@ -39,8 +39,10 @@ public class ListingAutoPaySchedule {
                 try{
                     transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), userData, listing.getId());
                     listing.setUpdatedAt(today);
+                    listingRepo.save(listing);
                 }catch (TransactionInsufficientFundsException e){
                     listing.setActive(false);
+                    listingRepo.save(listing);
                     throw new TransactionInsufficientFundsException();
                 }
 
