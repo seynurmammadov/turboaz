@@ -1,8 +1,6 @@
 package az.code.myauto.controllers;
 
 import az.code.myauto.models.dtos.*;
-import az.code.myauto.models.enums.BodyType;
-import az.code.myauto.models.enums.FuelType;
 import az.code.myauto.services.interfaces.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,38 +24,38 @@ public class SearchController {
     Logger logger = LoggerFactory.getLogger(SearchController.class);
 
     @GetMapping("/listings/dictionaries/makes/{id}/models")
-    public ResponseEntity<List<ModelDTO>> getModelsByMakeId(@PathVariable long id) {
+    public ResponseEntity<List<String>> getModelsByMakeId(@PathVariable long id) {
         logger.info("Getting all models (by make id) by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllModelsByMake(id), HttpStatus.OK);
     }
 
     @GetMapping("/listings/dictionaries/makes")
-    public ResponseEntity<List<MakeDTO>> getAllMakes() {
+    public ResponseEntity<List<String>> getAllMakes() {
         logger.info("Getting all makes by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllMakes(), HttpStatus.OK);
     }
 
     @GetMapping("/listings/dictionaries/fuelTypes")
-    public ResponseEntity<List<FuelType>> getAllFuelTypes() {
+    public ResponseEntity<List<String>> getAllFuelTypes() {
         logger.info("Getting all fuel types by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllFuelTypes(), HttpStatus.OK);
     }
 
     @GetMapping("/listings/dictionaries/bodyTypes")
-    public ResponseEntity<List<BodyType>> getAllBodyTypes() {
+    public ResponseEntity<List<String>> getAllBodyTypes() {
         logger.info("Getting all body types by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllBodyTypes(), HttpStatus.OK);
     }
 
     @GetMapping("/listings/dictionaries/locations")
-    public ResponseEntity<List<CityDTO>> getAllCities() {
+    public ResponseEntity<List<String>> getAllCities() {
         logger.info("Getting all cities by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllCities(), HttpStatus.OK);
     }
 
     @GetMapping("/car/search")

@@ -1,5 +1,6 @@
 package az.code.myauto.services.interfaces;
 
+import az.code.myauto.models.City;
 import az.code.myauto.models.dtos.CityDTO;
 import az.code.myauto.models.dtos.ListingListDTO;
 import az.code.myauto.models.dtos.MakeDTO;
@@ -11,15 +12,15 @@ import java.util.List;
 
 public interface SearchService {
 
-    List<ModelDTO> getAllModelsByMake(long makeId);
+    List<String> getAllModelsByMake(long makeId);
 
-    List<MakeDTO> getAllMakes();
+    List<String> getAllMakes();
 
-    List<FuelType> getAllFuelTypes();
+    List<String> getAllFuelTypes();
 
-    List<BodyType> getAllBodyTypes();
+    List<String> getAllBodyTypes();
 
-    List<CityDTO> getAllCities();
+    List<String> getAllCities();
 
     //TODO writing search parameters in better way
 //    List<ListingListDTO> search();
