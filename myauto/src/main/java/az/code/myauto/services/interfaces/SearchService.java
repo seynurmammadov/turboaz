@@ -17,7 +17,7 @@ public interface SearchService {
 
     List<String> getAllFuelTypes();
 
-    List<BodyType> getAllBodyTypes();
+    List<String> getAllBodyTypes();
 
     List<CityDTO> getAllCities();
 

@@ -47,10 +47,10 @@ public class SearchController {
     }
 
     @GetMapping("/listings/dictionaries/bodyTypes")
-    public ResponseEntity<List<BodyType>> getAllBodyTypes() {
+    public ResponseEntity<List<String>> getAllBodyTypes() {
         logger.info("Getting all body types by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllBodyTypes(), HttpStatus.OK);
     }
 
     @GetMapping("/listings/dictionaries/locations")
