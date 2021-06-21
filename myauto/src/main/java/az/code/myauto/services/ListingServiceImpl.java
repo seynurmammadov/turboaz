@@ -141,6 +141,7 @@ public class ListingServiceImpl implements ListingService {
         return new ListingGetDTO(listing);
     }
 
+    @Override
     public Listing listingCheck(long id, UserData user) throws ListingNotFoundException {
         Optional<Listing> listing = listingRepo.getUserListingById(id, user.getUsername());
         if (listing.isPresent()) {

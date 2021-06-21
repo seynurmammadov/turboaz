@@ -1,4 +1,4 @@
-package az.code.myauto.services;
+package az.code.myauto.utils;
 
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -7,8 +7,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.StorageClient;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -26,43 +24,36 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Properties;
 import java.util.UUID;
 
 @Service
-public class FileService {
-    @Autowired
+public class FileUploadUtil {
+    final
     Properties properties;
     private static final String MY_URL = "https://firebasestorage.googleapis.com/v0/b/my-auto-5679d.appspot.com/o/%s?alt=media";
     private static String TEMP_URL = "";
 
+    public FileUploadUtil(Properties properties) {
+        this.properties = properties;
+    }
+
     @EventListener
     public void init(ApplicationReadyEvent event) {
-
-        // initialize Firebase
-
         try {
-
             ClassPathResource serviceAccount = new ClassPathResource("firebase.json");
-
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
                     .setStorageBucket(properties.getBucketName())
                     .build();
-
             FirebaseApp.initializeApp(options);
-
         } catch (Exception ex) {
-
             ex.printStackTrace();
-
         }
     }
 
-
     private String uploadFile(File file, String fileName) throws IOException {
         BlobId blobId = BlobId.of("my-auto-5679d.appspot.com", fileName);
-        String type =Files.probeContentType(file.toPath());
+        String type = Files.probeContentType(file.toPath());
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(type).build();
         Path path = Paths.get("src/main/resources/firebase.json");
         Credentials credentials = GoogleCredentials.fromStream(new FileInputStream(path.toAbsolutePath().toString()));
@@ -99,7 +90,8 @@ public class FileService {
         }
 
     }
-    public void delete(){
+
+    public void delete() {
         Bucket bucket = StorageClient.getInstance().bucket();
         Blob blob = bucket.get("524888e1-a3cb-4b61-8e3a-fc9df768223c.jpg");
         blob.delete();
@@ -109,9 +101,7 @@ public class FileService {
     @Configuration
     @ConfigurationProperties(prefix = "firebase")
     public class Properties {
-
         private String bucketName;
-
         private String imageUrl;
     }
 }
