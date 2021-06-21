@@ -1,16 +1,13 @@
 package az.code.myauto.utils;
 
-import az.code.myauto.config.Properties;
+import az.code.myauto.config.FireBaseProperties;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.StorageClient;
-import lombok.Data;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -30,12 +27,12 @@ import java.util.UUID;
 @Service
 public class FileUploadUtil {
     final
-    Properties properties;
+    FireBaseProperties fireBaseProperties;
     private static final String MY_URL = "https://firebasestorage.googleapis.com/v0/b/my-auto-5679d.appspot.com/o/%s?alt=media";
     private static String TEMP_URL = "";
 
-    public FileUploadUtil(Properties properties) {
-        this.properties = properties;
+    public FileUploadUtil(FireBaseProperties fireBaseProperties) {
+        this.fireBaseProperties = fireBaseProperties;
     }
 
     @EventListener
@@ -44,7 +41,7 @@ public class FileUploadUtil {
             ClassPathResource serviceAccount = new ClassPathResource("firebase.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
-                    .setStorageBucket(properties.getBucketName())
+                    .setStorageBucket(fireBaseProperties.getBucketName())
                     .build();
             FirebaseApp.initializeApp(options);
         } catch (Exception ex) {

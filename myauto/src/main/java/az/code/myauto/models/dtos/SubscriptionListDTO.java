@@ -12,9 +12,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder(toBuilder = true)
-public class SubscriptionListDto {
-    //parameters -> makeId, modelId, cityId, minYear, maxYear,  minPrice, maxPrice, minMileage, maxMileage,
-    // fuel, loanOption(loan, barter, lease, cash) , bodyType, gearBox, type , specs = [...specIds]
+public class SubscriptionListDTO {
     private long subId;
     private String name;
     private MakeDTO make;
@@ -40,7 +38,7 @@ public class SubscriptionListDto {
     private LocalDateTime creationDate;
 
     private List<CarSpecDTO> specs= new ArrayList<>();
-    public SubscriptionListDto(Subscription data) {
+    public SubscriptionListDTO(Subscription data) {
         this.minYear=data.getMinYear();
         this.maxYear=data.getMaxYear();
         this.minPrice=data.getMinPrice();

@@ -1,9 +1,9 @@
 package az.code.myauto.controllers;
 
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
-import az.code.myauto.models.UserData;
 import az.code.myauto.models.dtos.AmountDTO;
-import az.code.myauto.models.dtos.TransactionListDto;
+import az.code.myauto.models.dtos.TransactionListDTO;
+import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.services.interfaces.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,29 +25,27 @@ public class TransactionController {
 
     Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
-
     @GetMapping("/wallet")
-    public ResponseEntity<Double> getBalance(@RequestAttribute UserData user) {
+    public ResponseEntity<Double> getBalance(@RequestAttribute UserDTO user) {
         logger.info("Getting balance by registered user");
 
         return new ResponseEntity<>(transactionService.getBalance(user), HttpStatus.OK);
     }
-    @GetMapping("/wallet/transactions")
-    public ResponseEntity<List<TransactionListDto>> getTranactions(
-            @RequestParam(required = false, defaultValue = "0") Integer pageNo,
-            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-            @RequestParam(required = false,defaultValue = "createdAt") String sortBy,
-            @RequestAttribute UserData user) {
-        logger.info("Getting transactions by registered user");
-        return new ResponseEntity<>(transactionService.getTransactions(pageNo,pageSize,sortBy,user), HttpStatus.OK);
-    }
-    @PutMapping("/wallet/increase")
-    public ResponseEntity<TransactionListDto> increaseBalance(@RequestAttribute UserData user,
-                                                              @RequestBody AmountDTO amount ) throws TransactionIncorrectAmountException {
-        logger.info("Increasing balance by registered user");
 
+    @GetMapping("/wallet/transactions")
+    public ResponseEntity<List<TransactionListDTO>> getTranactions(
+            @RequestParam(required = false, defaultValue = "0") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
+            @RequestParam(required = false, defaultValue = "createdAt") String sortBy,
+            @RequestAttribute UserDTO user) {
+        logger.info("Getting transactions by registered user");
+        return new ResponseEntity<>(transactionService.getTransactions(pageNo, itemsCount, sortBy, user), HttpStatus.OK);
+    }
+
+    @PutMapping("/wallet/increase")
+    public ResponseEntity<TransactionListDTO> increaseBalance(@RequestAttribute UserDTO user,
+                                                              @RequestBody AmountDTO amount) throws TransactionIncorrectAmountException {
+        logger.info("Increasing balance by registered user");
         return new ResponseEntity<>(transactionService.increaseBalance(amount.getAmount(), user), HttpStatus.OK);
     }
-
-
 }

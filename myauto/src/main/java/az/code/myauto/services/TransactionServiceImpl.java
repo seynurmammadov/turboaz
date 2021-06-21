@@ -5,8 +5,8 @@ import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.Transaction;
 import az.code.myauto.models.User;
-import az.code.myauto.models.UserData;
-import az.code.myauto.models.dtos.TransactionListDto;
+import az.code.myauto.models.dtos.TransactionListDTO;
+import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.enums.TransactionType;
 import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.TransactionRepo;
@@ -44,9 +44,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionListDto increaseBalance(double amount, UserData userData) throws TransactionIncorrectAmountException {
+    public TransactionListDTO increaseBalance(double amount, UserDTO userData) throws TransactionIncorrectAmountException {
         if (amount > 0) {
-            User user = userRepo.findByUsername(userData.getUsername());
+            User user = userRepo.findUserByUsername(userData.getUsername());
             user.setBalance(user.getBalance() + amount);
             Transaction newTransaction = Transaction.builder()
                     .transactionType(TransactionType.DEBIT)
@@ -59,15 +59,15 @@ public class TransactionServiceImpl implements TransactionService {
                     "Dear, " + user.getFullname() + ", your balance was increased by the amount of " +
                             amount + ". Now, you have the total " + user.getBalance() + " AZN at your balance. ");
             userRepo.save(user);
-            return new TransactionListDto(transactionRepo.save(newTransaction));
+            return new TransactionListDTO(transactionRepo.save(newTransaction));
         }
         throw new TransactionIncorrectAmountException();
     }
 
     @Override
-    public TransactionListDto decreaseBalance(double amount, UserData userData, long listingId) throws TransactionIncorrectAmountException, TransactionInsufficientFundsException {
+    public TransactionListDTO decreaseBalance(double amount, UserDTO userData, long listingId) throws TransactionIncorrectAmountException, TransactionInsufficientFundsException {
         if (amount > 0) {
-            User user = userRepo.findByUsername(userData.getUsername());
+            User user = userRepo.findUserByUsername(userData.getUsername());
             double balance = user.getBalance() - amount;
             if (balance >= 0) {
                 user.setBalance(balance);
@@ -83,7 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
                         "Dear, " + user.getFullname() + ", your balance was decreased by the amount of " +
                                 amount + ". Now, you have the total " + user.getBalance() + " AZN at your balance. ");
                 userRepo.save(user);
-                return new TransactionListDto(transactionRepo.save(newTransaction));
+                return new TransactionListDTO(transactionRepo.save(newTransaction));
             }
             throw new TransactionInsufficientFundsException();
         }
@@ -91,15 +91,15 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionListDto> getTransactions(Integer pageNo, Integer pageSize, String sortBy, UserData userData) {
+    public List<TransactionListDTO> getTransactions(Integer pageNo, Integer pageSize, String sortBy, UserDTO userData) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
-        Page<Transaction> pages = transactionRepo.getTransactionsById(pageable, userData.getUsername());
-        return getResult(pages.map(TransactionListDto::new));
+        Page<Transaction> pages = transactionRepo.getTransactionsByUserId(pageable, userData.getUsername());
+        return getResult(pages.map(TransactionListDTO::new));
     }
 
     @Override
-    public double getBalance(UserData userData) {
-        return userRepo.findByUsername(userData.getUsername()).getBalance();
+    public double getBalance(UserDTO userData) {
+        return userRepo.findUserByUsername(userData.getUsername()).getBalance();
     }
 
     public void sendEmail(String to, String subject, String content) {

@@ -8,13 +8,16 @@ import lombok.*;
 @Setter
 @Getter
 @Builder(toBuilder = true)
-public class UserDto {
+public class UserDTO {
     private String fullName;
     private String username;
-    private String phone;
-    public  UserDto(User data){
+    private String phoneNumber;
+    private String email;
+
+    public UserDTO(User data) {
         this.username = data.getUsername();
         this.fullName = data.getFullname();
-        this.phone = data.getPhonenumber();
+        this.phoneNumber = data.getPhonenumber();
+        this.email = data.getEmail();
     }
 }

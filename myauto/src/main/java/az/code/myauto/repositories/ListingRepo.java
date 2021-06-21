@@ -18,26 +18,25 @@ public interface ListingRepo extends JpaRepository<Listing, Long>, JpaSpecificat
     @Modifying
     @Transactional
     @Query("update Listing l set l.isActive=false where l.id=:id")
-    Listing deactiveListing(Long id);
+    void deactivateListing(Long id);
 
     @Query("select l from Listing l where l.id=:id and l.User.username=:username ")
-    Optional<Listing> getUserListingById(Long id,String username);
+    Optional<Listing> getUserListingById(Long id, String username);
 
     @Query("select l from Listing l where l.isActive=true")
-    Page<Listing> findAllActive(Pageable pageable);
+    Page<Listing> findAllActiveListings(Pageable pageable);
 
     @Query("select l from Listing l where l.isActive=true and l.type=:type")
-    Page<Listing> findAllActiveVIP(Pageable pageable,ListingType type);
+    Page<Listing> findAllActiveVIPListings(Pageable pageable, ListingType type);
 
     @Query("select l from Listing l where l.User.username=:username")
-    Page<Listing> findAllUser(Pageable pageable,String username);
+    Page<Listing> findAllUserListings(Pageable pageable, String username);
 
     @Query("select count(l) from Listing l where l.updatedAt >=:dateTime and l.type=:type and l.User.username=:username")
-    int getDefaultInMonth(String username, LocalDateTime dateTime, ListingType type);
+    int countOfDefaultUserListings(String username, LocalDateTime dateTime, ListingType type);
 
     @Query("select l from Listing l where l.isActive=true")
-    List<Listing> getAllActiveListings();
-
+    List<Listing> findAllActiveListings();
 
 
 }

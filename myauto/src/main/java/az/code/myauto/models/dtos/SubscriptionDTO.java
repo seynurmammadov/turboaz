@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder(toBuilder = true)
-public class SubscriptionDto {
+public class SubscriptionDTO {
     private String name;
 
     private long subId;

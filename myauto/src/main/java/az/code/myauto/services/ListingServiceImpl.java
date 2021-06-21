@@ -5,10 +5,7 @@ import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.*;
-import az.code.myauto.models.dtos.ListingCreationDTO;
-import az.code.myauto.models.dtos.ListingGetDTO;
-import az.code.myauto.models.dtos.ListingListDTO;
-import az.code.myauto.models.dtos.ThumbnailDTO;
+import az.code.myauto.models.dtos.*;
 import az.code.myauto.models.enums.*;
 import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.services.interfaces.ListingService;
@@ -39,16 +36,17 @@ public class ListingServiceImpl implements ListingService {
 
 
     @Override
-    public ListingGetDTO create(ListingCreationDTO listing, UserData user) throws FreeListingAlreadyPostedException {
-        if (listingRepo.getDefaultInMonth(user.getUsername(), LocalDateTime.now().minusMonths(1), ListingType.DEFAULT) > 1) {
+    public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
+        LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
+        if (listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) > 1) {
             throw new FreeListingAlreadyPostedException();
         }
         return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
     }
 
     @Override
-    public ListingGetDTO update(long id, ListingCreationDTO listing, UserData user) throws ListingNotFoundException {
-        Listing dbListing = listingCheck(id, user);
+    public ListingGetDTO update(long id, ListingCreationDTO listing, UserDTO user) throws ListingNotFoundException {
+        Listing dbListing = isListingExist(id, user);
 
         dbListing.getAuto().setMake(Make.builder().id(listing.getMakeId()).build());
         dbListing.getAuto().setModel(Model.builder().id(listing.getModelId()).build());
@@ -67,21 +65,21 @@ public class ListingServiceImpl implements ListingService {
         dbListing.setCashOption(listing.getCashOption());
         dbListing.setDescription(listing.getDescription());
         dbListing.setType(ListingType.valueOf(listing.getType()));
-        dbListing.getThumbnails().get(0).setUrl(listing.getThumbnailUrl());
+        dbListing.getImages().get(0).setUrl(listing.getThumbnailUrl());
         dbListing.getAuto().getEquipments().clear();
         dbListing.getAuto().addEquipments(listing.getCarSpecIds());
         return new ListingGetDTO(listingRepo.save(dbListing));
     }
 
     @Override
-    public ListingGetDTO delete(long id, UserData user) throws ListingNotFoundException {
-        listingCheck(id, user);
-        return new ListingGetDTO(listingRepo.deactiveListing(id));
+    public void delete(long id, UserDTO user) throws ListingNotFoundException {
+        isListingExist(id, user);
+        listingRepo.deactivateListing(id);
     }
 
     @Override
-    public ListingGetDTO makeVip(long id, UserData user) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException {
-        Listing dbListing = listingCheck(id, user);
+    public ListingGetDTO makeVip(long id, UserDTO user) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException {
+        Listing dbListing = isListingExist(id, user);
         transactionService.decreaseBalance(ListingType.VIP.getAmount(), user, dbListing.getId());
         dbListing.setType(ListingType.VIP);
         if (dbListing.getUpdatedAt().plusMonths(1).isAfter(LocalDateTime.now())) {
@@ -93,19 +91,19 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public ListingGetDTO makePaid(long id, UserData user) {
+    public ListingGetDTO makePaid(long id, UserDTO user) {
         return null;
     }
 
     @Override
-    public ListingGetDTO setNewThumbnail(long id, UserData user, ThumbnailDTO thumbnailDTO) {
-        Listing listing = listingCheck(id, user);
-        listing.getThumbnails().get(0).setUrl(thumbnailDTO.getThumbnail());
+    public ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO) {
+        Listing listing = isListingExist(id, user);
+        listing.getImages().get(0).setUrl(imageDTO.getThumbnail());
         return new ListingGetDTO(listingRepo.save(listing));
     }
 
     @Override
-    public ListingGetDTO getById(long id) throws ListingNotFoundException {
+    public ListingGetDTO getListingById(long id) throws ListingNotFoundException {
         Optional<Listing> listing = listingRepo.findById(id);
         if (listing.isPresent()) {
             return new ListingGetDTO(listing.get());
@@ -114,35 +112,33 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public List<ListingListDTO> getListings(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable pageable = preparePage(pageNo, pageSize, sortBy);
-        Page<Listing> pages = listingRepo.findAllActive(pageable);
+    public List<ListingListDTO> getListings(Integer pageNo, Integer itemsCount, String sortBy) {
+        Pageable pageable = preparePage(pageNo, itemsCount, sortBy);
+        Page<Listing> pages = listingRepo.findAllActiveListings(pageable);
         return getResult(pages.map(ListingListDTO::new));
     }
 
     @Override
     public List<ListingListDTO> getVIPListings(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
-        Page<Listing> pages = listingRepo.findAllActiveVIP(pageable, ListingType.VIP);
+        Page<Listing> pages = listingRepo.findAllActiveVIPListings(pageable, ListingType.VIP);
         return getResult(pages.map(ListingListDTO::new));
     }
 
-
     @Override
-    public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy, UserData userData) {
+    public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy, UserDTO user) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
-        Page<Listing> pages = listingRepo.findAllUser(pageable, userData.getUsername());
+        Page<Listing> pages = listingRepo.findAllUserListings(pageable, user.getUsername());
         return getResult(pages.map(ListingListDTO::new));
     }
 
     @Override
-    public ListingGetDTO getUserListingById(long id, UserData userData) throws ListingNotFoundException {
-        Listing listing = listingCheck(id, userData);
-        return new ListingGetDTO(listing);
+    public ListingGetDTO getUserListingById(long id, UserDTO user) throws ListingNotFoundException {
+        return new ListingGetDTO(isListingExist(id, user));
     }
 
     @Override
-    public Listing listingCheck(long id, UserData user) throws ListingNotFoundException {
+    public Listing isListingExist(long id, UserDTO user) throws ListingNotFoundException {
         Optional<Listing> listing = listingRepo.getUserListingById(id, user.getUsername());
         if (listing.isPresent()) {
             return listing.get();

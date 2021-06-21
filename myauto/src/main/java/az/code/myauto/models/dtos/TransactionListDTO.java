@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Builder(toBuilder = true)
-public class TransactionListDto {
+public class TransactionListDTO {
     private Long id;
     private Long listingId; // nullable
     private double amount;
     private LocalDateTime createdAt;
 
-    public TransactionListDto(Transaction transaction) {
+    public TransactionListDTO(Transaction transaction) {
         this.id = transaction.getId();
         if(transaction.getListing()!=null)
         this.listingId = transaction.getListing().getId();
