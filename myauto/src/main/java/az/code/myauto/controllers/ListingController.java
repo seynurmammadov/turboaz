@@ -1,7 +1,6 @@
 package az.code.myauto.controllers;
 
 import az.code.myauto.exceptions.ListingNotFoundException;
-import az.code.myauto.models.UserData;
 import az.code.myauto.models.dtos.ListingGetDTO;
 import az.code.myauto.services.interfaces.ListingService;
 import org.slf4j.Logger;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("api/v1/")
+@RequestMapping("api/v1/listings")
 public class ListingController {
     final
     ListingService listingService;
@@ -23,36 +22,27 @@ public class ListingController {
 
     Logger logger = LoggerFactory.getLogger(ListingController.class);
 
-    @GetMapping("listings/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ListingGetDTO> getListingById(@PathVariable long id) throws ListingNotFoundException {
         logger.info("Getting listing (by id) by unregistered user");
-        return new ResponseEntity<>(listingService.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.getListingById(id), HttpStatus.OK);
     }
 
-    @GetMapping("listings")
+    @GetMapping("/")
     public ResponseEntity<?> getListings(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
-                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                         @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
                                          @RequestParam(required = false, defaultValue = "updatedAt") String sortBy) {
         logger.info("Getting listings by unregistered user");
-        return new ResponseEntity<>(listingService.getListings(pageNo, pageSize, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.getListings(pageNo, itemsCount, sortBy), HttpStatus.OK);
     }
 
-    @GetMapping("listings/vip")
+    @GetMapping("/vip")
     public ResponseEntity<?> getVIPListings(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
-                                            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                            @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
                                             @RequestParam(required = false, defaultValue = "updatedAt") String sortBy) {
         logger.info("Getting VIP listings by unregistered user");
-        return new ResponseEntity<>(listingService.getVIPListings(pageNo, pageSize, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.getVIPListings(pageNo, itemsCount, sortBy), HttpStatus.OK);
     }
 
-    @GetMapping("user/{username}/listings")
-    public ResponseEntity<?> getListings(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
-                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                         @RequestParam(required = false, defaultValue = "updatedAt") String sortBy,
-                                         @PathVariable String username) {
-        logger.info("Getting listings (by username) by unregistered user");
-        return new ResponseEntity<>(
-                listingService.getUserListings(pageNo, pageSize, sortBy, UserData.builder().username(username).build())
-                , HttpStatus.OK);
-    }
+
 }

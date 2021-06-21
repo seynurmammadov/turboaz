@@ -1,8 +1,8 @@
 package az.code.myauto.controllers;
 
-import az.code.myauto.models.UserData;
-import az.code.myauto.models.dtos.SubscriptionDto;
-import az.code.myauto.models.dtos.SubscriptionListDto;
+import az.code.myauto.models.dtos.SubscriptionDTO;
+import az.code.myauto.models.dtos.SubscriptionListDTO;
+import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.services.interfaces.SubscriptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,34 +26,34 @@ public class SubscriptionController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<SubscriptionListDto>> getAllSubscriptions(@RequestAttribute UserData user) {
+    public ResponseEntity<List<SubscriptionListDTO>> getAllSubscriptions(@RequestAttribute UserDTO user) {
         logger.info("Getting all subscriptions by registered user");
-        return new ResponseEntity<>(subscriptionService.getUserSubscriptions(user)  , HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.getSubscriptions(user), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<SubscriptionListDto> addSubscription(@RequestBody SubscriptionDto subscriptionDto, @RequestAttribute UserData user) {
+    public ResponseEntity<SubscriptionListDTO> addSubscription(@RequestBody SubscriptionDTO subscriptionDto, @RequestAttribute UserDTO user) {
         logger.info("Creating subscription by registered user");
-        return new ResponseEntity<>(subscriptionService.addSubscription( user,subscriptionDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(subscriptionService.addSubscription(user, subscriptionDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubscriptionListDto> updateSubscription(@RequestBody SubscriptionDto subscriptionDto,@PathVariable long id,@RequestAttribute UserData user) {
+    public ResponseEntity<SubscriptionListDTO> updateSubscription(@RequestBody SubscriptionDTO subscriptionDto, @PathVariable long id, @RequestAttribute UserDTO user) {
         logger.info("Updating subscription (by id) by registered user");
-        return new ResponseEntity<>(subscriptionService.updateSubscriptionById(id,subscriptionDto,user), HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.updateSubscriptionById(id, subscriptionDto, user), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionListDto> getSubscriptionById(@PathVariable long id,@RequestAttribute UserData user) {
+    public ResponseEntity<SubscriptionListDTO> getSubscriptionById(@PathVariable long id, @RequestAttribute UserDTO user) {
         logger.info("Getting subscription (by id) by registered user");
-        return new ResponseEntity<>(subscriptionService.getSubscriptionById(id,user), HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.getSubscriptionById(id, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSubscriptionById(@PathVariable long id,@RequestAttribute UserData user) {
+    public ResponseEntity deleteSubscriptionById(@PathVariable long id, @RequestAttribute UserDTO user) {
         logger.info("Deleting subscription (by id) by registered user");
-        subscriptionService.deleteSubscriptionById(id,user);
-        return new ResponseEntity<>( HttpStatus.OK);
+        subscriptionService.deleteSubscriptionById(id, user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

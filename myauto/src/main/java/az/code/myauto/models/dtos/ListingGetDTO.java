@@ -13,8 +13,9 @@ import java.util.stream.Collectors;
 @Getter
 @Builder(toBuilder = true)
 public class ListingGetDTO {
+
     private Long id;
-    private UserDto user;
+    private UserDTO user;
     private MakeDTO make;
     private ModelDTO model;
     private int year;
@@ -39,7 +40,7 @@ public class ListingGetDTO {
 
     public ListingGetDTO(Listing data){
         this.id = data.getId();
-        this.user=new UserDto(data.getUser());
+        this.user=new UserDTO(data.getUser());
         this.make=new MakeDTO(data.getAuto().getMake());
         this.model= new ModelDTO(data.getAuto().getModel());
         this.year= data.getAuto().getYear();
@@ -57,7 +58,7 @@ public class ListingGetDTO {
         this.cashOption=data.getCashOption();
         this.description=data.getDescription();
         this.type=data.getType().name();
-        this.thumbnailUrl= data.getThumbnails().stream().map(Thumbnail::getUrl).collect(Collectors.toList());
+        this.thumbnailUrl= data.getImages().stream().map(Image::getUrl).collect(Collectors.toList());
         this.carSpecs= data.getAuto().getEquipments().stream().map(CarSpecDTO::new).collect(Collectors.toList());
         this.updatedAt=data.getUpdatedAt();
         this.isActive=data.isActive();

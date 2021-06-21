@@ -1,7 +1,7 @@
 package az.code.myauto.config;
 
 
-import az.code.myauto.config.security.Interceptor;
+import az.code.myauto.config.security.UserTokenInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,15 +9,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class BaseConfig implements WebMvcConfigurer {
     final
-    Interceptor productServiceInterceptor;
+    UserTokenInterceptor productServiceUserTokenInterceptor;
 
-    public BaseConfig(Interceptor productServiceInterceptor) {
-        this.productServiceInterceptor = productServiceInterceptor;
+    public BaseConfig(UserTokenInterceptor productServiceUserTokenInterceptor) {
+        this.productServiceUserTokenInterceptor = productServiceUserTokenInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(productServiceInterceptor);
+        registry.addInterceptor(productServiceUserTokenInterceptor);
     }
 }
 

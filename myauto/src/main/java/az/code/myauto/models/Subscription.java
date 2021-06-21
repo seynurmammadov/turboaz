@@ -1,6 +1,6 @@
 package az.code.myauto.models;
 
-import az.code.myauto.models.dtos.SubscriptionDto;
+import az.code.myauto.models.dtos.SubscriptionDTO;
 import az.code.myauto.models.enums.BodyType;
 import az.code.myauto.models.enums.Color;
 import az.code.myauto.models.enums.FuelType;
@@ -9,7 +9,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class Subscription {
     private Boolean barterOption;
     private LocalDateTime createdAt;
 
-    public Subscription(SubscriptionDto data, String username) {
+    public Subscription(SubscriptionDTO data, String username) {
         this.minYear = data.getMinYear();
         this.maxYear = data.getMaxYear();
         this.minPrice = data.getMinPrice();

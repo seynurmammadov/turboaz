@@ -1,20 +1,20 @@
 package az.code.myauto.services.interfaces;
 
-import az.code.myauto.models.UserData;
-import az.code.myauto.models.dtos.SubscriptionDto;
-import az.code.myauto.models.dtos.SubscriptionListDto;
+import az.code.myauto.models.dtos.SubscriptionDTO;
+import az.code.myauto.models.dtos.SubscriptionListDTO;
+import az.code.myauto.models.dtos.UserDTO;
 
 import java.util.List;
 
 public interface SubscriptionService {
 
-    List<SubscriptionListDto> getUserSubscriptions(UserData userData);
+    List<SubscriptionListDTO> getSubscriptions(UserDTO user);
 
-    SubscriptionListDto addSubscription(UserData userData, SubscriptionDto subscription);
+    SubscriptionListDTO addSubscription(UserDTO user, SubscriptionDTO subscription);
 
-    SubscriptionListDto getSubscriptionById( long id,UserData userData);
+    SubscriptionListDTO getSubscriptionById(long id, UserDTO user);
 
-    SubscriptionListDto updateSubscriptionById( long id, SubscriptionDto subscription,UserData userData);
+    SubscriptionListDTO updateSubscriptionById(long id, SubscriptionDTO subscription, UserDTO user);
 
-    void deleteSubscriptionById(long id, UserData userData);
+    void deleteSubscriptionById(long id, UserDTO user);
 }

@@ -4,7 +4,6 @@ import az.code.myauto.models.enums.TransactionType;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +22,7 @@ public class Transaction {
 
     private double amount;
 
-    private LocalDateTime createdAt ;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "userId")

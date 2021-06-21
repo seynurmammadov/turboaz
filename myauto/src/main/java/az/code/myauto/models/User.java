@@ -1,6 +1,7 @@
 package az.code.myauto.models;
 
 
+import az.code.myauto.models.dtos.UserDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,15 +28,15 @@ public class User {
     private double balance = 0;
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "User")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "User")
     private List<Transaction> transactions;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "User")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "User")
     private List<Listing> listings;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "User")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "User")
     private List<Subscription> subscriptions;
 
-    public  User(UserData data){
+    public User(UserDTO data) {
         this.username = data.getUsername();
         this.fullname = data.getFullName();
         this.email = data.getEmail();

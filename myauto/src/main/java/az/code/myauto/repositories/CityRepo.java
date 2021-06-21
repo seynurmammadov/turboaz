@@ -1,4 +1,4 @@
-package az.code.myauto.repositories.search_repos;
+package az.code.myauto.repositories;
 
 import az.code.myauto.models.City;
 import org.springframework.data.jpa.repository.JpaRepository;

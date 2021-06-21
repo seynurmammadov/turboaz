@@ -1,6 +1,7 @@
 package az.code.myauto.models;
 
 import az.code.myauto.models.dtos.ListingCreationDTO;
+import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.enums.*;
 import lombok.*;
 
@@ -34,7 +35,7 @@ public class Listing {
     ListingType type;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "listing")
-    private List<Thumbnail> thumbnails = new ArrayList<>();
+    private List<Image> images = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isActive = true;
@@ -50,7 +51,7 @@ public class Listing {
     @JoinColumn(name = "cityId")
     private City city;
 
-    public Listing(ListingCreationDTO data, UserData user) {
+    public Listing(ListingCreationDTO data, UserDTO user) {
         this.creditOption = data.getCreditOption();
         this.barterOption = data.getBarterOption();
         this.leaseOption = data.getLeaseOption();
@@ -59,7 +60,7 @@ public class Listing {
         this.city = City.builder().id(data.getCityId()).build();
         this.auto_pay = data.isAuto_pay();
         this.description = data.getDescription();
-        this.thumbnails.add(Thumbnail.builder().url(data.getThumbnailUrl()).listing(this).build());
+        this.images.add(Image.builder().url(data.getThumbnailUrl()).listing(this).build());
         this.User = new User(user);
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "firebase")
-public class Properties {
+public class FireBaseProperties {
     private String bucketName;
     private String imageUrl;
 }

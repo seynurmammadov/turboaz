@@ -13,7 +13,7 @@ import java.util.List;
 import static az.code.myauto.utils.SpecificationUtil.*;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/listings/dictionaries")
 public class SearchController {
 
     final
@@ -25,42 +25,41 @@ public class SearchController {
 
     Logger logger = LoggerFactory.getLogger(SearchController.class);
 
-    @GetMapping("/listings/dictionaries/makes/{id}/models")
+    @GetMapping("/makes/{id}/models")
     public ResponseEntity<List<String>> getModelsByMakeId(@PathVariable long id) {
         logger.info("Getting all models (by make id) by unregistered user");
 
         return new ResponseEntity<>(searchService.getAllModelsByMake(id), HttpStatus.OK);
     }
 
-    @GetMapping("/listings/dictionaries/makes")
+    @GetMapping("/makes")
     public ResponseEntity<List<String>> getAllMakes() {
         logger.info("Getting all makes by unregistered user");
 
         return new ResponseEntity<>(searchService.getAllMakes(), HttpStatus.OK);
     }
 
-    @GetMapping("/listings/dictionaries/fuelTypes")
+    @GetMapping("/fuelTypes")
     public ResponseEntity<List<String>> getAllFuelTypes() {
         logger.info("Getting all fuel types by unregistered user");
-
         return new ResponseEntity<>(searchService.getAllFuelTypes(), HttpStatus.OK);
     }
 
-    @GetMapping("/listings/dictionaries/bodyTypes")
+    @GetMapping("/bodyTypes")
     public ResponseEntity<List<String>> getAllBodyTypes() {
         logger.info("Getting all body types by unregistered user");
 
         return new ResponseEntity<>(searchService.getAllBodyTypes(), HttpStatus.OK);
     }
 
-    @GetMapping("/listings/dictionaries/locations")
+    @GetMapping("/locations")
     public ResponseEntity<List<String>> getAllCities() {
         logger.info("Getting all cities by unregistered user");
 
         return new ResponseEntity<>(searchService.getAllCities(), HttpStatus.OK);
     }
 
-    @GetMapping("/car/search")
+    @GetMapping("/search")
     public ResponseEntity<List<ListingListDTO>> search(@RequestParam(required = false) String make,
                                                        @RequestParam(required = false) String model,
                                                        @RequestParam(required = false) String location,
@@ -76,21 +75,22 @@ public class SearchController {
                                                        @RequestParam(required = false) Boolean hasLease,
                                                        @RequestParam(required = false) Boolean hasCash,
                                                        @RequestParam(required = false) String bodyType,
-                                                        @RequestParam(required = false, defaultValue = "10") Integer count,
+                                                       @RequestParam(required = false, defaultValue = "10") Integer count,
                                                        @RequestParam(required = false, defaultValue = "0") Integer page) {
         logger.info("Getting all listings (detailed search) by unregistered user");
-        return new ResponseEntity<>(searchService.search(sameAuto("make",make)
-                        .and(sameAuto("model",model))
+        return new ResponseEntity<>(searchService.search(
+                sameAuto("make", make)
+                        .and(sameAuto("model", model))
                         .and(sameCity(location))
-                        .and(between("year",minYear, maxYear))
-                        .and(between("price",minPrice, maxPrice))
-                        .and(between("mileage",minMileage, maxMileage))
+                        .and(between("year", minYear, maxYear))
+                        .and(between("price", minPrice, maxPrice))
+                        .and(between("mileage", minMileage, maxMileage))
                         .and(sameFuelType(fuel))
                         .and(sameBodyType(bodyType))
-                        .and(sameOption("creditOption",hasLoan))
-                        .and(sameOption("barterOption",hasBarter))
-                        .and(sameOption("leaseOption",hasLease))
-                        .and(sameOption("cashOption",hasCash)),
+                        .and(sameOption("creditOption", hasLoan))
+                        .and(sameOption("barterOption", hasBarter))
+                        .and(sameOption("leaseOption", hasLease))
+                        .and(sameOption("cashOption", hasCash)),
                 count,
                 page
         ), HttpStatus.OK);
