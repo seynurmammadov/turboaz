@@ -57,11 +57,10 @@ public class ThumbnailController {
     }
 
     @GetMapping("listings/{listingId}/image/{imageId}")
-    public ResponseEntity<String> getImageByImageId(@PathVariable long listingId,
-                                                    @PathVariable long imageId) throws ListingNotFoundException {
+    public ResponseEntity<ThumbnailDTO> getImageByImageId(@PathVariable Long listingId,
+                                                    @PathVariable Long imageId) throws  ThumbnailNotFoundException {
         logger.info("Getting image by image id");
-//        thumbnailService.getImageById(imageId, listingId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(thumbnailService.getThumbnailById(listingId, imageId),HttpStatus.OK);
     }
 
     @GetMapping("listings/{id}/images")

@@ -1,5 +1,6 @@
 package az.code.myauto.services;
 
+import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.ThumbnailNotFoundException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.Thumbnail;
@@ -36,11 +37,16 @@ public class ThumbnailServiceImpl implements ThumbnailService {
     }
 
     public List<ThumbnailDTO> getThumbnailsByListingId(Long id) throws ThumbnailNotFoundException {
-        Optional<List<Thumbnail>> t = thumbnailRepo.findThumbnailByListingId(id);
+        Optional<List<Thumbnail>> t = thumbnailRepo.findThumbnailsByListingId(id);
         if (t.isPresent()) {
             return t.get().stream().map(thumbnail -> new ThumbnailDTO(thumbnail)).collect(Collectors.toList());
         }
         throw new ThumbnailNotFoundException();
+    }
+
+    @Override
+    public ThumbnailDTO getThumbnailById(Long listingId, Long id) throws ThumbnailNotFoundException {
+        return new ThumbnailDTO(thumbnailCheck(listingId,id));
     }
 //    public List<String> getThumbnailsUrlsByListingId(Long id) throws ThumbnailNotFoundException {
 //        List<ThumbnailDTO> thumbnailDTOList = getThumbnailsByListingId(id);
@@ -50,15 +56,24 @@ public class ThumbnailServiceImpl implements ThumbnailService {
 //        }
 //        return urls;
 //    }
-
+    @Override
     public String uploadImage(UserData user, MultipartFile multipartFile){
         return fileService.upload(multipartFile);
     }
 
     @Override
-    public ThumbnailDTO uploadImageToListing(long id, UserData user, String url) {
+    public ThumbnailDTO uploadImageToListing(Long id, UserData user, String url) {
         Listing listing = listingService.listingCheck(id,user);
         listing.getThumbnails().add(Thumbnail.builder().url(url).listing(listing).build());
         return new ThumbnailDTO(listingRepo.save(listing).getThumbnails().get(listing.getThumbnails().size()-1));
     }
+    @Override
+    public Thumbnail thumbnailCheck(Long listingId, Long id) throws ThumbnailNotFoundException {
+        Optional<Thumbnail> thumb =  thumbnailRepo.findThumbById(listingId,id);
+        if (thumb.isPresent()) {
+            return thumb.get();
+        }
+        throw new ThumbnailNotFoundException();
+    }
+
 }
