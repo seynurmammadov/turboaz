@@ -92,9 +92,9 @@ public class FileUploadUtil {
 
     }
 
-    public void delete() {
+    public void delete(String url) {
         Bucket bucket = StorageClient.getInstance().bucket();
-        Blob blob = bucket.get("524888e1-a3cb-4b61-8e3a-fc9df768223c.jpg");
+        Blob blob = bucket.get(url);
         blob.delete();
     }
 
