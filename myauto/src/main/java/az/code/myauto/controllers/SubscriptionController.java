@@ -1,14 +1,11 @@
 package az.code.myauto.controllers;
 
 import az.code.myauto.models.UserData;
-import az.code.myauto.models.dtos.ListingCreationDTO;
-import az.code.myauto.models.dtos.ListingGetDTO;
 import az.code.myauto.models.dtos.SubscriptionDto;
 import az.code.myauto.models.dtos.SubscriptionListDto;
 import az.code.myauto.services.interfaces.SubscriptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +52,7 @@ public class SubscriptionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<SubscriptionListDto> deleteSubscriptionById(@PathVariable long id,@RequestAttribute UserData user) {
         logger.info("Deleting subscription (by id) by registered user");
-        return new ResponseEntity<>(subscriptionService.deactiveSubscriptionById(id,user), HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.deleteSubscriptionById(id,user), HttpStatus.OK);
     }
 
 }
