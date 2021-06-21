@@ -5,6 +5,7 @@ import az.code.myauto.models.enums.ListingType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface ListingRepo extends JpaRepository<Listing, Long> {
+public interface ListingRepo extends JpaRepository<Listing, Long>, JpaSpecificationExecutor<Listing> {
     @Modifying
     @Transactional
     @Query("update Listing l set l.isActive=false where l.id=:id")
@@ -36,5 +37,7 @@ public interface ListingRepo extends JpaRepository<Listing, Long> {
 
     @Query("select l from Listing l where l.isActive=true")
     List<Listing> getAllActiveListings();
+
+
 
 }

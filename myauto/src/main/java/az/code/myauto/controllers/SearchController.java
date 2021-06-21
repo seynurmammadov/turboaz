@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static az.code.myauto.utils.SpecificationUtil.*;
+
 @RestController
 @RequestMapping("api/v1")
 public class SearchController {
@@ -73,9 +75,24 @@ public class SearchController {
                                                        @RequestParam(required = false) Boolean hasBarter,
                                                        @RequestParam(required = false) Boolean hasLease,
                                                        @RequestParam(required = false) Boolean hasCash,
-                                                       @RequestParam(required = false) String bodyType) {
+                                                       @RequestParam(required = false) String bodyType,
+                                                        @RequestParam(required = false, defaultValue = "10") Integer count,
+                                                       @RequestParam(required = false, defaultValue = "0") Integer page) {
         logger.info("Getting all listings (detailed search) by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(searchService.search(sameAuto("make",make)
+                        .and(sameAuto("model",model))
+                        .and(sameCity(location))
+                        .and(between("year",minYear, maxYear))
+                        .and(between("price",minPrice, maxPrice))
+                        .and(between("mileage",minMileage, maxMileage))
+                        .and(sameFuelType(fuel))
+                        .and(sameBodyType(bodyType))
+                        .and(sameOption("creditOption",hasLoan))
+                        .and(sameOption("barterOption",hasBarter))
+                        .and(sameOption("leaseOption",hasLease))
+                        .and(sameOption("cashOption",hasCash)),
+                count,
+                page
+        ), HttpStatus.OK);
     }
 }
