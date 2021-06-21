@@ -27,10 +27,10 @@ public class SearchController {
     Logger logger = LoggerFactory.getLogger(SearchController.class);
 
     @GetMapping("/listings/dictionaries/makes/{id}/models")
-    public ResponseEntity<List<ModelDTO>> getModelsByMakeId(@PathVariable long id) {
+    public ResponseEntity<List<String>> getModelsByMakeId(@PathVariable long id) {
         logger.info("Getting all models (by make id) by unregistered user");
-        //TODO after updating SearchService, 'null' must be changed.
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(searchService.getAllModelsByMake(id), HttpStatus.OK);
     }
 
     @GetMapping("/listings/dictionaries/makes")

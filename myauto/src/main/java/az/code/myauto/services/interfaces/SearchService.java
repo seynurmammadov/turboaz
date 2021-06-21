@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface SearchService {
 
-    List<ModelDTO> getAllModelsByMake(long makeId);
+    List<String> getAllModelsByMake(long makeId);
 
     List<String> getAllMakes();
 
