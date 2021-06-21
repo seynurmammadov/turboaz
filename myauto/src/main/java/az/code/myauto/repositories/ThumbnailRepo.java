@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface ThumbnailRepo extends JpaRepository<Thumbnail, Long> {
-    @Query("select t from Thumbnail t where t.listing =: id")
+    @Query("select t from Thumbnail t where t.listing.id =:id")
     Optional<List<Thumbnail>> findThumbnailByListingId(Long id);
 }
