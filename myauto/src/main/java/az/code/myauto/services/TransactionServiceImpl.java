@@ -58,7 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
             sendEmail(user.getEmail(), "Balance Increase Notification",
                     "Dear, " + user.getFullname() + ", your balance was increased by the amount of " +
                             amount + ". Now, you have the total " + user.getBalance() + " AZN at your balance. ");
-
+            userRepo.save(user);
             return new TransactionListDto(transactionRepo.save(newTransaction));
         }
         throw new TransactionIncorrectAmountException();
@@ -82,7 +82,7 @@ public class TransactionServiceImpl implements TransactionService {
                 sendEmail(user.getEmail(), "Balance Decrease Notification",
                         "Dear, " + user.getFullname() + ", your balance was decreased by the amount of " +
                                 amount + ". Now, you have the total " + user.getBalance() + " AZN at your balance. ");
-
+                userRepo.save(user);
                 return new TransactionListDto(transactionRepo.save(newTransaction));
             }
             throw new TransactionInsufficientFundsException();

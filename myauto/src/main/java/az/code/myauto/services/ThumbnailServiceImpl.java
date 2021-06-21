@@ -71,7 +71,6 @@ public class ThumbnailServiceImpl implements ThumbnailService {
     @Override
     public void deleteThumbnail(UserData user, Long listingId, Long id) throws ThumbnailNotFoundException {
         String wholeImage = thumbnailCheck(listingId,id).getUrl();
-
         fileService.delete(wholeImage.substring(72, wholeImage.length() - 10));
         thumbnailRepo.deleteThumbById(listingId,id);
     }
