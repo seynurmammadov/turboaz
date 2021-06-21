@@ -47,12 +47,12 @@ public class ThumbnailController {
         return new ResponseEntity<>( thumbnailService.uploadImage(user, multipartFile),HttpStatus.OK);
     }
 
-    @DeleteMapping("listings/{listingId}/image/{imageId}")
-    public ResponseEntity<String> deleteImageFromListing( @PathVariable long listingId,
-                                                          @PathVariable long imageId,
-                                                          @RequestAttribute UserData user) throws ListingNotFoundException {
+    @DeleteMapping("profile/listings/{listingId}/image/{imageId}")
+    public ResponseEntity deleteImageFromListing( @PathVariable Long listingId,
+                                                          @PathVariable Long imageId,
+                                                          @RequestAttribute UserData user) throws ListingNotFoundException, ThumbnailNotFoundException {
         logger.info("Deleting image from listing");
-//        thumbnailService.deleteImage(user, listingId, imageId);
+        thumbnailService.deleteThumbnail(user, listingId, imageId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -14,4 +14,5 @@ public interface ThumbnailService {
     String uploadImage(UserData user, MultipartFile multipartFile);
     ThumbnailDTO uploadImageToListing(Long id, UserData user, String url);
     Thumbnail thumbnailCheck(Long listingId, Long id) throws ThumbnailNotFoundException;
+    void deleteThumbnail(UserData user, Long listingId, Long id) throws ThumbnailNotFoundException;
 }

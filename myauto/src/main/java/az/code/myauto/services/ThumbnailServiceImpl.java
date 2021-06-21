@@ -1,6 +1,5 @@
 package az.code.myauto.services;
 
-import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.ThumbnailNotFoundException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.Thumbnail;
@@ -48,14 +47,7 @@ public class ThumbnailServiceImpl implements ThumbnailService {
     public ThumbnailDTO getThumbnailById(Long listingId, Long id) throws ThumbnailNotFoundException {
         return new ThumbnailDTO(thumbnailCheck(listingId,id));
     }
-//    public List<String> getThumbnailsUrlsByListingId(Long id) throws ThumbnailNotFoundException {
-//        List<ThumbnailDTO> thumbnailDTOList = getThumbnailsByListingId(id);
-//        List<String> urls = new ArrayList<>();
-//        for(ThumbnailDTO td : thumbnailDTOList){
-//            urls.add(td.getThumbnail());
-//        }
-//        return urls;
-//    }
+
     @Override
     public String uploadImage(UserData user, MultipartFile multipartFile){
         return fileService.upload(multipartFile);
@@ -74,6 +66,12 @@ public class ThumbnailServiceImpl implements ThumbnailService {
             return thumb.get();
         }
         throw new ThumbnailNotFoundException();
+    }
+
+    @Override
+    public void deleteThumbnail(UserData user, Long listingId, Long id) throws ThumbnailNotFoundException {
+//        fileService.delete(thumbnailCheck(listingId,id).getUrl());
+        thumbnailRepo.deleteThumbById(listingId,id);
     }
 
 }
