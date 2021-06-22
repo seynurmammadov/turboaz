@@ -7,6 +7,8 @@ import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.services.interfaces.TransactionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,10 +28,10 @@ public class ListingSchedule {
         this.transactionService = transactionService;
     }
 
-    @Scheduled(cron = "0 00 23 * * ?", zone = "Asia/Baku")
+    @Scheduled(cron = "0 0 23 * * ?", zone = "Asia/Baku")
     public void listingNotifications() {
-        List<Listing> allListings = listingRepo.findAllActiveListings();
-        for (Listing listing : allListings) {
+        List<Listing> allActiveListingsBetweenDates = listingRepo.findAllActiveListingsBetweenDate(LocalDateTime.now().minusMonths(1).minusDays(1), LocalDateTime.now().minusMonths(1).plusDays(1));
+        for (Listing listing : allActiveListingsBetweenDates) {
             LocalDateTime today = LocalDateTime.now();
             LocalDateTime oneDayBeforeExpire = listing.getUpdatedAt().plusMonths(1).minusDays(1);
             LocalDateTime paymentDate = listing.getUpdatedAt().plusMonths(1);
@@ -48,5 +50,4 @@ public class ListingSchedule {
             }
         }
     }
-
 }

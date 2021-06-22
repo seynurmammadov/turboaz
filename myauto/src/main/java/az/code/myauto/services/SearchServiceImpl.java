@@ -22,7 +22,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static az.code.myauto.utils.PaginationUtil.*;
+import static az.code.myauto.utils.BaseUtils.*;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -71,10 +71,9 @@ MapperModel mapper;
         return cityRepo.findAll().stream().map(m->mapper.entityToDTO(m, CityDTO.class)).collect(Collectors.toList());
     }
     @Override
-    public List<ListingListDTO> search(Specification<Listing> spec, Integer count, Integer page) {
-        Pageable paging = preparePage(page, count);
-        Page<Listing> pageResult = listingRepo.findAll(spec, paging);
-        return getResult(pageResult).stream()
+    public List<ListingListDTO> search(Specification<Listing> spec, Pageable pageable) {
+        Page<Listing> pageResult = listingRepo.findAll(spec, pageable);
+        return paginationResult(pageResult).stream()
                 .map(r->mapper.entityToDTO(r,ListingListDTO.class))
                 .collect(Collectors.toList());
     }

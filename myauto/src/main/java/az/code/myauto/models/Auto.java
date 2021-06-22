@@ -1,5 +1,6 @@
 package az.code.myauto.models;
 
+import az.code.myauto.models.dtos.CarSpecDTO;
 import az.code.myauto.models.enums.BodyType;
 import az.code.myauto.models.enums.Color;
 import az.code.myauto.models.enums.FuelType;
@@ -7,6 +8,7 @@ import az.code.myauto.models.enums.GearBox;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class Auto {
     private long id;
     @ManyToOne
     @JoinColumn(name = "makeId")
-    private Make make;
+    private Make make = new Make();
     private int year;
     private int price;
     private int mileage;
@@ -46,7 +48,8 @@ public class Auto {
     @JoinColumn(name = "model_id", referencedColumnName = "id")
     Model model;
 
-    public void addEquipments(List<Integer> equipmentList) {
-        equipmentList.forEach(e -> equipments.add(Equipment.builder().id(e).build()));
+    public void addEquipments(List<CarSpecDTO> equipmentList) {
+        ModelMapper modelMapper = new ModelMapper();
+        equipmentList.forEach(e -> equipments.add(modelMapper.map(equipments,Equipment.class)));
     }
 }

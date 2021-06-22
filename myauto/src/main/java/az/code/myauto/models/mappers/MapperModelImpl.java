@@ -2,7 +2,10 @@ package az.code.myauto.models.mappers;
 
 import az.code.myauto.models.*;
 import az.code.myauto.models.dtos.*;
+import org.modelmapper.Conditions;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,9 +21,21 @@ public class MapperModelImpl implements MapperModel {
     }
 
     @Override
-    public <T, Y> T entityToDTO(Y data, Class<T> tClass) {
+    public <T, Y> T entityToDTO(Y data, Class<T> entityClass) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-        T dto = modelMapper.map(data, tClass);
+        T dto = modelMapper.map(data, entityClass);
         return dto;
+    }
+
+    @Override
+    public Listing listingCreationDTOToListing(ListingCreationDTO dto, Listing entity) {
+        entity.getAuto().setModel(null);
+        entity.getAuto().setMake(null);
+        entity.setCity(null);
+        entity.getAuto().setEquipments(null);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.map(dto, entity);
+        return entity;
     }
 }

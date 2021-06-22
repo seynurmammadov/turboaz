@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -37,4 +38,8 @@ public interface ListingRepo extends JpaRepository<Listing, Long>, JpaSpecificat
 
     @Query("select l from Listing l where l.isActive=true")
     List<Listing> findAllActiveListings();
+
+    @Query("select l from Listing l where l.isActive=true and l.updatedAt >= :first_date and l.updatedAt <= :second_date")
+    List<Listing> findAllActiveListingsBetweenDate ( LocalDateTime first_date,
+                                                     LocalDateTime second_date );
 }
