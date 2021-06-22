@@ -38,10 +38,16 @@ public class ListingServiceImpl implements ListingService {
     @Override
     public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
-        if (listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) > 1) {
+        if (listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) == 1 && listing.getType().equals(ListingType.DEFAULT)) {
             throw new FreeListingAlreadyPostedException();
+        }else if(listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) == 1 && listing.getType().equals(ListingType.STANDARD)){
+            Listing listingPaid = new Listing(listing, user);
+            listingPaid.setType(ListingType.STANDARD);
+            transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), user, listingPaid.getId());
+            return new ListingGetDTO(listingRepo.save(listingPaid));
+        }else{
+            return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
         }
-        return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
     }
 
     @Override
