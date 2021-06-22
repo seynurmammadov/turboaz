@@ -1,5 +1,6 @@
 package az.code.myauto.utils;
 
+import az.code.myauto.models.User;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +17,10 @@ public class MessageUtil {
         this.environment = environment;
     }
 
-    public void sendNotification(String type, String to, String name, Double amount, Double balance) {
+    public void sendNotification(String type, User user, Double amount) {
         String subject = type + environment.getProperty("mail.subject");
-        String content = name + environment.getProperty("mail.amount.info.message")
-                + amount + environment.getProperty("mail.balance.info.message") + balance;
-        mailSenderUtil.sendEmail(to, subject, content);
+        String content = user.getFullname() + environment.getProperty("mail.amount.info.message")
+                + amount + environment.getProperty("mail.balance.info.message") + user.getBalance();
+        mailSenderUtil.sendEmail(user.getEmail(), subject, content);
     }
 }

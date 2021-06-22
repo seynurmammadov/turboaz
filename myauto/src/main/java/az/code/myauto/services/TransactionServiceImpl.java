@@ -56,8 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
                     .User(User.builder().username(userData.getUsername()).build())
                     .build();
 
-            messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(),
-                    user.getEmail(), user.getFullname(), amount, user.getBalance());
+            messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
             userRepo.save(user);
             return new TransactionListDTO(transactionRepo.save(newTransaction));
         }
@@ -79,8 +78,7 @@ public class TransactionServiceImpl implements TransactionService {
                         .listing(Listing.builder().id(listingId).build())
                         .build();
 
-                messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(),
-                        user.getEmail(), user.getFullname(), amount, user.getBalance());
+                messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
                 userRepo.save(user);
                 return new TransactionListDTO(transactionRepo.save(newTransaction));
             }
