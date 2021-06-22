@@ -36,6 +36,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "User")
     private List<Subscription> subscriptions;
 
+    private boolean isActive;
+
     public User(UserDTO data) {
         this.username = data.getUsername();
         this.fullname = data.getFullName();
