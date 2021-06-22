@@ -13,7 +13,8 @@ import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.TransactionRepo;
 import az.code.myauto.repositories.UserRepo;
 import az.code.myauto.services.interfaces.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import az.code.myauto.utils.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
@@ -35,15 +36,17 @@ public class TransactionServiceImpl implements TransactionService {
     TransactionRepo transactionRepo;
 
     final
-    JavaMailSender javaMailSender;
+    MessageUtil messageUtil;
 
     final
     MapperModel mapper;
 
-    public TransactionServiceImpl(UserRepo userRepo, TransactionRepo transactionRepo, JavaMailSender javaMailSender, ListingRepo listingRepo, MapperModel mapper) {
+
+        
+    public TransactionServiceImpl(UserRepo userRepo, TransactionRepo transactionRepo, MessageUtil messageUtil, MapperModel mapper) {
         this.userRepo = userRepo;
         this.transactionRepo = transactionRepo;
-        this.javaMailSender = javaMailSender;
+        this.messageUtil = messageUtil;
         this.mapper = mapper;
     }
 
@@ -59,9 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
                     .User(User.builder().username(userData.getUsername()).build())
                     .build();
 
-            sendEmail(user.getEmail(), "Balance Increase Notification",
-                    "Dear, " + user.getFullname() + ", your balance was increased by the amount of " +
-                            amount + ". Now, you have the total " + user.getBalance() + " AZN at your balance. ");
+            messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
             userRepo.save(user);
             return mapper.entityToDTO(transactionRepo.save(newTransaction),TransactionListDTO.class);
         }
@@ -83,9 +84,7 @@ public class TransactionServiceImpl implements TransactionService {
                         .listing(Listing.builder().id(listingId).build())
                         .build();
 
-                sendEmail(user.getEmail(), "Balance Decrease Notification",
-                        "Dear, " + user.getFullname() + ", your balance was decreased by the amount of " +
-                                amount + ". Now, you have the total " + user.getBalance() + " AZN at your balance. ");
+                messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
                 userRepo.save(user);
                 return mapper.entityToDTO(transactionRepo.save(newTransaction),TransactionListDTO.class);
             }
@@ -106,11 +105,4 @@ public class TransactionServiceImpl implements TransactionService {
         return userRepo.findUserByUsername(userData.getUsername()).getBalance();
     }
 
-    public void sendEmail(String to, String subject, String content) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(content);
-        javaMailSender.send(message);
-    }
 }
