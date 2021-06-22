@@ -24,8 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static az.code.myauto.utils.PaginationUtil.getResult;
-import static az.code.myauto.utils.PaginationUtil.preparePage;
+import static az.code.myauto.utils.BaseUtils.paginationResult;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -128,10 +127,9 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy, UserDTO user) {
-        Pageable pageable = preparePage(pageNo, pageSize, sortBy);
+    public List<ListingListDTO> getUserListings(Pageable pageable, UserDTO user) {
         Page<Listing> pages = listingRepo.findAllUserListings(pageable, user.getUsername());
-        return getResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
+        return paginationResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
     }
 
     @Override

@@ -13,6 +13,8 @@ import az.code.myauto.services.interfaces.ListingService;
 import az.code.myauto.services.interfaces.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +46,9 @@ public class ProfileController {
                                                          defaultValue = "updatedAt") String sortBy,
                                                  @RequestAttribute UserDTO user) {
         logger.info("Getting user listings by registered user");
-        return new ResponseEntity<>(profileService.getUserListings(pageNo, itemsCount, sortBy, user), HttpStatus.OK);
+        return new ResponseEntity<>(profileService.getUserListings(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy)), user), HttpStatus.OK);
     }
+
     @Transactional
     @PostMapping("")
     public ResponseEntity<ListingGetDTO> getUser(@RequestBody ListingCreationDTO listingCreationDTO,
@@ -86,10 +89,10 @@ public class ProfileController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable long id,
-                                                    @RequestAttribute UserDTO user) throws ListingNotFoundException {
+                                     @RequestAttribute UserDTO user) throws ListingNotFoundException {
         logger.info("Deleting listing by registered user");
         profileService.delete(id, user);
-        return new ResponseEntity<>( HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{username}/all")
@@ -99,7 +102,7 @@ public class ProfileController {
                                          @PathVariable String username) {
         logger.info("Getting listings (by username) by unregistered user");
         return new ResponseEntity<>(
-                profileService.getUserListings(pageNo, itemsCount, sortBy, UserDTO.builder().username(username).build())
+                profileService.getUserListings(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy)), UserDTO.builder().username(username).build())
                 , HttpStatus.OK);
     }
 
