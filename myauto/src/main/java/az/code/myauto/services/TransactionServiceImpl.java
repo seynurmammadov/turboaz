@@ -9,7 +9,6 @@ import az.code.myauto.models.dtos.TransactionListDTO;
 import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.enums.TransactionType;
 import az.code.myauto.models.mappers.MapperModel;
-import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.TransactionRepo;
 import az.code.myauto.repositories.UserRepo;
 import az.code.myauto.services.interfaces.TransactionService;
@@ -17,15 +16,12 @@ import az.code.myauto.services.interfaces.TransactionService;
 import az.code.myauto.utils.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static az.code.myauto.utils.PaginationUtil.getResult;
-import static az.code.myauto.utils.PaginationUtil.preparePage;
+import static az.code.myauto.utils.BaseUtils.paginationResult;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -94,10 +90,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionListDTO> getTransactions(Integer pageNo, Integer pageSize, String sortBy, UserDTO userData) {
-        Pageable pageable = preparePage(pageNo, pageSize, sortBy);
+    public List<TransactionListDTO> getTransactions(Pageable pageable, UserDTO userData) {
         Page<Transaction> pages = transactionRepo.getTransactionsByUserId(pageable, userData.getUsername());
-        return getResult(pages.map(t->mapper.entityToDTO(t,TransactionListDTO.class)));
+        return paginationResult(pages.map(t->mapper.entityToDTO(t,TransactionListDTO.class)));
     }
 
     @Override

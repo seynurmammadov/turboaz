@@ -1,9 +1,6 @@
 package az.code.myauto.services;
 
-import az.code.myauto.exceptions.FreeListingAlreadyPostedException;
 import az.code.myauto.exceptions.ListingNotFoundException;
-import az.code.myauto.exceptions.TransactionIncorrectAmountException;
-import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.*;
 import az.code.myauto.models.dtos.*;
 import az.code.myauto.models.enums.*;
@@ -15,14 +12,11 @@ import az.code.myauto.services.interfaces.TransactionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static az.code.myauto.utils.PaginationUtil.getResult;
-import static az.code.myauto.utils.PaginationUtil.preparePage;
+import static az.code.myauto.utils.BaseUtils.paginationResult;
 
 @Service
 public class ListingServiceImpl implements ListingService {
@@ -55,18 +49,16 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public List<ListingListDTO> getListings(Integer pageNo, Integer itemsCount, String sortBy) {
-        Pageable pageable = preparePage(pageNo, itemsCount, sortBy);
+    public List<ListingListDTO> getListings(Pageable pageable) {
         Page<Listing> pages = listingRepo.findAllActiveListings(pageable);
-        return getResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
+        return paginationResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
     }
 
 
     @Override
-    public List<ListingListDTO> getVIPListings(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable pageable = preparePage(pageNo, pageSize, sortBy);
+    public List<ListingListDTO> getVIPListings(Pageable pageable) {
         Page<Listing> pages = listingRepo.findAllActiveVIPListings(pageable, ListingType.VIP);
-        return getResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
+        return paginationResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
     }
 
 }

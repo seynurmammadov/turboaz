@@ -7,6 +7,8 @@ import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.services.interfaces.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +41,7 @@ public class TransactionController {
             @RequestParam(required = false, defaultValue = "createdAt") String sortBy,
             @RequestAttribute UserDTO user) {
         logger.info("Getting transactions by registered user");
-        return new ResponseEntity<>(transactionService.getTransactions(pageNo, itemsCount, sortBy, user), HttpStatus.OK);
+        return new ResponseEntity<>(transactionService.getTransactions(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy)), user), HttpStatus.OK);
     }
 
     @PutMapping("/wallet/increase")

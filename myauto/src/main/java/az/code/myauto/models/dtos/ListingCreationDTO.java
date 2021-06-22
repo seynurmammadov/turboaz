@@ -1,5 +1,7 @@
 package az.code.myauto.models.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,5 +33,6 @@ public class ListingCreationDTO {
     private String description;
     private String type;
     private String thumbnailUrl;
-    private List<Integer> carSpecIds;
+    @JsonProperty("carSpecIds")
+        private List<CarSpecDTO> equipments    ;
 }

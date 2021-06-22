@@ -4,6 +4,7 @@ import az.code.myauto.models.Listing;
 import az.code.myauto.models.dtos.CityDTO;
 import az.code.myauto.models.dtos.ListingListDTO;
 import az.code.myauto.models.dtos.MakeDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface SearchService {
 
     List<CityDTO> getAllCities();
 
-    List<ListingListDTO> search(Specification<Listing> spec, Integer count, Integer page);
+    List<ListingListDTO> search(Specification<Listing> spec, Pageable pageable);
 
 
 }

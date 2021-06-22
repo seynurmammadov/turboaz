@@ -6,6 +6,8 @@ import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.dtos.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,8 +15,7 @@ public interface ListingService {
 
     ListingGetDTO getListingById(long id) throws ListingNotFoundException;
 
-    List<ListingListDTO> getListings(Integer pageNo, Integer pageSize, String sortBy);
-
-    List<ListingListDTO> getVIPListings(Integer pageNo, Integer pageSize, String sortBy);
+    List<ListingListDTO> getListings(Pageable pageable);
+    List<ListingListDTO> getVIPListings(Pageable pageable);
 
 }
