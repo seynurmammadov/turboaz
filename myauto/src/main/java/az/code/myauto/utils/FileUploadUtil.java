@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -33,14 +34,7 @@ import java.util.UUID;
 public class FileUploadUtil {
     final
     FireBaseProperties fireBaseProperties;
-    @Value("${firebase.image-url}")
-    private static String MY_URL;
-    @Value("${firebase.json}")
-    private static String firebaseJson;
-    @Value("${firebase.json-path}")
-    private static  String firebaseJsonPath;
     private static String TEMP_URL = "";
-
 
     public FileUploadUtil(FireBaseProperties fireBaseProperties) {
         this.fireBaseProperties = fireBaseProperties;
@@ -49,7 +43,8 @@ public class FileUploadUtil {
     @EventListener
     public void init(ApplicationReadyEvent event) {
         try {
-            ClassPathResource serviceAccount = new ClassPathResource(firebaseJson);
+//            environment.getProperty("firebase.json")
+            ClassPathResource serviceAccount = new ClassPathResource(fireBaseProperties.getJson());
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
                     .setStorageBucket(fireBaseProperties.getBucketName())
@@ -61,14 +56,17 @@ public class FileUploadUtil {
     }
 
     private String uploadFile(File file, String fileName) throws IOException {
+//        environment.getProperty("")
         BlobId blobId = BlobId.of(fireBaseProperties.getBucketName(), fileName);
         String type = Files.probeContentType(file.toPath());
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(type).build();
-        Path path = Paths.get(firebaseJsonPath);
+//        environment.getProperty("firebase.json-path")
+        Path path = Paths.get(fireBaseProperties.getJsonPath());
         Credentials credentials = GoogleCredentials.fromStream(new FileInputStream(path.toAbsolutePath().toString()));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
-        return String.format(MY_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+//        environment.getProperty("firebase.image-url")
+        return String.format(fireBaseProperties.getImageUrl(), URLEncoder.encode(fileName, StandardCharsets.UTF_8));
     }
 
     private File convertToFile(MultipartFile multipartFile, String fileName) throws IOException {

@@ -10,4 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class FireBaseProperties {
     private String bucketName;
     private String imageUrl;
+    private String json;
+    private String jsonPath;
+    private String urlFirstPart;
+    private String urlSecondPart;
 }
