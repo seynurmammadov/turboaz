@@ -56,6 +56,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
+
         if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) == 0
                 && listing.getType().equals(ListingType.DEFAULT.name())) {
             Listing newListing = listingRepo.save(new Listing(listing, user));
