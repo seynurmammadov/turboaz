@@ -10,6 +10,7 @@ import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.ImageRepo;
 import az.code.myauto.services.interfaces.ListingService;
 import az.code.myauto.services.interfaces.ImageService;
+import az.code.myauto.services.interfaces.ProfileService;
 import az.code.myauto.utils.FileUploadUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,20 +23,23 @@ import java.util.stream.Collectors;
 public class ImageServiceImpl implements ImageService {
     final
     ImageRepo imageRepo;
+
     final
     FileUploadUtil fileService;
+
     final
-    ListingService listingService;
+    ProfileService profileService;
+
     final
     ListingRepo listingRepo;
 
     final
     MapperModel mapperModel;
 
-    public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService, ListingService listingService, ListingRepo listingRepo, MapperModel mapperModel) {
+    public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService, ProfileService profileService, ListingRepo listingRepo, MapperModel mapperModel) {
         this.imageRepo = imageRepo;
         this.fileService = fileService;
-        this.listingService = listingService;
+        this.profileService = profileService;
         this.listingRepo = listingRepo;
         this.mapperModel = mapperModel;
     }
@@ -61,7 +65,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public ImageDTO addImageToListing(Long id, UserDTO user, String url) {
-        Listing listing = listingService.isListingExist(id, user);
+        Listing listing = profileService.isListingExist(id, user);
         listing.getImages().add(Image.builder().name(url).listing(listing).build());
         int addedImageIndex = listing.getImages().size() - 1;
         return mapperModel.entityToDTO(listingRepo.save(listing).getImages().get(addedImageIndex), ImageDTO.class);
