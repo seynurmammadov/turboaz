@@ -19,13 +19,13 @@ public class UserTokenInterceptor implements HandlerInterceptor {
         if (auth != null) {
             String[] chunks = auth.split("\\.");
             String data = new String(Base64.getDecoder().decode(chunks[1]));
-            JsonNode payload = new ObjectMapper().readValue(data, JsonNode.class);
+            JsonNode user = new ObjectMapper().readValue(data, JsonNode.class);
             request.setAttribute("user",
                     UserDTO.builder()
-                            .username(payload.get("preferred_username").textValue())
-                            .fullName(payload.get("name").textValue())
-                            .email(payload.get("email").textValue())
-                            .phoneNumber(payload.get("phoneNumber").textValue())
+                            .username(user.get("preferred_username").textValue())
+                            .fullName(user.get("name").textValue())
+                            .email(user.get("email").textValue())
+                            .phoneNumber(user.get("phoneNumber").textValue())
                             .build());
         }
         return true;
