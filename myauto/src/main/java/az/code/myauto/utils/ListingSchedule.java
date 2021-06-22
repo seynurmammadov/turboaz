@@ -33,9 +33,7 @@ public class ListingSchedule {
             LocalDateTime today = LocalDateTime.now();
             LocalDateTime oneDayBeforeExpire = listing.getUpdatedAt().plusMonths(1).minusDays(1);
             LocalDateTime paymentDate = listing.getUpdatedAt().plusMonths(1);
-            if (today.isAfter(oneDayBeforeExpire)) {
-                mailSenderUtil.sendEmail(listing.getUser().getEmail(), "Attention !", "Tomorrow you have to pay for listing  " + listing.getUpdatedAt().plusMonths(1) + " -payment date");
-            }
+
             if (today.isAfter(paymentDate)) {
                 UserDTO user = UserDTO.builder().username(listing.getUser().getUsername()).build();
                 try {
@@ -46,6 +44,8 @@ public class ListingSchedule {
                     listing.setActive(false);
                     listingRepo.save(listing);
                 }
+            } else if (today.isAfter(oneDayBeforeExpire)) {
+                mailSenderUtil.sendEmail(listing.getUser().getEmail(), "Attention !", "Tomorrow you have to pay for listing  " + listing.getUpdatedAt().plusMonths(1) + " -payment date");
             }
         }
     }
