@@ -26,7 +26,7 @@ public class ListingSchedule {
         this.transactionService = transactionService;
     }
 
-    @Scheduled(cron = "0 23 14 * * ?", zone = "Asia/Baku")
+    @Scheduled(cron = "0 00 23 * * ?", zone = "Asia/Baku")
     public void listingNotifications() {
         List<Listing> allListings = listingRepo.findAllActiveListings();
         for (Listing listing : allListings) {
