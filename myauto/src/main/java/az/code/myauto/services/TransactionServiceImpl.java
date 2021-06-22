@@ -8,10 +8,12 @@ import az.code.myauto.models.User;
 import az.code.myauto.models.dtos.TransactionListDTO;
 import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.enums.TransactionType;
+import az.code.myauto.models.mappers.MapperModel;
 import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.TransactionRepo;
 import az.code.myauto.repositories.UserRepo;
 import az.code.myauto.services.interfaces.TransactionService;
+
 import az.code.myauto.utils.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,12 +38,16 @@ public class TransactionServiceImpl implements TransactionService {
     final
     MessageUtil messageUtil;
 
+    final
+    MapperModel mapper;
 
-    public TransactionServiceImpl(UserRepo userRepo, TransactionRepo transactionRepo, MessageUtil messageUtil) {
+
+        
+    public TransactionServiceImpl(UserRepo userRepo, TransactionRepo transactionRepo, MessageUtil messageUtil, MapperModel mapper) {
         this.userRepo = userRepo;
         this.transactionRepo = transactionRepo;
         this.messageUtil = messageUtil;
-
+        this.mapper = mapper;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class TransactionServiceImpl implements TransactionService {
 
             messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
             userRepo.save(user);
-            return new TransactionListDTO(transactionRepo.save(newTransaction));
+            return mapper.entityToDTO(transactionRepo.save(newTransaction),TransactionListDTO.class);
         }
         throw new TransactionIncorrectAmountException();
     }
@@ -80,7 +86,7 @@ public class TransactionServiceImpl implements TransactionService {
 
                 messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
                 userRepo.save(user);
-                return new TransactionListDTO(transactionRepo.save(newTransaction));
+                return mapper.entityToDTO(transactionRepo.save(newTransaction),TransactionListDTO.class);
             }
             throw new TransactionInsufficientFundsException();
         }
@@ -91,7 +97,7 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionListDTO> getTransactions(Integer pageNo, Integer pageSize, String sortBy, UserDTO userData) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
         Page<Transaction> pages = transactionRepo.getTransactionsByUserId(pageable, userData.getUsername());
-        return getResult(pages.map(TransactionListDTO::new));
+        return getResult(pages.map(t->mapper.entityToDTO(t,TransactionListDTO.class)));
     }
 
     @Override

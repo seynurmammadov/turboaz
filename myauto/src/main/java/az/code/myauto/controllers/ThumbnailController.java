@@ -36,7 +36,7 @@ public class ThumbnailController {
                                                       @RequestBody ImageDTO imageDTO,
                                                       @RequestAttribute UserDTO user)  throws ListingNotFoundException {
         logger.info("Uploading image to listing");
-        return new ResponseEntity<>(thumbnailService.addImageToListing(id, user, imageDTO.getThumbnail()),HttpStatus.OK);
+        return new ResponseEntity<>(thumbnailService.addImageToListing(id, user, imageDTO.getName()),HttpStatus.OK);
     }
 
     @PutMapping("add/image")
