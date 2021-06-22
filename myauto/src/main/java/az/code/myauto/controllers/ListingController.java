@@ -28,7 +28,7 @@ public class ListingController {
         return new ResponseEntity<>(listingService.getListingById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getListings(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
                                          @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
                                          @RequestParam(required = false, defaultValue = "updatedAt") String sortBy) {

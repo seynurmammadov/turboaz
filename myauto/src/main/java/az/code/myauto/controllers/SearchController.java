@@ -33,9 +33,8 @@ public class SearchController {
     }
 
     @GetMapping("/makes")
-    public ResponseEntity<List<String>> getAllMakes() {
+    public ResponseEntity<List<MakeDTO>> getAllMakes() {
         logger.info("Getting all makes by unregistered user");
-
         return new ResponseEntity<>(searchService.getAllMakes(), HttpStatus.OK);
     }
 
@@ -53,7 +52,7 @@ public class SearchController {
     }
 
     @GetMapping("/locations")
-    public ResponseEntity<List<String>> getAllCities() {
+    public ResponseEntity<List<CityDTO>> getAllCities() {
         logger.info("Getting all cities by unregistered user");
 
         return new ResponseEntity<>(searchService.getAllCities(), HttpStatus.OK);

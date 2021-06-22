@@ -6,8 +6,10 @@ import az.code.myauto.models.Subscription;
 import az.code.myauto.models.dtos.SubscriptionDTO;
 import az.code.myauto.models.dtos.SubscriptionListDTO;
 import az.code.myauto.models.dtos.UserDTO;
+import az.code.myauto.models.mappers.MapperModel;
 import az.code.myauto.repositories.SubscriptionRepo;
 import az.code.myauto.services.interfaces.SubscriptionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,13 +21,19 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     final
     SubscriptionRepo subscriptionRepo;
 
-    public SubscriptionServiceImpl(SubscriptionRepo subscriptionRepo) {
+    final
+    MapperModel mapperModel;
+
+    public SubscriptionServiceImpl(SubscriptionRepo subscriptionRepo, MapperModel mapperModel) {
         this.subscriptionRepo = subscriptionRepo;
+        this.mapperModel = mapperModel;
     }
 
     @Override
     public List<SubscriptionListDTO> getSubscriptions(UserDTO user) {
-        return subscriptionRepo.getUserSubs(user.getUsername()).stream().map(SubscriptionListDTO::new).collect(Collectors.toList());
+        return subscriptionRepo.getUserSubs(user.getUsername()).stream()
+                .map(r -> mapperModel.entityToDTO(r, SubscriptionListDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -33,12 +41,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         if (subscriptionRepo.getCountOfUserSubs(user.getUsername()) >= 5) {
             throw new SubscriptionLimitException();
         }
-        return new SubscriptionListDTO(subscriptionRepo.save(new Subscription(subscription, user.getUsername())));
+        return mapperModel.entityToDTO(subscriptionRepo.save(new Subscription(subscription, user.getUsername())), SubscriptionListDTO.class);
     }
 
     @Override
     public SubscriptionListDTO getSubscriptionById(long id, UserDTO user) {
-        return new SubscriptionListDTO(subsCheck(id, user));
+        return mapperModel.entityToDTO(subsCheck(id, user),SubscriptionListDTO.class);
     }
 
     @Override
@@ -48,7 +56,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public void deleteSubscriptionById(long id, UserDTO user) {
-        subsCheck(id,user);
+        subsCheck(id, user);
         subscriptionRepo.deleteSubById(id, user.getUsername());
     }
 

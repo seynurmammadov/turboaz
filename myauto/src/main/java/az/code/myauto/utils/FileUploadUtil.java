@@ -1,6 +1,7 @@
 package az.code.myauto.utils;
 
 import az.code.myauto.config.FireBaseProperties;
+import com.google.api.client.util.Value;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
@@ -28,7 +29,12 @@ import java.util.UUID;
 public class FileUploadUtil {
     final
     FireBaseProperties fireBaseProperties;
-    private static final String MY_URL = "https://firebasestorage.googleapis.com/v0/b/my-auto-5679d.appspot.com/o/%s?alt=media";
+    @Value("${firebase.image-url}")
+    private static String MY_URL;
+    @Value("${firebase.json}")
+    private static String firebaseJson;
+    @Value("${firebase.json-path}")
+    private static String firebaseJsonPath;
     private static String TEMP_URL = "";
 
     public FileUploadUtil(FireBaseProperties fireBaseProperties) {
@@ -38,7 +44,7 @@ public class FileUploadUtil {
     @EventListener
     public void init(ApplicationReadyEvent event) {
         try {
-            ClassPathResource serviceAccount = new ClassPathResource("firebase.json");
+            ClassPathResource serviceAccount = new ClassPathResource(firebaseJson);
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
                     .setStorageBucket(fireBaseProperties.getBucketName())
@@ -50,10 +56,10 @@ public class FileUploadUtil {
     }
 
     private String uploadFile(File file, String fileName) throws IOException {
-        BlobId blobId = BlobId.of("my-auto-5679d.appspot.com", fileName);
+        BlobId blobId = BlobId.of(fireBaseProperties.getBucketName(), fileName);
         String type = Files.probeContentType(file.toPath());
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(type).build();
-        Path path = Paths.get("src/main/resources/firebase.json");
+        Path path = Paths.get(firebaseJsonPath);
         Credentials credentials = GoogleCredentials.fromStream(new FileInputStream(path.toAbsolutePath().toString()));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
