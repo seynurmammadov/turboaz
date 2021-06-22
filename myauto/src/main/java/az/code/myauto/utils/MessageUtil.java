@@ -4,6 +4,8 @@ import az.code.myauto.models.User;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class MessageUtil {
     final
@@ -23,4 +25,11 @@ public class MessageUtil {
                 + amount + environment.getProperty("mail.balance.info.message") + user.getBalance();
         mailSenderUtil.sendEmail(user.getEmail(), subject, content);
     }
+
+    public void sendNotification(String to, LocalDateTime date) {
+        mailSenderUtil.sendEmail(to, environment.getProperty("mail.notification.subject"),
+                environment.getProperty("mail.notification.message") + date.toString());
+    }
+
+
 }
