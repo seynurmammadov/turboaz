@@ -26,14 +26,13 @@ public class ListingSchedule {
         this.transactionService = transactionService;
     }
 
-    @Scheduled(cron = "0 0 23 * * ?", zone = "Asia/Baku")
+    @Scheduled(cron = "0 26 12 * * ?", zone = "Asia/Baku")
     public void listingNotifications() {
         List<Listing> allListings = listingRepo.findAllActiveListings();
         for (Listing listing : allListings) {
             LocalDateTime today = LocalDateTime.now();
             LocalDateTime oneDayBeforeExpire = listing.getUpdatedAt().plusMonths(1).minusDays(1);
             LocalDateTime paymentDate = listing.getUpdatedAt().plusMonths(1);
-
             if (today.isAfter(paymentDate)) {
                 UserDTO user = UserDTO.builder().username(listing.getUser().getUsername()).build();
                 try {
