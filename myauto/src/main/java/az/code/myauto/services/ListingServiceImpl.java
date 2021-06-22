@@ -13,6 +13,7 @@ import az.code.myauto.services.interfaces.TransactionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,12 +37,21 @@ public class ListingServiceImpl implements ListingService {
 
 
     @Override
+    @Transactional
     public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
-        if (listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) > 1) {
-            throw new FreeListingAlreadyPostedException();
+        if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) != 1
+                && listing.getType().equals(ListingType.DEFAULT)) {
+            Listing newListing = listingRepo.save(new Listing(listing, user));
+            return new ListingGetDTO(newListing);
         }
-        return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
+        if (listing.getType().equals(ListingType.STANDARD)) {
+            Listing newListing = listingRepo.save(new Listing(listing, user));
+            transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), user, newListing.getId());
+            return new ListingGetDTO(newListing);
+        }
+        throw new FreeListingAlreadyPostedException();
+
     }
 
     @Override
