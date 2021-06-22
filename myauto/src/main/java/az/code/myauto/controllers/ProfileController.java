@@ -3,6 +3,7 @@ package az.code.myauto.controllers;
 import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
+import az.code.myauto.models.Listing;
 import az.code.myauto.models.dtos.ListingCreationDTO;
 import az.code.myauto.models.dtos.ListingGetDTO;
 
@@ -59,8 +60,8 @@ public class ProfileController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ListingGetDTO> updateUser(@PathVariable long id,
-                                                    @RequestBody ListingCreationDTO listingCreationDTO,
-                                                    @RequestAttribute UserDTO user) throws ListingNotFoundException {
+                                              @RequestBody ListingCreationDTO listingCreationDTO,
+                                              @RequestAttribute UserDTO user) throws ListingNotFoundException {
         logger.info("Updating listing by registered user");
         return new ResponseEntity<>(profileService.update(id, listingCreationDTO, user), HttpStatus.OK);
     }

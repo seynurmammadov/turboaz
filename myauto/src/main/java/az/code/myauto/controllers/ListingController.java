@@ -45,6 +45,4 @@ public class ListingController {
         logger.info("Getting VIP listings by unregistered user");
         return new ResponseEntity<>(listingService.getVIPListings(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy))), HttpStatus.OK);
     }
-
-
 }
