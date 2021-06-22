@@ -13,6 +13,7 @@ import az.code.myauto.services.interfaces.TransactionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,18 +37,21 @@ public class ListingServiceImpl implements ListingService {
 
 
     @Override
+    @Transactional
     public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
-        if (listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) == 1 && listing.getType().equals(ListingType.DEFAULT)) {
-            throw new FreeListingAlreadyPostedException();
-        }else if(listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) == 1 && listing.getType().equals(ListingType.STANDARD)){
-            Listing listingPaid = new Listing(listing, user);
-            listingPaid.setType(ListingType.STANDARD);
-            transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), user, listingPaid.getId());
-            return new ListingGetDTO(listingRepo.save(listingPaid));
-        }else{
-            return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
+        if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) != 1
+                && listing.getType().equals(ListingType.DEFAULT)) {
+            Listing newListing = listingRepo.save(new Listing(listing, user));
+            return new ListingGetDTO(newListing);
         }
+        if (listing.getType().equals(ListingType.STANDARD)) {
+            Listing newListing = listingRepo.save(new Listing(listing, user));
+            transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), user, newListing.getId());
+            return new ListingGetDTO(newListing);
+        }
+        throw new FreeListingAlreadyPostedException();
+
     }
 
     @Override

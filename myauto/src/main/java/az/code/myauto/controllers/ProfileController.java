@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -44,7 +45,7 @@ public class ProfileController {
         logger.info("Getting user listings by registered user");
         return new ResponseEntity<>(listingService.getUserListings(pageNo, itemsCount, sortBy, user), HttpStatus.OK);
     }
-
+    @Transactional
     @PostMapping("")
     public ResponseEntity<ListingGetDTO> getUser(@RequestBody ListingCreationDTO listingCreationDTO,
                                                  @RequestAttribute UserDTO user) {
