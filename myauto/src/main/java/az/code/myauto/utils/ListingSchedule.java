@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-//@Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
 public class ListingSchedule {
     final
     MessageUtil messageUtil;
@@ -32,7 +31,6 @@ public class ListingSchedule {
     @Scheduled(cron = "0 0 23 * * ?", zone = "Asia/Baku")
     public void listingNotifications() {
         List<Listing> allActiveListingsBetweenDates = listingRepo.findAllActiveListingsBetweenDate(LocalDateTime.now().minusMonths(1).minusDays(1), LocalDateTime.now().minusMonths(1).plusDays(1));
-//        System.out.println(allActiveListingsBetweenDates);
         for (Listing listing : allActiveListingsBetweenDates) {
             LocalDateTime today = LocalDateTime.now();
             LocalDateTime oneDayBeforeExpire = listing.getUpdatedAt().plusMonths(1).minusDays(1);
@@ -52,5 +50,4 @@ public class ListingSchedule {
             }
         }
     }
-
 }
