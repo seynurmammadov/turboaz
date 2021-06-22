@@ -1,5 +1,6 @@
 package az.code.myauto.services;
 
+import az.code.myauto.config.FireBaseProperties;
 import az.code.myauto.exceptions.ThumbnailNotFoundException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.Image;
@@ -12,6 +13,7 @@ import az.code.myauto.services.interfaces.ListingService;
 import az.code.myauto.services.interfaces.ImageService;
 import az.code.myauto.services.interfaces.ProfileService;
 import az.code.myauto.utils.FileUploadUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +37,9 @@ public class ImageServiceImpl implements ImageService {
 
     final
     MapperModel mapperModel;
+
+    @Autowired
+    FireBaseProperties fireBaseProperties;
 
     public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService, ProfileService profileService, ListingRepo listingRepo, MapperModel mapperModel) {
         this.imageRepo = imageRepo;
@@ -83,7 +88,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void deleteImage(UserDTO user, Long listingId, Long id) throws ThumbnailNotFoundException {
         String wholeImage = isImageExist(listingId, id).getName();
-        fileService.delete(wholeImage.substring(72, wholeImage.length() - 10));
+        fileService.delete(wholeImage.substring(fireBaseProperties.getUrlFirstPart().length(), wholeImage.length() - fireBaseProperties.getUrlSecondPart().length()));
         imageRepo.deleteImageByid(listingId, id);
     }
 }
