@@ -74,7 +74,7 @@ public class Listing {
         this.auto.setBodyType(BodyType.valueOf(data.getBodyType()));
         this.auto.setColor(Color.valueOf(data.getColor()));
         this.auto.setGearBox(GearBox.valueOf(data.getGearBox()));
-        this.auto.addEquipments(data.getCarSpecIds());
+        this.auto.addEquipments(data.getEquipments());
         this.auto.setModel(Model.builder().id(data.getModelId()).build());
     }
 
