@@ -16,9 +16,9 @@ import java.util.List;
 public class Make {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    String name;
+    private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "make")
     private List<Model> models = new ArrayList<>();

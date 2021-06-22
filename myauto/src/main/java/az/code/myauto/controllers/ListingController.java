@@ -5,6 +5,8 @@ import az.code.myauto.models.dtos.ListingGetDTO;
 import az.code.myauto.services.interfaces.ListingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +30,12 @@ public class ListingController {
         return new ResponseEntity<>(listingService.getListingById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getListings(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
                                          @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
                                          @RequestParam(required = false, defaultValue = "updatedAt") String sortBy) {
         logger.info("Getting listings by unregistered user");
-        return new ResponseEntity<>(listingService.getListings(pageNo, itemsCount, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.getListings(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy))), HttpStatus.OK);
     }
 
     @GetMapping("/vip")
@@ -41,7 +43,7 @@ public class ListingController {
                                             @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
                                             @RequestParam(required = false, defaultValue = "updatedAt") String sortBy) {
         logger.info("Getting VIP listings by unregistered user");
-        return new ResponseEntity<>(listingService.getVIPListings(pageNo, itemsCount, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(listingService.getVIPListings(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy))), HttpStatus.OK);
     }
 
 

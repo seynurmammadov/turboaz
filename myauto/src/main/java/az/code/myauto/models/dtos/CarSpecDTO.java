@@ -1,6 +1,5 @@
 package az.code.myauto.models.dtos;
 
-import az.code.myauto.models.Equipment;
 import lombok.*;
 
 @NoArgsConstructor
@@ -9,8 +8,6 @@ import lombok.*;
 @Getter
 @Builder(toBuilder = true)
 public class CarSpecDTO {
+    Long id;
     String name;
-    public CarSpecDTO(Equipment equipment){
-        this.name=equipment.getName();
-    }
 }

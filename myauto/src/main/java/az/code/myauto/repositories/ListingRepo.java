@@ -37,6 +37,4 @@ public interface ListingRepo extends JpaRepository<Listing, Long>, JpaSpecificat
 
     @Query("select l from Listing l where l.isActive=true")
     List<Listing> findAllActiveListings();
-
-
 }

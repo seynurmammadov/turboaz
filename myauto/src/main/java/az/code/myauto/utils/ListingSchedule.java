@@ -14,28 +14,25 @@ import java.util.List;
 @Component
 public class ListingSchedule {
     final
-    MailSenderUtil mailSenderUtil;
+    MessageUtil messageUtil;
     final
     ListingRepo listingRepo;
     final
     TransactionService transactionService;
 
-    public ListingSchedule(MailSenderUtil mailSenderUtil, ListingRepo listingRepo, TransactionService transactionService) {
-        this.mailSenderUtil = mailSenderUtil;
+    public ListingSchedule(MessageUtil messageUtil, ListingRepo listingRepo, TransactionService transactionService) {
+        this.messageUtil = messageUtil;
         this.listingRepo = listingRepo;
         this.transactionService = transactionService;
     }
 
-    @Scheduled(cron = "0 0 23 * * ?", zone = "Asia/Baku")
+    @Scheduled(cron = "0 00 23 * * ?", zone = "Asia/Baku")
     public void listingNotifications() {
         List<Listing> allListings = listingRepo.findAllActiveListings();
         for (Listing listing : allListings) {
             LocalDateTime today = LocalDateTime.now();
             LocalDateTime oneDayBeforeExpire = listing.getUpdatedAt().plusMonths(1).minusDays(1);
             LocalDateTime paymentDate = listing.getUpdatedAt().plusMonths(1);
-            if (today.isAfter(oneDayBeforeExpire)) {
-                mailSenderUtil.sendEmail(listing.getUser().getEmail(), "Attention !", "Tomorrow you have to pay for listing  " + listing.getUpdatedAt().plusMonths(1) + " -payment date");
-            }
             if (today.isAfter(paymentDate)) {
                 UserDTO user = UserDTO.builder().username(listing.getUser().getUsername()).build();
                 try {
@@ -46,6 +43,8 @@ public class ListingSchedule {
                     listing.setActive(false);
                     listingRepo.save(listing);
                 }
+            } else if (today.isAfter(oneDayBeforeExpire)) {
+                messageUtil.sendNotification(listing.getUser().getEmail(), listing.getUpdatedAt().plusMonths(1));
             }
         }
     }

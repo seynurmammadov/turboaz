@@ -10,8 +10,11 @@ import az.code.myauto.models.dtos.ImageDTO;
 
 import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.services.interfaces.ListingService;
+import az.code.myauto.services.interfaces.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +24,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/profile/listings")
 public class ProfileController {
     final
-    ListingService listingService;
+    ProfileService profileService;
 
-    public ProfileController(ListingService listingService) {
-        this.listingService = listingService;
+    public ProfileController(ProfileService profileService) {
+        this.profileService = profileService;
     }
 
     Logger logger = LoggerFactory.getLogger(ProfileController.class);
@@ -33,7 +36,7 @@ public class ProfileController {
     public ResponseEntity<ListingGetDTO> getUserListingsById(@PathVariable long id,
                                                              @RequestAttribute UserDTO user) throws ListingNotFoundException {
         logger.info("Getting user listing (by id) by registered user");
-        return new ResponseEntity<>(listingService.getUserListingById(id, user), HttpStatus.OK);
+        return new ResponseEntity<>(profileService.getUserListingById(id, user), HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -43,14 +46,15 @@ public class ProfileController {
                                                          defaultValue = "updatedAt") String sortBy,
                                                  @RequestAttribute UserDTO user) {
         logger.info("Getting user listings by registered user");
-        return new ResponseEntity<>(listingService.getUserListings(pageNo, itemsCount, sortBy, user), HttpStatus.OK);
+        return new ResponseEntity<>(profileService.getUserListings(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy)), user), HttpStatus.OK);
     }
+
     @Transactional
     @PostMapping("")
     public ResponseEntity<ListingGetDTO> getUser(@RequestBody ListingCreationDTO listingCreationDTO,
                                                  @RequestAttribute UserDTO user) {
         logger.info("Post: New listing by user");
-        return new ResponseEntity<>(listingService.create(listingCreationDTO, user), HttpStatus.CREATED);
+        return new ResponseEntity<>(profileService.create(listingCreationDTO, user), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -58,7 +62,7 @@ public class ProfileController {
                                                     @RequestBody ListingCreationDTO listingCreationDTO,
                                                     @RequestAttribute UserDTO user) throws ListingNotFoundException {
         logger.info("Updating listing by registered user");
-        return new ResponseEntity<>(listingService.update(id, listingCreationDTO, user), HttpStatus.OK);
+        return new ResponseEntity<>(profileService.update(id, listingCreationDTO, user), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/setThumbnail")
@@ -66,29 +70,29 @@ public class ProfileController {
                                                       @RequestBody ImageDTO imageDTO,
                                                       @RequestAttribute UserDTO user) throws ListingNotFoundException {
         logger.info("Set thumbnail for register user");
-        return new ResponseEntity<>(listingService.setNewThumbnail(id, user, imageDTO), HttpStatus.OK);
+        return new ResponseEntity<>(profileService.setNewThumbnail(id, user, imageDTO), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/makevip")
     public ResponseEntity<ListingGetDTO> makeVip(@PathVariable long id,
                                                  @RequestAttribute UserDTO user) throws TransactionIncorrectAmountException, ListingNotFoundException, TransactionInsufficientFundsException {
         logger.info("Making listing vip by registered user");
-        return new ResponseEntity<>(listingService.makeVip(id, user), HttpStatus.OK);
+        return new ResponseEntity<>(profileService.makeVip(id, user), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/makepaid")
     public ResponseEntity<ListingGetDTO> makePaid(@PathVariable long id,
                                                   @RequestAttribute UserDTO user) {
         logger.info("Making listing paid by registered user");
-        return new ResponseEntity<>(listingService.makePaid(id, user), HttpStatus.OK);
+        return new ResponseEntity<>(profileService.makePaid(id, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable long id,
-                                                    @RequestAttribute UserDTO user) throws ListingNotFoundException {
+                                     @RequestAttribute UserDTO user) throws ListingNotFoundException {
         logger.info("Deleting listing by registered user");
-        listingService.delete(id, user);
-        return new ResponseEntity<>( HttpStatus.OK);
+        profileService.delete(id, user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{username}/all")
@@ -98,7 +102,7 @@ public class ProfileController {
                                          @PathVariable String username) {
         logger.info("Getting listings (by username) by unregistered user");
         return new ResponseEntity<>(
-                listingService.getUserListings(pageNo, itemsCount, sortBy, UserDTO.builder().username(username).build())
+                profileService.getUserListings(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy)), UserDTO.builder().username(username).build())
                 , HttpStatus.OK);
     }
 
