@@ -60,7 +60,7 @@ public class Listing {
         this.city = City.builder().id(data.getCityId()).build();
         this.auto_pay = data.isAuto_pay();
         this.description = data.getDescription();
-        this.images.add(Image.builder().url(data.getThumbnailUrl()).listing(this).build());
+        this.images.add(Image.builder().name(data.getThumbnailUrl()).listing(this).build());
         this.User = new User(user);
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

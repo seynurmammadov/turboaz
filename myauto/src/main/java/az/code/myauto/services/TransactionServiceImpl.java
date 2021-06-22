@@ -8,10 +8,12 @@ import az.code.myauto.models.User;
 import az.code.myauto.models.dtos.TransactionListDTO;
 import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.enums.TransactionType;
+import az.code.myauto.models.mappers.MapperModel;
 import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.TransactionRepo;
 import az.code.myauto.repositories.UserRepo;
 import az.code.myauto.services.interfaces.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
@@ -35,12 +37,14 @@ public class TransactionServiceImpl implements TransactionService {
     final
     JavaMailSender javaMailSender;
 
+    final
+    MapperModel mapper;
 
-    public TransactionServiceImpl(UserRepo userRepo, TransactionRepo transactionRepo, JavaMailSender javaMailSender, ListingRepo listingRepo) {
+    public TransactionServiceImpl(UserRepo userRepo, TransactionRepo transactionRepo, JavaMailSender javaMailSender, ListingRepo listingRepo, MapperModel mapper) {
         this.userRepo = userRepo;
         this.transactionRepo = transactionRepo;
         this.javaMailSender = javaMailSender;
-
+        this.mapper = mapper;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class TransactionServiceImpl implements TransactionService {
                     "Dear, " + user.getFullname() + ", your balance was increased by the amount of " +
                             amount + ". Now, you have the total " + user.getBalance() + " AZN at your balance. ");
             userRepo.save(user);
-            return new TransactionListDTO(transactionRepo.save(newTransaction));
+            return mapper.entityToDTO(transactionRepo.save(newTransaction),TransactionListDTO.class);
         }
         throw new TransactionIncorrectAmountException();
     }
@@ -83,7 +87,7 @@ public class TransactionServiceImpl implements TransactionService {
                         "Dear, " + user.getFullname() + ", your balance was decreased by the amount of " +
                                 amount + ". Now, you have the total " + user.getBalance() + " AZN at your balance. ");
                 userRepo.save(user);
-                return new TransactionListDTO(transactionRepo.save(newTransaction));
+                return mapper.entityToDTO(transactionRepo.save(newTransaction),TransactionListDTO.class);
             }
             throw new TransactionInsufficientFundsException();
         }
@@ -94,7 +98,7 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionListDTO> getTransactions(Integer pageNo, Integer pageSize, String sortBy, UserDTO userData) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
         Page<Transaction> pages = transactionRepo.getTransactionsByUserId(pageable, userData.getUsername());
-        return getResult(pages.map(TransactionListDTO::new));
+        return getResult(pages.map(t->mapper.entityToDTO(t,TransactionListDTO.class)));
     }
 
     @Override

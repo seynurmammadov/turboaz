@@ -1,12 +1,13 @@
 package az.code.myauto.services;
 
-import az.code.myauto.models.City;
 import az.code.myauto.models.Listing;
-import az.code.myauto.models.Make;
 import az.code.myauto.models.Model;
+import az.code.myauto.models.dtos.CityDTO;
 import az.code.myauto.models.dtos.ListingListDTO;
+import az.code.myauto.models.dtos.MakeDTO;
 import az.code.myauto.models.enums.BodyType;
 import az.code.myauto.models.enums.FuelType;
+import az.code.myauto.models.mappers.MapperModel;
 import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.CityRepo;
 import az.code.myauto.repositories.MakeRepo;
@@ -35,12 +36,14 @@ public class SearchServiceImpl implements SearchService {
     ModelRepo modelRepo;
     final
     ListingRepo listingRepo;
-
-    public SearchServiceImpl(CityRepo cityRepo, MakeRepo makeRepo, ModelRepo modelRepo, ListingRepo listingRepo) {
+final
+MapperModel mapper;
+    public SearchServiceImpl(CityRepo cityRepo, MakeRepo makeRepo, ModelRepo modelRepo, ListingRepo listingRepo, MapperModel mapper) {
         this.cityRepo = cityRepo;
         this.makeRepo = makeRepo;
         this.modelRepo = modelRepo;
         this.listingRepo = listingRepo;
+        this.mapper = mapper;
     }
 
     @Override
@@ -49,8 +52,8 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<String> getAllMakes() {
-        return makeRepo.findAll().stream().map(Make::getName).collect(Collectors.toList());
+    public List<MakeDTO> getAllMakes() {
+       return makeRepo.findAll().stream().map(m->mapper.entityToDTO(m,MakeDTO.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -64,15 +67,15 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<String> getAllCities() {
-        return cityRepo.findAll().stream().map(City::getName).collect(Collectors.toList());
+    public List<CityDTO> getAllCities() {
+        return cityRepo.findAll().stream().map(m->mapper.entityToDTO(m, CityDTO.class)).collect(Collectors.toList());
     }
     @Override
     public List<ListingListDTO> search(Specification<Listing> spec, Integer count, Integer page) {
         Pageable paging = preparePage(page, count);
         Page<Listing> pageResult = listingRepo.findAll(spec, paging);
         return getResult(pageResult).stream()
-                .map(ListingListDTO::new)
+                .map(r->mapper.entityToDTO(r,ListingListDTO.class))
                 .collect(Collectors.toList());
     }
 }

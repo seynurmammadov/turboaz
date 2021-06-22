@@ -7,6 +7,8 @@ import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.*;
 import az.code.myauto.models.dtos.*;
 import az.code.myauto.models.enums.*;
+import az.code.myauto.models.mappers.MapperModel;
+import az.code.myauto.repositories.ImageRepo;
 import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.services.interfaces.ListingService;
 import az.code.myauto.services.interfaces.TransactionService;
@@ -28,20 +30,27 @@ public class ListingServiceImpl implements ListingService {
 
     final
     TransactionService transactionService;
+    final
+    MapperModel mapper;
 
-    public ListingServiceImpl(ListingRepo listingRepo, TransactionService transactionService) {
+    final
+    ImageRepo imageRepo;
+
+    public ListingServiceImpl(ListingRepo listingRepo, TransactionService transactionService, MapperModel mapper, ImageRepo imageRepo) {
         this.listingRepo = listingRepo;
         this.transactionService = transactionService;
+        this.mapper = mapper;
+        this.imageRepo = imageRepo;
     }
 
 
     @Override
     public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
-        if (listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) > 1) {
+        if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) > 1) {
             throw new FreeListingAlreadyPostedException();
         }
-        return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
+        return mapper.entityToDTO(listingRepo.save(new Listing(listing, user)), ListingGetDTO.class);
     }
 
     @Override
@@ -65,10 +74,11 @@ public class ListingServiceImpl implements ListingService {
         dbListing.setCashOption(listing.getCashOption());
         dbListing.setDescription(listing.getDescription());
         dbListing.setType(ListingType.valueOf(listing.getType()));
-        dbListing.getImages().get(0).setUrl(listing.getThumbnailUrl());
+        dbListing.getImages().get(0).setName(listing.getThumbnailUrl());
         dbListing.getAuto().getEquipments().clear();
         dbListing.getAuto().addEquipments(listing.getCarSpecIds());
-        return new ListingGetDTO(listingRepo.save(dbListing));
+//        return new ListingGetDTO(listingRepo.save(dbListing));
+        return null;
     }
 
     @Override
@@ -87,7 +97,7 @@ public class ListingServiceImpl implements ListingService {
         } else {
             dbListing.setUpdatedAt(dbListing.getUpdatedAt().plusMonths(1));
         }
-        return new ListingGetDTO(listingRepo.save(dbListing));
+        return mapper.entityToDTO(listingRepo.save(dbListing), ListingGetDTO.class);
     }
 
     @Override
@@ -98,15 +108,15 @@ public class ListingServiceImpl implements ListingService {
     @Override
     public ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO) {
         Listing listing = isListingExist(id, user);
-        listing.getImages().get(0).setUrl(imageDTO.getThumbnail());
-        return new ListingGetDTO(listingRepo.save(listing));
+        listing.getImages().get(0).setName(imageDTO.getName());
+        return mapper.entityToDTO(listingRepo.save(listing), ListingGetDTO.class);
     }
 
     @Override
     public ListingGetDTO getListingById(long id) throws ListingNotFoundException {
         Optional<Listing> listing = listingRepo.findById(id);
         if (listing.isPresent()) {
-            return new ListingGetDTO(listing.get());
+            return mapper.entityToDTO(listing.get(), ListingGetDTO.class);
         }
         throw new ListingNotFoundException();
     }
@@ -115,26 +125,27 @@ public class ListingServiceImpl implements ListingService {
     public List<ListingListDTO> getListings(Integer pageNo, Integer itemsCount, String sortBy) {
         Pageable pageable = preparePage(pageNo, itemsCount, sortBy);
         Page<Listing> pages = listingRepo.findAllActiveListings(pageable);
-        return getResult(pages.map(ListingListDTO::new));
+        return getResult(pages.map(p->mapper.entityToDTO(p, ListingListDTO.class)));
     }
+
 
     @Override
     public List<ListingListDTO> getVIPListings(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
         Page<Listing> pages = listingRepo.findAllActiveVIPListings(pageable, ListingType.VIP);
-        return getResult(pages.map(ListingListDTO::new));
+        return getResult(pages.map(p->mapper.entityToDTO(p, ListingListDTO.class)));
     }
 
     @Override
     public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy, UserDTO user) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
         Page<Listing> pages = listingRepo.findAllUserListings(pageable, user.getUsername());
-        return getResult(pages.map(ListingListDTO::new));
+        return getResult(pages.map(p->mapper.entityToDTO(p, ListingListDTO.class)));
     }
 
     @Override
     public ListingGetDTO getUserListingById(long id, UserDTO user) throws ListingNotFoundException {
-        return new ListingGetDTO(isListingExist(id, user));
+        return mapper.entityToDTO(isListingExist(id, user), ListingGetDTO.class);
     }
 
     @Override
