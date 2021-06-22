@@ -7,8 +7,8 @@ import az.code.myauto.models.dtos.ImageDTO;
 import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.ImageRepo;
-import az.code.myauto.services.interfaces.ListingService;
 import az.code.myauto.services.interfaces.ImageService;
+import az.code.myauto.services.interfaces.ProfileService;
 import az.code.myauto.utils.FileUploadUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,15 +24,15 @@ public class ImageServiceImpl implements ImageService {
     final
     FileUploadUtil fileService;
     final
-    ListingService listingService;
-    final
     ListingRepo listingRepo;
+    final
+    ProfileService profileService;
 
-    public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService, ListingService listingService, ListingRepo listingRepo) {
+    public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService, ListingRepo listingRepo, ProfileService profileService) {
         this.imageRepo = imageRepo;
         this.fileService = fileService;
-        this.listingService = listingService;
         this.listingRepo = listingRepo;
+        this.profileService = profileService;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public ImageDTO addImageToListing(Long id, UserDTO user, String url) {
-        Listing listing = listingService.isListingExist(id, user);
+        Listing listing = profileService.isListingExist(id, user);
         listing.getImages().add(Image.builder().url(url).listing(listing).build());
         return new ImageDTO(listingRepo.save(listing).getImages().get(listing.getImages().size() - 1));
     }

@@ -1,9 +1,6 @@
 package az.code.myauto.services;
 
-import az.code.myauto.exceptions.FreeListingAlreadyPostedException;
-import az.code.myauto.exceptions.ListingNotFoundException;
-import az.code.myauto.exceptions.TransactionIncorrectAmountException;
-import az.code.myauto.exceptions.TransactionInsufficientFundsException;
+import az.code.myauto.exceptions.ListingNotFoundException;;
 import az.code.myauto.models.*;
 import az.code.myauto.models.dtos.*;
 import az.code.myauto.models.enums.*;
@@ -14,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,73 +30,6 @@ public class ListingServiceImpl implements ListingService {
         this.transactionService = transactionService;
     }
 
-
-    @Override
-    public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
-        LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
-        if (listingRepo.countOfDefaultUserListings(user.getUsername(),minusMonths, ListingType.DEFAULT) > 1) {
-            throw new FreeListingAlreadyPostedException();
-        }
-        return new ListingGetDTO(listingRepo.save(new Listing(listing, user)));
-    }
-
-    @Override
-    public ListingGetDTO update(long id, ListingCreationDTO listing, UserDTO user) throws ListingNotFoundException {
-        Listing dbListing = isListingExist(id, user);
-
-        dbListing.getAuto().setMake(Make.builder().id(listing.getMakeId()).build());
-        dbListing.getAuto().setModel(Model.builder().id(listing.getModelId()).build());
-        dbListing.getAuto().setYear(listing.getYear());
-        dbListing.getAuto().setPrice(listing.getPrice());
-        dbListing.getAuto().setMileage(listing.getMileage());
-        dbListing.getAuto().setFueltype(FuelType.valueOf(listing.getFuelType()));
-        dbListing.getAuto().setBodyType(BodyType.valueOf(listing.getBodyType()));
-        dbListing.getAuto().setColor(Color.valueOf(listing.getColor()));
-        dbListing.setCity(City.builder().id(listing.getCityId()).build());
-        dbListing.getAuto().setGearBox(GearBox.valueOf(listing.getGearBox()));
-        dbListing.setAuto_pay(listing.isAuto_pay());
-        dbListing.setCreditOption(listing.getCreditOption());
-        dbListing.setBarterOption(listing.getBarterOption());
-        dbListing.setLeaseOption(listing.getLeaseOption());
-        dbListing.setCashOption(listing.getCashOption());
-        dbListing.setDescription(listing.getDescription());
-        dbListing.setType(ListingType.valueOf(listing.getType()));
-        dbListing.getImages().get(0).setUrl(listing.getThumbnailUrl());
-        dbListing.getAuto().getEquipments().clear();
-        dbListing.getAuto().addEquipments(listing.getCarSpecIds());
-        return new ListingGetDTO(listingRepo.save(dbListing));
-    }
-
-    @Override
-    public void delete(long id, UserDTO user) throws ListingNotFoundException {
-        isListingExist(id, user);
-        listingRepo.deactivateListing(id);
-    }
-
-    @Override
-    public ListingGetDTO makeVip(long id, UserDTO user) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException {
-        Listing dbListing = isListingExist(id, user);
-        transactionService.decreaseBalance(ListingType.VIP.getAmount(), user, dbListing.getId());
-        dbListing.setType(ListingType.VIP);
-        if (dbListing.getUpdatedAt().plusMonths(1).isAfter(LocalDateTime.now())) {
-            dbListing.setUpdatedAt(LocalDateTime.now().plusMonths(1));
-        } else {
-            dbListing.setUpdatedAt(dbListing.getUpdatedAt().plusMonths(1));
-        }
-        return new ListingGetDTO(listingRepo.save(dbListing));
-    }
-
-    @Override
-    public ListingGetDTO makePaid(long id, UserDTO user) {
-        return null;
-    }
-
-    @Override
-    public ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO) {
-        Listing listing = isListingExist(id, user);
-        listing.getImages().get(0).setUrl(imageDTO.getThumbnail());
-        return new ListingGetDTO(listingRepo.save(listing));
-    }
 
     @Override
     public ListingGetDTO getListingById(long id) throws ListingNotFoundException {
@@ -125,24 +54,4 @@ public class ListingServiceImpl implements ListingService {
         return getResult(pages.map(ListingListDTO::new));
     }
 
-    @Override
-    public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy, UserDTO user) {
-        Pageable pageable = preparePage(pageNo, pageSize, sortBy);
-        Page<Listing> pages = listingRepo.findAllUserListings(pageable, user.getUsername());
-        return getResult(pages.map(ListingListDTO::new));
-    }
-
-    @Override
-    public ListingGetDTO getUserListingById(long id, UserDTO user) throws ListingNotFoundException {
-        return new ListingGetDTO(isListingExist(id, user));
-    }
-
-    @Override
-    public Listing isListingExist(long id, UserDTO user) throws ListingNotFoundException {
-        Optional<Listing> listing = listingRepo.getUserListingById(id, user.getUsername());
-        if (listing.isPresent()) {
-            return listing.get();
-        }
-        throw new ListingNotFoundException();
-    }
 }
