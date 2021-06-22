@@ -14,19 +14,19 @@ import java.util.List;
 @Component
 public class ListingSchedule {
     final
-    MailSenderUtil mailSenderUtil;
+    MessageUtil messageUtil;
     final
     ListingRepo listingRepo;
     final
     TransactionService transactionService;
 
-    public ListingSchedule(MailSenderUtil mailSenderUtil, ListingRepo listingRepo, TransactionService transactionService) {
-        this.mailSenderUtil = mailSenderUtil;
+    public ListingSchedule(MessageUtil messageUtil, ListingRepo listingRepo, TransactionService transactionService) {
+        this.messageUtil = messageUtil;
         this.listingRepo = listingRepo;
         this.transactionService = transactionService;
     }
 
-    @Scheduled(cron = "0 26 12 * * ?", zone = "Asia/Baku")
+    @Scheduled(cron = "0 23 14 * * ?", zone = "Asia/Baku")
     public void listingNotifications() {
         List<Listing> allListings = listingRepo.findAllActiveListings();
         for (Listing listing : allListings) {
@@ -44,7 +44,7 @@ public class ListingSchedule {
                     listingRepo.save(listing);
                 }
             } else if (today.isAfter(oneDayBeforeExpire)) {
-                mailSenderUtil.sendEmail(listing.getUser().getEmail(), "Attention !", "Tomorrow you have to pay for listing  " + listing.getUpdatedAt().plusMonths(1) + " -payment date");
+                messageUtil.sendNotification(listing.getUser().getEmail(), listing.getUpdatedAt().plusMonths(1));
             }
         }
     }
