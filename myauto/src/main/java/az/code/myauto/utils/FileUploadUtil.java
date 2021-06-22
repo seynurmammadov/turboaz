@@ -8,9 +8,13 @@ import com.google.cloud.storage.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.StorageClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@Service
+@Component
 public class FileUploadUtil {
     final
     FireBaseProperties fireBaseProperties;
@@ -34,8 +38,9 @@ public class FileUploadUtil {
     @Value("${firebase.json}")
     private static String firebaseJson;
     @Value("${firebase.json-path}")
-    private static String firebaseJsonPath;
+    private static  String firebaseJsonPath;
     private static String TEMP_URL = "";
+
 
     public FileUploadUtil(FireBaseProperties fireBaseProperties) {
         this.fireBaseProperties = fireBaseProperties;

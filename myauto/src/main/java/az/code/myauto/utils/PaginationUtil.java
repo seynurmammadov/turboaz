@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class PaginationUtil {
-    public static Pageable preparePage(Integer pageNo, Integer pageSize, String sortBy) {
-        return PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+    public static Pageable preparePage(Integer pageNo, Integer items, String sortBy) {
+        return PageRequest.of(pageNo, items, Sort.by(sortBy));
     }
     public static Pageable preparePage(Integer pageNo, Integer pageSize) {
         return PageRequest.of(pageNo, pageSize);

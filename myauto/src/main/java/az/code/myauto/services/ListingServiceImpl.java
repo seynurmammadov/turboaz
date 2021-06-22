@@ -50,16 +50,15 @@ public class ListingServiceImpl implements ListingService {
     public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
 
-
         if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) != 1
                 && listing.getType().equals(ListingType.DEFAULT)) {
             Listing newListing = listingRepo.save(new Listing(listing, user));
-            return new ListingGetDTO(newListing);
+            return mapper.entityToDTO(newListing, ListingGetDTO.class);
         }
         if (listing.getType().equals(ListingType.STANDARD)) {
             Listing newListing = listingRepo.save(new Listing(listing, user));
             transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), user, newListing.getId());
-            return new ListingGetDTO(newListing);
+            return mapper.entityToDTO(newListing, ListingGetDTO.class);
         }
         throw new FreeListingAlreadyPostedException();
 
@@ -137,7 +136,7 @@ public class ListingServiceImpl implements ListingService {
     public List<ListingListDTO> getListings(Integer pageNo, Integer itemsCount, String sortBy) {
         Pageable pageable = preparePage(pageNo, itemsCount, sortBy);
         Page<Listing> pages = listingRepo.findAllActiveListings(pageable);
-        return getResult(pages.map(p->mapper.entityToDTO(p, ListingListDTO.class)));
+        return getResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
     }
 
 
@@ -145,14 +144,14 @@ public class ListingServiceImpl implements ListingService {
     public List<ListingListDTO> getVIPListings(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
         Page<Listing> pages = listingRepo.findAllActiveVIPListings(pageable, ListingType.VIP);
-        return getResult(pages.map(p->mapper.entityToDTO(p, ListingListDTO.class)));
+        return getResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
     }
 
     @Override
     public List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy, UserDTO user) {
         Pageable pageable = preparePage(pageNo, pageSize, sortBy);
         Page<Listing> pages = listingRepo.findAllUserListings(pageable, user.getUsername());
-        return getResult(pages.map(p->mapper.entityToDTO(p, ListingListDTO.class)));
+        return getResult(pages.map(p -> mapper.entityToDTO(p, ListingListDTO.class)));
     }
 
     @Override
