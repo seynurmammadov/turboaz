@@ -43,9 +43,10 @@ public class FileUploadUtil {
     @EventListener
     public void init(ApplicationReadyEvent event) {
         try {
-//            environment.getProperty("firebase.json")
+
             ClassPathResource serviceAccount = new ClassPathResource(fireBaseProperties.getJson());
-            FirebaseOptions options = new FirebaseOptions.Builder()
+
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
                     .setStorageBucket(fireBaseProperties.getBucketName())
                     .build();
@@ -56,16 +57,16 @@ public class FileUploadUtil {
     }
 
     private String uploadFile(File file, String fileName) throws IOException {
-//        environment.getProperty("")
+
         BlobId blobId = BlobId.of(fireBaseProperties.getBucketName(), fileName);
         String type = Files.probeContentType(file.toPath());
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(type).build();
-//        environment.getProperty("firebase.json-path")
+
         Path path = Paths.get(fireBaseProperties.getJsonPath());
         Credentials credentials = GoogleCredentials.fromStream(new FileInputStream(path.toAbsolutePath().toString()));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
-//        environment.getProperty("firebase.image-url")
+
         return String.format(fireBaseProperties.getImageUrl(), URLEncoder.encode(fileName, StandardCharsets.UTF_8));
     }
 
