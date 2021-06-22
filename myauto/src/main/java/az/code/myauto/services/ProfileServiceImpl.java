@@ -55,7 +55,7 @@ public class ProfileServiceImpl implements ProfileService {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
 
         if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) != 1
-                && listing.getType().equals(ListingType.DEFAULT)) {
+                && listing.getType().equals(ListingType.DEFAULT.name())) {
             Listing newListing = listingRepo.save(new Listing(listing, user));
             return mapper.entityToDTO(newListing, ListingGetDTO.class);
         }
