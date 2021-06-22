@@ -6,6 +6,7 @@ import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.dtos.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface ProfileService {
 
     ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO);
 
-    List<ListingListDTO> getUserListings(Integer pageNo, Integer pageSize, String sortBy, UserDTO user);
+    List<ListingListDTO> getUserListings(Pageable pageable, UserDTO user);
 
     ListingGetDTO getUserListingById(long id, UserDTO user) throws ListingNotFoundException;
 
