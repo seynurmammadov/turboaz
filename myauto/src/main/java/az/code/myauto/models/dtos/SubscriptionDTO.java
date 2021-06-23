@@ -1,5 +1,6 @@
 package az.code.myauto.models.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,8 @@ public class SubscriptionDTO {
     private String bodyType;
 
     private String color;
-    private List<Long> specs;
+    @JsonProperty("specs")
+    private List<CarSpecDTO> equipments;
 
     private int minYear;
     private int maxYear;

@@ -9,4 +9,6 @@ public interface MapperModel {
     Listing updateListingToListingDTO(ListingCreationDTO dto, Listing entity);
 
     Listing listingCreationDTOToListing(ListingCreationDTO dto, Listing entity,UserDTO user);
+    Subscription subscriptionDTOToSubscription(SubscriptionDTO dto, Subscription sub);
+  
 }
