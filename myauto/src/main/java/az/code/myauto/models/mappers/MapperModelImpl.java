@@ -2,17 +2,13 @@ package az.code.myauto.models.mappers;
 
 import az.code.myauto.models.*;
 import az.code.myauto.models.dtos.*;
-import org.modelmapper.Conditions;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 @Component
 public class MapperModelImpl implements MapperModel {
@@ -30,7 +26,7 @@ public class MapperModelImpl implements MapperModel {
     }
 
     @Override
-    public Listing updateListingToListingDTO(ListingCreationDTO dto, Listing entity) {
+    public Listing updateListDTOToList(ListingCreationDTO dto, Listing entity) {
         entity.getAuto().setModel(null);
         entity.getAuto().setMake(null);
         entity.setCity(null);
@@ -42,7 +38,7 @@ public class MapperModelImpl implements MapperModel {
         return entity;
     }
     @Override
-    public Listing listingCreationDTOToListing(ListingCreationDTO dto, Listing entity,UserDTO user) {
+    public Listing createListDTOToList(ListingCreationDTO dto, Listing entity, UserDTO user) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.map(dto, entity);
@@ -51,6 +47,29 @@ public class MapperModelImpl implements MapperModel {
         entity.setUser(entityToDTO(user,User.class));
         entity.setImages(new ArrayList<>());
         entity.getImages().add(Image.builder().name(dto.getThumbnailUrl()).listing(entity).build());
+        return entity;
+    }
+
+    @Override
+    public Subscription updateSubDTOToSub(SubscriptionDTO dto, Subscription sub){
+        sub.setCity(null);
+        sub.setMake(null);
+        sub.setModel(null);
+        sub.setEquipments(null);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.map(dto, sub);
+        sub.setCreatedAt(LocalDateTime.now());
+        return sub;
+    }
+
+    @Override
+    public Subscription createSubDTOToSub(SubscriptionDTO dto, Subscription entity, UserDTO user) {
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.map(dto, entity);
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUser(entityToDTO(user,User.class));
         return entity;
     }
 }

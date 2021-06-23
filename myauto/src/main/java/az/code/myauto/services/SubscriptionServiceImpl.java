@@ -9,7 +9,6 @@ import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.mappers.MapperModel;
 import az.code.myauto.repositories.SubscriptionRepo;
 import az.code.myauto.services.interfaces.SubscriptionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,17 +40,21 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         if (subscriptionRepo.getCountOfUserSubs(user.getUsername()) >= 5) {
             throw new SubscriptionLimitException();
         }
-        return mapperModel.entityToDTO(subscriptionRepo.save(new Subscription(subscription, user.getUsername())), SubscriptionListDTO.class);
+        Subscription newSub = new Subscription();
+        newSub =subscriptionRepo.save(mapperModel.createSubDTOToSub(subscription, newSub,user));
+        return mapperModel.entityToDTO(newSub, SubscriptionListDTO.class);
     }
 
     @Override
     public SubscriptionListDTO getSubscriptionById(long id, UserDTO user) {
-        return mapperModel.entityToDTO(subsCheck(id, user),SubscriptionListDTO.class);
+        return mapperModel.entityToDTO(subsCheck(id, user), SubscriptionListDTO.class);
     }
 
     @Override
     public SubscriptionListDTO updateSubscriptionById(long id, SubscriptionDTO subscription, UserDTO user) {
-        return null;
+        Subscription dbSub = subsCheck(id, user);
+        Subscription updatedSub = mapperModel.updateSubDTOToSub(subscription, dbSub);
+        return mapperModel.entityToDTO(subscriptionRepo.save(updatedSub), SubscriptionListDTO.class);
     }
 
     @Override
