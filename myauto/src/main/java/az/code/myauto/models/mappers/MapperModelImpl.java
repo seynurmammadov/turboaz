@@ -10,6 +10,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Component
@@ -37,5 +38,18 @@ public class MapperModelImpl implements MapperModel {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.map(dto, entity);
         return entity;
+    }
+
+    @Override
+    public Subscription subscriptionDTOToSubscription(SubscriptionDTO dto, Subscription sub){
+        sub.setCity(null);
+        sub.setMake(null);
+        sub.setModel(null);
+        sub.setEquipments(null);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.map(dto, sub);
+        sub.setCreatedAt(LocalDateTime.now());
+        return sub;
     }
 }

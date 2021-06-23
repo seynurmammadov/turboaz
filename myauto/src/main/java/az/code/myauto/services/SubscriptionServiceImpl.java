@@ -41,7 +41,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         if (subscriptionRepo.getCountOfUserSubs(user.getUsername()) >= 5) {
             throw new SubscriptionLimitException();
         }
-        return mapperModel.entityToDTO(subscriptionRepo.save(new Subscription(subscription, user.getUsername())), SubscriptionListDTO.class);
+//        return mapperModel.entityToDTO(subscriptionRepo.save(new Subscription(subscription, user.getUsername())), SubscriptionListDTO.class);
+    return null;
     }
 
     @Override
@@ -51,7 +52,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public SubscriptionListDTO updateSubscriptionById(long id, SubscriptionDTO subscription, UserDTO user) {
-        return null;
+        Subscription dbSub = subsCheck(id, user);
+        Subscription updatedSub = mapperModel.subscriptionDTOToSubscription(subscription, dbSub);
+        return mapperModel.entityToDTO(subscriptionRepo.save(updatedSub), SubscriptionListDTO.class);
     }
 
     @Override
