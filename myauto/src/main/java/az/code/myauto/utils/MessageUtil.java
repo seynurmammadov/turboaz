@@ -35,10 +35,13 @@ public class MessageUtil {
 
     public void regVerifyNotification(User user, String token) {
         mailSenderUtil.sendEmail(user.getEmail(),
-                "Complete Registration!", "To confirm your account, please click here : " + "http://localhost:8000/api/v1/auth/confirm-account?token=" + token);
+                environment.getProperty("mail.registration.complete.subject"),
+                environment.getProperty("mail.registration.complete.message") + token);
     }
 
     public void successRegister(User user){
-        mailSenderUtil.sendEmail(user.getEmail(), "Congratulations","You have registered successfully");
+        mailSenderUtil.sendEmail(user.getEmail(),
+                environment.getProperty("mail.registration.success.subject"),
+                environment.getProperty("mail.registration.success.message"));
     }
 }
