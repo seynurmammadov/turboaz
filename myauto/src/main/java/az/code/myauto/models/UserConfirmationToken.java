@@ -1,9 +1,6 @@
 package az.code.myauto.models;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,6 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_confirmation_tokens")
 public class UserConfirmationToken {
     @Id
@@ -29,6 +27,7 @@ public class UserConfirmationToken {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
+
 
     public UserConfirmationToken(User user) {
         this.user = user;
