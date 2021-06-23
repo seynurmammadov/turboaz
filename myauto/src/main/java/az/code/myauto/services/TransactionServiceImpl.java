@@ -1,5 +1,6 @@
 package az.code.myauto.services;
 
+import az.code.myauto.exceptions.TransactionFailedException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.Listing;
@@ -38,7 +39,6 @@ public class TransactionServiceImpl implements TransactionService {
     MapperModel mapper;
 
 
-        
     public TransactionServiceImpl(UserRepo userRepo, TransactionRepo transactionRepo, MessageUtil messageUtil, MapperModel mapper) {
         this.userRepo = userRepo;
         this.transactionRepo = transactionRepo;
@@ -58,11 +58,18 @@ public class TransactionServiceImpl implements TransactionService {
                     .User(User.builder().username(userData.getUsername()).build())
                     .build();
 
-            messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
-            userRepo.save(user);
-            return mapper.entityToDTO(transactionRepo.save(newTransaction),TransactionListDTO.class);
+            TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
+            if (transactionListDTO != null) {
+                messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
+                userRepo.save(user);
+                return transactionListDTO;
+            } else {
+                throw new TransactionFailedException();
+            }
+        } else {
+            throw new TransactionIncorrectAmountException();
         }
-        throw new TransactionIncorrectAmountException();
+
     }
 
     @Override
@@ -79,20 +86,26 @@ public class TransactionServiceImpl implements TransactionService {
                         .User(User.builder().username(userData.getUsername()).build())
                         .listing(Listing.builder().id(listingId).build())
                         .build();
-
-                messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
-                userRepo.save(user);
-                return mapper.entityToDTO(transactionRepo.save(newTransaction),TransactionListDTO.class);
+                TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
+                if (transactionListDTO != null) {
+                    messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
+                    userRepo.save(user);
+                    return transactionListDTO;
+                } else {
+                    throw new TransactionFailedException();
+                }
+            } else {
+                throw new TransactionInsufficientFundsException();
             }
-            throw new TransactionInsufficientFundsException();
+        } else {
+            throw new TransactionIncorrectAmountException();
         }
-        throw new TransactionIncorrectAmountException();
     }
 
     @Override
     public List<TransactionListDTO> getTransactions(Pageable pageable, UserDTO userData) {
         Page<Transaction> pages = transactionRepo.getTransactionsByUserId(pageable, userData.getUsername());
-        return paginationResult(pages.map(t->mapper.entityToDTO(t,TransactionListDTO.class)));
+        return paginationResult(pages.map(t -> mapper.entityToDTO(t, TransactionListDTO.class)));
     }
 
     @Override
