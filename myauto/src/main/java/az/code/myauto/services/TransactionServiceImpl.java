@@ -1,6 +1,5 @@
 package az.code.myauto.services;
 
-import az.code.myauto.exceptions.TransactionFailedException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.Listing;
@@ -60,7 +59,7 @@ public class TransactionServiceImpl implements TransactionService {
 
             TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
             userRepo.save(user);
-            messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
+            messageUtil.transactionsNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
             return transactionListDTO;
         } else {
             throw new TransactionIncorrectAmountException();
@@ -84,7 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
                         .build();
                     TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
                     userRepo.save(user);
-                    messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
+                    messageUtil.transactionsNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
                     return transactionListDTO;
             } else {
                 throw new TransactionInsufficientFundsException();

@@ -33,19 +33,15 @@ public class ImageServiceImpl implements ImageService {
     ProfileService profileService;
 
     final
-    ListingRepo listingRepo;
-
-    final
     MapperModel mapperModel;
 
     @Autowired
     FireBaseProperties fireBaseProperties;
 
-    public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService, ProfileService profileService, ListingRepo listingRepo, MapperModel mapperModel) {
+    public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService, ProfileService profileService,  MapperModel mapperModel) {
         this.imageRepo = imageRepo;
         this.fileService = fileService;
         this.profileService = profileService;
-        this.listingRepo = listingRepo;
         this.mapperModel = mapperModel;
     }
 
@@ -71,9 +67,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageDTO addImageToListing(Long id, UserDTO user, String url) {
         Listing listing = profileService.isListingExist(id, user);
-        listing.getImages().add(Image.builder().name(url).listing(listing).build());
-        int addedImageIndex = listing.getImages().size() - 1;
-        return mapperModel.entityToDTO(listingRepo.save(listing).getImages().get(addedImageIndex), ImageDTO.class);
+        Image image = imageRepo.save(Image.builder().name(url).listing(listing).build());
+        return mapperModel.entityToDTO(image, ImageDTO.class);
     }
 
     @Override

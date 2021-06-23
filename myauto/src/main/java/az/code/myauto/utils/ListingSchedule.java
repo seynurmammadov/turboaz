@@ -7,8 +7,6 @@ import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.services.interfaces.TransactionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,7 +44,7 @@ public class ListingSchedule {
                     listingRepo.save(listing);
                 }
             } else if (today.isAfter(oneDayBeforeExpire)) {
-                messageUtil.sendNotification(listing.getUser().getEmail(), listing.getUpdatedAt().plusMonths(1));
+                messageUtil.autoPaymentNotification(listing.getUser().getEmail(), listing.getUpdatedAt().plusMonths(1));
             }
         }
     }
