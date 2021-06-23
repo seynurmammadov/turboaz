@@ -58,12 +58,12 @@ public class ProfileServiceImpl implements ProfileService {
         if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) == 0
                 && listing.getType().equals(ListingType.DEFAULT.name())) {
             Listing newListing = new Listing();
-            newListing=  listingRepo.save(mapper.listingCreationDTOToListing(listing, newListing,user));
+            newListing=  listingRepo.save(mapper.createListDTOToList(listing, newListing,user));
             return mapper.entityToDTO(newListing, ListingGetDTO.class);
         }
         if (listing.getType().equals(ListingType.STANDARD.name())) {
             Listing newListing = new Listing();
-            newListing=  listingRepo.save(mapper.listingCreationDTOToListing(listing, newListing, user));
+            newListing=  listingRepo.save(mapper.createListDTOToList(listing, newListing, user));
             transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), user, newListing.getId());
             return mapper.entityToDTO(newListing, ListingGetDTO.class);
         }
@@ -73,7 +73,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ListingGetDTO update(long id, ListingCreationDTO listing, UserDTO user) throws ListingNotFoundException {
         Listing dbListing = isListingExist(id, user);
-        return mapper.entityToDTO(listingRepo.save(mapper.updateListingToListingDTO(listing, dbListing))
+        return mapper.entityToDTO(listingRepo.save(mapper.updateListDTOToList(listing, dbListing))
                 , ListingGetDTO.class);
     }
 
