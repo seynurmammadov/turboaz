@@ -13,13 +13,11 @@ import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.services.interfaces.ProfileService;
 import az.code.myauto.services.interfaces.TransactionService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.print.attribute.standard.Destination;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -57,25 +55,25 @@ public class ProfileServiceImpl implements ProfileService {
     public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
 
-
         if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) == 0
                 && listing.getType().equals(ListingType.DEFAULT.name())) {
-            Listing newListing = listingRepo.save(new Listing(listing, user));
+            Listing newListing = new Listing();
+            newListing=  listingRepo.save(mapper.listingCreationDTOToListing(listing, newListing,user));
             return mapper.entityToDTO(newListing, ListingGetDTO.class);
         }
         if (listing.getType().equals(ListingType.STANDARD.name())) {
-            Listing newListing = listingRepo.save(new Listing(listing, user));
+            Listing newListing = new Listing();
+            newListing=  listingRepo.save(mapper.listingCreationDTOToListing(listing, newListing, user));
             transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), user, newListing.getId());
             return mapper.entityToDTO(newListing, ListingGetDTO.class);
         }
         throw new FreeListingAlreadyPostedException();
-
     }
 
     @Override
     public ListingGetDTO update(long id, ListingCreationDTO listing, UserDTO user) throws ListingNotFoundException {
         Listing dbListing = isListingExist(id, user);
-        return mapper.entityToDTO(listingRepo.save(mapper.listingCreationDTOToListing(listing, dbListing))
+        return mapper.entityToDTO(listingRepo.save(mapper.updateListingToListingDTO(listing, dbListing))
                 , ListingGetDTO.class);
     }
 

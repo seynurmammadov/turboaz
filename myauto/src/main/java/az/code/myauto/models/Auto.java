@@ -47,9 +47,4 @@ public class Auto {
     @ManyToOne
     @JoinColumn(name = "model_id", referencedColumnName = "id")
     Model model;
-
-    public void addEquipments(List<CarSpecDTO> equipmentList) {
-        ModelMapper modelMapper = new ModelMapper();
-        equipmentList.forEach(e -> equipments.add(modelMapper.map(equipments,Equipment.class)));
-    }
 }

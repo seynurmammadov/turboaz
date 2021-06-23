@@ -34,5 +34,5 @@ public class ListingCreationDTO {
     private String type;
     private String thumbnailUrl;
     @JsonProperty("carSpecIds")
-        private List<CarSpecDTO> equipments    ;
+    private List<CarSpecDTO> equipments;
 }
