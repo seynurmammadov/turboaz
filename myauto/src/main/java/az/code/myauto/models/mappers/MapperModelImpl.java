@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+
 import java.util.stream.Collectors;
 
 @Component
@@ -29,7 +30,7 @@ public class MapperModelImpl implements MapperModel {
     }
 
     @Override
-    public Listing listingCreationDTOToListing(ListingCreationDTO dto, Listing entity) {
+    public Listing updateListingToListingDTO(ListingCreationDTO dto, Listing entity) {
         entity.getAuto().setModel(null);
         entity.getAuto().setMake(null);
         entity.setCity(null);
@@ -37,6 +38,19 @@ public class MapperModelImpl implements MapperModel {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.map(dto, entity);
+        entity.getImages().get(0).setName(dto.getThumbnailUrl());
+        return entity;
+    }
+    @Override
+    public Listing listingCreationDTOToListing(ListingCreationDTO dto, Listing entity,UserDTO user) {
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.map(dto, entity);
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setUser(entityToDTO(user,User.class));
+        entity.setImages(new ArrayList<>());
+        entity.getImages().add(Image.builder().name(dto.getThumbnailUrl()).listing(entity).build());
         return entity;
     }
 

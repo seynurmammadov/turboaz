@@ -42,10 +42,4 @@ public class User {
     @OneToOne(mappedBy = "user")
     private UserConfirmationToken userConfirmationToken;
 
-    public User(UserDTO data) {
-        this.username = data.getUsername();
-        this.name = data.getFullName();
-        this.email = data.getEmail();
-        this.phoneNumber = data.getPhoneNumber();
-    }
 }
