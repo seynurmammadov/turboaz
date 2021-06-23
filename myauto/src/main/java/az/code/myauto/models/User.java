@@ -16,16 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "users")
 public class User {
-
-    @Column(nullable = false, unique = true)
-    private String email;
     @Id
     @Column(nullable = false, unique = true)
     private String username;
-    private String fullname;
-    private String phonenumber;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+    private String name;
+    private String surname;
+    private String phoneNumber;
     private double balance = 0;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "User")
@@ -43,8 +44,8 @@ public class User {
 
     public User(UserDTO data) {
         this.username = data.getUsername();
-        this.fullname = data.getFullName();
+        this.name = data.getFullName();
         this.email = data.getEmail();
-        this.phonenumber = data.getPhoneNumber();
+        this.phoneNumber = data.getPhoneNumber();
     }
 }
