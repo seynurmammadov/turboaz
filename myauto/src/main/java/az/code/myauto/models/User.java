@@ -36,7 +36,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "User")
     private List<Subscription> subscriptions;
 
-    private boolean isActive;
+    private Boolean isActive = false;
+
+    @OneToOne(mappedBy = "user")
+    private UserConfirmationToken userConfirmationToken;
 
     public User(UserDTO data) {
         this.username = data.getUsername();
