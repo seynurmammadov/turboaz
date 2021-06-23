@@ -59,13 +59,9 @@ public class TransactionServiceImpl implements TransactionService {
                     .build();
 
             TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
-            if (transactionListDTO != null) {
-                messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
-                userRepo.save(user);
-                return transactionListDTO;
-            } else {
-                throw new TransactionFailedException();
-            }
+            userRepo.save(user);
+            messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
+            return transactionListDTO;
         } else {
             throw new TransactionIncorrectAmountException();
         }
@@ -86,14 +82,10 @@ public class TransactionServiceImpl implements TransactionService {
                         .User(User.builder().username(userData.getUsername()).build())
                         .listing(Listing.builder().id(listingId).build())
                         .build();
-                TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
-                if (transactionListDTO != null) {
-                    messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
+                    TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
                     userRepo.save(user);
+                    messageUtil.sendNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
                     return transactionListDTO;
-                } else {
-                    throw new TransactionFailedException();
-                }
             } else {
                 throw new TransactionInsufficientFundsException();
             }
