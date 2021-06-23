@@ -1,6 +1,7 @@
 package az.code.myauto.utils;
 
 import az.code.myauto.models.User;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +34,6 @@ public class MessageUtil {
     @Value("${mail.amount.info.message}")
     private String transactionNotificationText;
 
-    @Value("${mail.balance.info.message}")
-    private String balanceNotificationText;
-
     final
     MailSenderUtil mailSenderUtil;
 
@@ -45,20 +43,18 @@ public class MessageUtil {
     }
 
     public void transactionsNotification(String type, User user, Double amount) {
-        String subject = type + transactionNotificationSubject;
-        String content = user.getName() + transactionNotificationText
-                + amount + balanceNotificationText + user.getBalance();
-        mailSenderUtil.sendEmail(user.getEmail(), subject, content);
+        mailSenderUtil.sendEmail(user.getEmail(), String.format(transactionNotificationSubject, type),
+                String.format(transactionNotificationText,user.getName(), type.toLowerCase(), amount ,user.getBalance()));
     }
 
     public void autoPaymentNotification(String to, LocalDateTime date) {
         mailSenderUtil.sendEmail(to, autoPaymentNotificationSubject,
-                autoPaymentNotificationText + date.toString());
+                String.format(autoPaymentNotificationText, date.toString()));
     }
 
     public void regVerifyNotification(User user, String token) {
         mailSenderUtil.sendEmail(user.getEmail(), registrationVerifySubject,
-                registrationVerifyText + token);
+                String.format(registrationVerifyText, token));
     }
 
     public void successRegister(User user) {
