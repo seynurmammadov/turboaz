@@ -26,6 +26,10 @@ public class ListingSchedule {
         this.transactionService = transactionService;
     }
 
+    /**
+     * This method is for checking the update time of listings if today is payment date, balance is decreased
+     * if tomorrow is payment date, notification is sent via email
+     */
     @Scheduled(cron = "0 0 23 * * ?", zone = "Asia/Baku")
     public void listingNotifications() {
         List<Listing> allActiveListingsBetweenDates = listingRepo.findAllActiveListingsBetweenDate(LocalDateTime.now().minusMonths(1).minusDays(1), LocalDateTime.now().minusMonths(1).plusDays(1));
