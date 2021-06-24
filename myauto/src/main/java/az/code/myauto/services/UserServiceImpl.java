@@ -2,6 +2,7 @@ package az.code.myauto.services;
 
 import az.code.myauto.controllers.SubscriptionController;
 import az.code.myauto.models.User;
+import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.dtos.UserRegistrationDTO;
 import az.code.myauto.models.mappers.MapperModel;
 import az.code.myauto.repositories.UserRepo;
@@ -15,22 +16,30 @@ import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.authorization.client.AuthzClient;
+import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.keycloak.authorization.client.AuthzClient;
+import org.keycloak.authorization.client.Configuration;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Value("${app.keycloak.admin.resource}")
     private String adminClientId;
+    @Value("${keycloak.resource}")
+    private String clientId;
     @Value("${app.keycloak.admin.realm}")
     private String adminRealm;
     @Value("${keycloak.realm}")
@@ -83,6 +92,7 @@ public class UserServiceImpl implements UserService {
         return userDTO;
     }
 
+
     private UserRepresentation createKeycloakUser(UserRegistrationDTO userDTO) {
         UserRepresentation user = new UserRepresentation();
         user.setEnabled(true);
@@ -116,4 +126,19 @@ public class UserServiceImpl implements UserService {
     private User createUser(UserRegistrationDTO userDTO) {
         return userRepo.save(userRepo.save(mapperModel.entityToDTO(userDTO, User.class)));
     }
+
+    @Override
+    public AccessTokenResponse login(UserRegistrationDTO userDTO) {
+
+        Map<String, Object> clientCredentials = new HashMap<>();
+        clientCredentials.put("secret", clientSecret);
+        clientCredentials.put("grant_type", "password");
+
+        Configuration configuration = new Configuration(authServerUrl, realm, clientId, clientCredentials, null);
+        AuthzClient authzClient = AuthzClient.create(configuration);
+
+        AccessTokenResponse response = authzClient.obtainAccessToken(userDTO.getEmail(), userDTO.getPassword());
+        return response;
+    }
+
 }

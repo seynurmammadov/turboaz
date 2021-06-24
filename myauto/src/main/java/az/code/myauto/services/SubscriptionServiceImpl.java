@@ -36,7 +36,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionListDTO addSubscription(UserDTO user, SubscriptionDTO subscription) {
+    public SubscriptionListDTO addSubscription(UserDTO user, SubscriptionDTO subscription) throws SubscriptionLimitException {
         if (subscriptionRepo.getCountOfUserSubs(user.getUsername()) >= 5) {
             throw new SubscriptionLimitException();
         }
@@ -46,19 +46,19 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionListDTO getSubscriptionById(long id, UserDTO user) {
+    public SubscriptionListDTO getSubscriptionById(long id, UserDTO user) throws SubscriptionNotFoundException {
         return mapperModel.entityToDTO(subsCheck(id, user), SubscriptionListDTO.class);
     }
 
     @Override
-    public SubscriptionListDTO updateSubscriptionById(long id, SubscriptionDTO subscription, UserDTO user) {
+    public SubscriptionListDTO updateSubscriptionById(long id, SubscriptionDTO subscription, UserDTO user) throws SubscriptionNotFoundException {
         Subscription dbSub = subsCheck(id, user);
         Subscription updatedSub = mapperModel.updateSubDTOToSub(subscription, dbSub);
         return mapperModel.entityToDTO(subscriptionRepo.save(updatedSub), SubscriptionListDTO.class);
     }
 
     @Override
-    public void deleteSubscriptionById(long id, UserDTO user) {
+    public void deleteSubscriptionById(long id, UserDTO user) throws SubscriptionNotFoundException {
         subsCheck(id, user);
         subscriptionRepo.deleteSubById(id, user.getUsername());
     }

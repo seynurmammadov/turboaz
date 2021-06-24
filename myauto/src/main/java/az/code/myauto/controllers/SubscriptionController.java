@@ -1,5 +1,8 @@
 package az.code.myauto.controllers;
 
+import az.code.myauto.exceptions.FreeListingAlreadyPostedException;
+import az.code.myauto.exceptions.SubscriptionLimitException;
+import az.code.myauto.exceptions.SubscriptionNotFoundException;
 import az.code.myauto.models.dtos.SubscriptionDTO;
 import az.code.myauto.models.dtos.SubscriptionListDTO;
 import az.code.myauto.models.dtos.UserDTO;
@@ -25,6 +28,16 @@ public class SubscriptionController {
         this.subscriptionService = subscriptionService;
     }
 
+    @ExceptionHandler(SubscriptionLimitException.class)
+    public ResponseEntity<String> handleNotFound(SubscriptionLimitException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SubscriptionNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(SubscriptionNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping("")
     public ResponseEntity<List<SubscriptionListDTO>> getAllSubscriptions(@RequestAttribute UserDTO user) {
         logger.info("Getting all subscriptions by registered user");
@@ -33,26 +46,26 @@ public class SubscriptionController {
 
     @PostMapping("/")
     public ResponseEntity<SubscriptionListDTO> addSubscription(@RequestBody SubscriptionDTO subscriptionDto,
-                                                               @RequestAttribute UserDTO user) {
+                                                               @RequestAttribute UserDTO user) throws SubscriptionLimitException {
         logger.info("Creating subscription by registered user");
         return new ResponseEntity<>(subscriptionService.addSubscription(user, subscriptionDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SubscriptionListDTO> updateSubscription(@RequestBody SubscriptionDTO subscriptionDto,
-                                                                  @PathVariable long id, @RequestAttribute UserDTO user) {
+                                                                  @PathVariable long id, @RequestAttribute UserDTO user) throws SubscriptionNotFoundException {
         logger.info("Updating subscription (by id) by registered user");
         return new ResponseEntity<>(subscriptionService.updateSubscriptionById(id, subscriptionDto, user), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionListDTO> getSubscriptionById(@PathVariable long id, @RequestAttribute UserDTO user) {
+    public ResponseEntity<SubscriptionListDTO> getSubscriptionById(@PathVariable long id, @RequestAttribute UserDTO user) throws SubscriptionNotFoundException {
         logger.info("Getting subscription (by id) by registered user");
         return new ResponseEntity<>(subscriptionService.getSubscriptionById(id, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSubscriptionById(@PathVariable long id, @RequestAttribute UserDTO user) {
+    public ResponseEntity deleteSubscriptionById(@PathVariable long id, @RequestAttribute UserDTO user) throws SubscriptionNotFoundException {
         logger.info("Deleting subscription (by id) by registered user");
         subscriptionService.deleteSubscriptionById(id, user);
         return new ResponseEntity<>(HttpStatus.OK);

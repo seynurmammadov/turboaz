@@ -1,5 +1,7 @@
 package az.code.myauto.services.interfaces;
 
+import az.code.myauto.exceptions.SubscriptionLimitException;
+import az.code.myauto.exceptions.SubscriptionNotFoundException;
 import az.code.myauto.models.dtos.SubscriptionDTO;
 import az.code.myauto.models.dtos.SubscriptionListDTO;
 import az.code.myauto.models.dtos.UserDTO;
@@ -21,7 +23,7 @@ public interface SubscriptionService {
      * @param subscription
      * @return
      */
-    SubscriptionListDTO addSubscription(UserDTO user, SubscriptionDTO subscription);
+    SubscriptionListDTO addSubscription(UserDTO user, SubscriptionDTO subscription) throws SubscriptionLimitException;
 
     /**
      * This method is for getting subscription of registered user by id.
@@ -29,7 +31,7 @@ public interface SubscriptionService {
      * @param user
      * @return
      */
-    SubscriptionListDTO getSubscriptionById(long id, UserDTO user);
+    SubscriptionListDTO getSubscriptionById(long id, UserDTO user) throws SubscriptionNotFoundException;
 
     /**
      * This method is for updating subscription of registered user by id.
@@ -38,12 +40,12 @@ public interface SubscriptionService {
      * @param user
      * @return
      */
-    SubscriptionListDTO updateSubscriptionById(long id, SubscriptionDTO subscription, UserDTO user);
+    SubscriptionListDTO updateSubscriptionById(long id, SubscriptionDTO subscription, UserDTO user) throws SubscriptionNotFoundException;
 
     /**
      * This method is for deleting subscription of registered user by id.
      * @param id
      * @param user
      */
-    void deleteSubscriptionById(long id, UserDTO user);
+    void deleteSubscriptionById(long id, UserDTO user) throws SubscriptionNotFoundException;
 }
