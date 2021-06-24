@@ -25,20 +25,22 @@ public class SubscriptionController {
         this.subscriptionService = subscriptionService;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<SubscriptionListDTO>> getAllSubscriptions(@RequestAttribute UserDTO user) {
         logger.info("Getting all subscriptions by registered user");
         return new ResponseEntity<>(subscriptionService.getSubscriptions(user), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<SubscriptionListDTO> addSubscription(@RequestBody SubscriptionDTO subscriptionDto, @RequestAttribute UserDTO user) {
+    public ResponseEntity<SubscriptionListDTO> addSubscription(@RequestBody SubscriptionDTO subscriptionDto,
+                                                               @RequestAttribute UserDTO user) {
         logger.info("Creating subscription by registered user");
         return new ResponseEntity<>(subscriptionService.addSubscription(user, subscriptionDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubscriptionListDTO> updateSubscription(@RequestBody SubscriptionDTO subscriptionDto, @PathVariable long id, @RequestAttribute UserDTO user) {
+    public ResponseEntity<SubscriptionListDTO> updateSubscription(@RequestBody SubscriptionDTO subscriptionDto,
+                                                                  @PathVariable long id, @RequestAttribute UserDTO user) {
         logger.info("Updating subscription (by id) by registered user");
         return new ResponseEntity<>(subscriptionService.updateSubscriptionById(id, subscriptionDto, user), HttpStatus.OK);
     }

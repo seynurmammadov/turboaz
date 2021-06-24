@@ -5,7 +5,6 @@ import az.code.myauto.services.interfaces.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -76,8 +75,10 @@ public class SearchController {
                                                        @RequestParam(required = false) Boolean hasLease,
                                                        @RequestParam(required = false) Boolean hasCash,
                                                        @RequestParam(required = false) String bodyType,
-                                                       @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
-                                                       @RequestParam(required = false, defaultValue = "0") Integer pageNo) {
+                                                       @RequestParam(required = false, defaultValue = "10")
+                                                       Integer itemsCount,
+                                                       @RequestParam(required = false, defaultValue = "0")
+                                                       Integer pageNo) {
         logger.info("Getting all listings (detailed search) by unregistered user");
         return new ResponseEntity<>(searchService.search(
                 sameAuto("make", make)

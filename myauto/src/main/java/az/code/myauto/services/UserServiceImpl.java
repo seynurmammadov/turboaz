@@ -2,14 +2,11 @@ package az.code.myauto.services;
 
 import az.code.myauto.controllers.SubscriptionController;
 import az.code.myauto.models.User;
-import az.code.myauto.models.UserConfirmationToken;
-import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.dtos.UserRegistrationDTO;
 import az.code.myauto.models.mappers.MapperModel;
 import az.code.myauto.repositories.UserRepo;
 import az.code.myauto.services.interfaces.UserConfirmationService;
 import az.code.myauto.services.interfaces.UserService;
-import az.code.myauto.utils.MessageUtil;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.CreatedResponseUtil;
@@ -23,12 +20,10 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 import java.util.Collections;
 
 @Service
@@ -58,6 +53,7 @@ public class UserServiceImpl implements UserService {
     MapperModel mapperModel;
     final
     UserConfirmationService userConfirmationService;
+
     public UserServiceImpl(UserRepo userRepo, MapperModel mapperModel, UserConfirmationService userConfirmationService) {
         this.userRepo = userRepo;
         this.mapperModel = mapperModel;
@@ -99,7 +95,10 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private void setPasswordAndRole(UserRegistrationDTO userDTO, RealmResource realmResource, UsersResource usersResource, Response response) {
+    private void setPasswordAndRole(UserRegistrationDTO userDTO,
+                                    RealmResource realmResource,
+                                    UsersResource usersResource,
+                                    Response response) {
         String userId = CreatedResponseUtil.getCreatedId(response);
         logger.info("Created userId {}", userId);
 
@@ -110,10 +109,11 @@ public class UserServiceImpl implements UserService {
 
         UserResource userResource = usersResource.get(userId);
         userResource.resetPassword(passwordCred);
-        RoleRepresentation realmRoleUser = realmResource.roles().get("app-user").toRepresentation();
-        userResource.roles().realmLevel().add(Arrays.asList(realmRoleUser));
+        RoleRepresentation realmRoleUser = realmResource.roles().get(role).toRepresentation();
+        userResource.roles().realmLevel().add(Collections.singletonList(realmRoleUser));
     }
-    private User createUser(UserRegistrationDTO userDTO){
+
+    private User createUser(UserRegistrationDTO userDTO) {
         return userRepo.save(userRepo.save(mapperModel.entityToDTO(userDTO, User.class)));
     }
 }

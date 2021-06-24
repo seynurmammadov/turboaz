@@ -41,7 +41,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             throw new SubscriptionLimitException();
         }
         Subscription newSub = new Subscription();
-        newSub =subscriptionRepo.save(mapperModel.createSubDTOToSub(subscription, newSub,user));
+        newSub = subscriptionRepo.save(mapperModel.createSubDTOToSub(subscription, newSub, user));
         return mapperModel.entityToDTO(newSub, SubscriptionListDTO.class);
     }
 

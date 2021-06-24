@@ -1,6 +1,5 @@
 package az.code.myauto.models;
 
-import az.code.myauto.models.dtos.CarSpecDTO;
 import az.code.myauto.models.enums.BodyType;
 import az.code.myauto.models.enums.Color;
 import az.code.myauto.models.enums.FuelType;
@@ -8,7 +7,6 @@ import az.code.myauto.models.enums.GearBox;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package az.code.myauto.models;
 
 
-import az.code.myauto.models.dtos.UserDTO;
 import lombok.*;
 
 import javax.persistence.*;
