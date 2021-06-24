@@ -42,7 +42,8 @@ public class ProfileServiceImpl implements ProfileService {
     final
     ModelMapper modelMapper;
 
-    public ProfileServiceImpl(ListingRepo listingRepo, TransactionService transactionService, MapperModel mapper, ImageRepo imageRepo, ModelMapper modelMapper) {
+    public ProfileServiceImpl(ListingRepo listingRepo, TransactionService transactionService,
+                              MapperModel mapper, ImageRepo imageRepo, ModelMapper modelMapper) {
         this.listingRepo = listingRepo;
         this.transactionService = transactionService;
         this.mapper = mapper;
@@ -54,20 +55,17 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
-
-        if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) == 0
+        Listing newListing = new Listing();
+        if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) == 1
                 && listing.getType().equals(ListingType.DEFAULT.name())) {
-            Listing newListing = new Listing();
-            newListing=  listingRepo.save(mapper.createListDTOToList(listing, newListing,user));
-            return mapper.entityToDTO(newListing, ListingGetDTO.class);
+            throw new FreeListingAlreadyPostedException();
+        } else if (listing.getType().equals(ListingType.STANDARD.name())) {
+            newListing = listingRepo.save(mapper.createListDTOToList(listing, newListing, user));
+            updateStatus(newListing.getId(),user,ListingType.STANDARD);
+        } else {
+            newListing = listingRepo.save(mapper.createListDTOToList(listing, newListing, user));
         }
-        if (listing.getType().equals(ListingType.STANDARD.name())) {
-            Listing newListing = new Listing();
-            newListing=  listingRepo.save(mapper.createListDTOToList(listing, newListing, user));
-            transactionService.decreaseBalance(ListingType.STANDARD.getAmount(), user, newListing.getId());
-            return mapper.entityToDTO(newListing, ListingGetDTO.class);
-        }
-        throw new FreeListingAlreadyPostedException();
+        return mapper.entityToDTO(newListing, ListingGetDTO.class);
     }
 
     @Override
@@ -84,22 +82,17 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public ListingGetDTO makeVip(long id, UserDTO user) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException {
+    public ListingGetDTO updateStatus(long id, UserDTO user,ListingType status) throws ListingNotFoundException,
+                                                               TransactionIncorrectAmountException,
+                                                               TransactionInsufficientFundsException {
         Listing dbListing = isListingExist(id, user);
-        transactionService.decreaseBalance(ListingType.VIP.getAmount(), user, dbListing.getId());
-        dbListing.setType(ListingType.VIP);
-        if (dbListing.getUpdatedAt().plusMonths(1).isAfter(LocalDateTime.now())) {
-            dbListing.setUpdatedAt(LocalDateTime.now().plusMonths(1));
-        } else {
-            dbListing.setUpdatedAt(dbListing.getUpdatedAt().plusMonths(1));
-        }
+        transactionService.decreaseBalance(status.getAmount(), user, dbListing.getId());
+        dbListing.setType(status);
+        dbListing.setUpdatedAt(LocalDateTime.now());
         return mapper.entityToDTO(listingRepo.save(dbListing), ListingGetDTO.class);
     }
 
-    @Override
-    public ListingGetDTO makePaid(long id, UserDTO user) {
-        return null;
-    }
+
 
     @Override
     public ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO) {

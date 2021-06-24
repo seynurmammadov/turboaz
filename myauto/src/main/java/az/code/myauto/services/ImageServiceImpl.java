@@ -7,13 +7,10 @@ import az.code.myauto.models.Image;
 import az.code.myauto.models.dtos.ImageDTO;
 import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.mappers.MapperModel;
-import az.code.myauto.repositories.ListingRepo;
 import az.code.myauto.repositories.ImageRepo;
-import az.code.myauto.services.interfaces.ListingService;
 import az.code.myauto.services.interfaces.ImageService;
 import az.code.myauto.services.interfaces.ProfileService;
 import az.code.myauto.utils.FileUploadUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,14 +32,16 @@ public class ImageServiceImpl implements ImageService {
     final
     MapperModel mapperModel;
 
-    @Autowired
+    final
     FireBaseProperties fireBaseProperties;
 
-    public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService, ProfileService profileService,  MapperModel mapperModel) {
+    public ImageServiceImpl(ImageRepo imageRepo, FileUploadUtil fileService,
+                            ProfileService profileService, MapperModel mapperModel, FireBaseProperties fireBaseProperties) {
         this.imageRepo = imageRepo;
         this.fileService = fileService;
         this.profileService = profileService;
         this.mapperModel = mapperModel;
+        this.fireBaseProperties = fireBaseProperties;
     }
 
     @Override
@@ -83,7 +82,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void deleteImage(UserDTO user, Long listingId, Long id) throws ThumbnailNotFoundException {
         String wholeImage = isImageExist(listingId, id).getName();
-        fileService.delete(wholeImage.substring(fireBaseProperties.getUrlFirstPart().length(), wholeImage.length() - fireBaseProperties.getUrlSecondPart().length()));
+        fileService.delete(wholeImage.substring(fireBaseProperties.getUrlFirstPart().length(),
+                wholeImage.length() - fireBaseProperties.getUrlSecondPart().length()));
         imageRepo.deleteImageByid(listingId, id);
     }
 }

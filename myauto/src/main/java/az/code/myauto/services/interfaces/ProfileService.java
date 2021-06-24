@@ -6,6 +6,7 @@ import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.dtos.*;
+import az.code.myauto.models.enums.ListingType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -41,25 +42,19 @@ public interface ProfileService {
      */
     void delete(long id, UserDTO user) throws ListingNotFoundException;
 
+
     /**
-     * This method is for making listing VIP by registered user
+     * This method is for changing status of listing by registered user
      * if user has sufficient amount of money in balance.
      * @param id
      * @param user
+     * @param lisitngType
      * @return
      * @throws ListingNotFoundException
      * @throws TransactionIncorrectAmountException
      * @throws TransactionInsufficientFundsException
      */
-    ListingGetDTO makeVip(long id, UserDTO user) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException;
-
-    /**
-     * This method is for making listing Paid by registered user
-     * @param id
-     * @param user
-     * @return
-     */
-    ListingGetDTO makePaid(long id, UserDTO user);
+    ListingGetDTO updateStatus(long id, UserDTO user, ListingType listingType) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException;
 
     /**
      * This method is for setting new thumbnail to listing by registered user

@@ -32,7 +32,8 @@ public class ListingServiceImpl implements ListingService {
     final
     ImageRepo imageRepo;
 
-    public ListingServiceImpl(ListingRepo listingRepo, TransactionService transactionService, MapperModel mapper, ImageRepo imageRepo) {
+    public ListingServiceImpl(ListingRepo listingRepo, TransactionService transactionService,
+                              MapperModel mapper, ImageRepo imageRepo) {
         this.listingRepo = listingRepo;
         this.transactionService = transactionService;
         this.mapper = mapper;

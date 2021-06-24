@@ -34,6 +34,13 @@ public class SpecificationUtil {
         };
     }
 
+    public static Specification<Listing> sameCity(String city) {
+        return (root, query, criteriaBuilder) -> {
+            if (city != null)
+                return criteriaBuilder.equal(root.get("city").get("name"), city);
+            return criteriaBuilder.conjunction();
+        };
+    }
     public static Specification<Listing> sameBodyType(String bodyType) {
         return (root, query, criteriaBuilder) -> {
             if (bodyType != null)
@@ -50,11 +57,4 @@ public class SpecificationUtil {
         };
     }
 
-    public static Specification<Listing> sameCity(String location) {
-        return (root, query, criteriaBuilder) -> {
-            if (location != null)
-                return criteriaBuilder.equal(root.get("city").get("name"), location);
-            return criteriaBuilder.conjunction();
-        };
-    }
 }

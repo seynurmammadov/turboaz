@@ -1,6 +1,5 @@
 package az.code.myauto.services.interfaces;
 
-import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.dtos.UserRegistrationDTO;
 
 public interface UserService {

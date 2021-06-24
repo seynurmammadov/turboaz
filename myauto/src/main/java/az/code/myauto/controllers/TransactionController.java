@@ -19,35 +19,42 @@ import java.util.List;
 @RequestMapping("/api/v1/profile")
 public class TransactionController {
     final
-    TransactionService transactionService;
+    TransactionService transService;
 
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
+    public TransactionController(TransactionService transService) {
+        this.transService = transService;
     }
 
     Logger logger = LoggerFactory.getLogger(TransactionController.class);
+
+    @ExceptionHandler(TransactionIncorrectAmountException.class)
+    public ResponseEntity<String> handleNotFound(TransactionIncorrectAmountException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @GetMapping("/wallet")
     public ResponseEntity<Double> getBalance(@RequestAttribute UserDTO user) {
         logger.info("Getting balance by registered user");
 
-        return new ResponseEntity<>(transactionService.getBalance(user), HttpStatus.OK);
+        return new ResponseEntity<>(transService.getBalance(user), HttpStatus.OK);
     }
 
     @GetMapping("/wallet/transactions")
-    public ResponseEntity<List<TransactionListDTO>> getTranactions(
+    public ResponseEntity<List<TransactionListDTO>> getTransactions(
             @RequestParam(required = false, defaultValue = "0") Integer pageNo,
             @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
             @RequestParam(required = false, defaultValue = "createdAt") String sortBy,
             @RequestAttribute UserDTO user) {
         logger.info("Getting transactions by registered user");
-        return new ResponseEntity<>(transactionService.getTransactions(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy)), user), HttpStatus.OK);
+        List<TransactionListDTO> list =
+                transService.getTransactions(PageRequest.of(pageNo, itemsCount, Sort.by(sortBy)),user);
+        return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
     @PutMapping("/wallet/increase")
-    public ResponseEntity<TransactionListDTO> increaseBalance(@RequestAttribute UserDTO user,
-                                                              @RequestBody AmountDTO amount) throws TransactionIncorrectAmountException {
+    public ResponseEntity<TransactionListDTO> increaseBalance(@RequestAttribute UserDTO user,@RequestBody AmountDTO amount)
+                                                                              throws TransactionIncorrectAmountException {
         logger.info("Increasing balance by registered user");
-        return new ResponseEntity<>(transactionService.increaseBalance(amount.getAmount(), user), HttpStatus.OK);
+        return new ResponseEntity<>(transService.increaseBalance(amount.getAmount(), user), HttpStatus.OK);
     }
 }

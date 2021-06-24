@@ -57,18 +57,20 @@ public class TransactionServiceImpl implements TransactionService {
                     .User(User.builder().username(userData.getUsername()).build())
                     .build();
 
-            TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
+            TransactionListDTO transactionListDTO = mapper.entityToDTO(
+                    transactionRepo.save(newTransaction),
+                    TransactionListDTO.class);
             userRepo.save(user);
             messageUtil.transactionsNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
             return transactionListDTO;
-        } else {
-            throw new TransactionIncorrectAmountException();
         }
-
+        throw new TransactionIncorrectAmountException();
     }
 
     @Override
-    public TransactionListDTO decreaseBalance(double amount, UserDTO userData, long listingId) throws TransactionIncorrectAmountException, TransactionInsufficientFundsException {
+    public TransactionListDTO decreaseBalance(double amount, UserDTO userData, long listingId)
+            throws TransactionIncorrectAmountException,
+            TransactionInsufficientFundsException {
         if (amount > 0) {
             User user = userRepo.findUserByUsername(userData.getUsername());
             double balance = user.getBalance() - amount;
@@ -81,10 +83,11 @@ public class TransactionServiceImpl implements TransactionService {
                         .User(User.builder().username(userData.getUsername()).build())
                         .listing(Listing.builder().id(listingId).build())
                         .build();
-                    TransactionListDTO transactionListDTO = mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
-                    userRepo.save(user);
-                    messageUtil.transactionsNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
-                    return transactionListDTO;
+                TransactionListDTO transactionListDTO =
+                        mapper.entityToDTO(transactionRepo.save(newTransaction), TransactionListDTO.class);
+                userRepo.save(user);
+                messageUtil.transactionsNotification(newTransaction.getTransactionType().getOperationName(), user, amount);
+                return transactionListDTO;
             } else {
                 throw new TransactionInsufficientFundsException();
             }

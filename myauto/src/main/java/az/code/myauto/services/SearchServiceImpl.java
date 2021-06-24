@@ -28,16 +28,15 @@ import static az.code.myauto.utils.BaseUtils.*;
 public class SearchServiceImpl implements SearchService {
     final
     CityRepo cityRepo;
-
     final
     MakeRepo makeRepo;
-
     final
     ModelRepo modelRepo;
     final
     ListingRepo listingRepo;
-final
-MapperModel mapper;
+    final
+    MapperModel mapper;
+
     public SearchServiceImpl(CityRepo cityRepo, MakeRepo makeRepo, ModelRepo modelRepo, ListingRepo listingRepo, MapperModel mapper) {
         this.cityRepo = cityRepo;
         this.makeRepo = makeRepo;
@@ -53,7 +52,7 @@ MapperModel mapper;
 
     @Override
     public List<MakeDTO> getAllMakes() {
-       return makeRepo.findAll().stream().map(m->mapper.entityToDTO(m,MakeDTO.class)).collect(Collectors.toList());
+        return makeRepo.findAll().stream().map(m -> mapper.entityToDTO(m, MakeDTO.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -68,13 +67,14 @@ MapperModel mapper;
 
     @Override
     public List<CityDTO> getAllCities() {
-        return cityRepo.findAll().stream().map(m->mapper.entityToDTO(m, CityDTO.class)).collect(Collectors.toList());
+        return cityRepo.findAll().stream().map(m -> mapper.entityToDTO(m, CityDTO.class)).collect(Collectors.toList());
     }
+
     @Override
     public List<ListingListDTO> search(Specification<Listing> spec, Pageable pageable) {
         Page<Listing> pageResult = listingRepo.findAll(spec, pageable);
         return paginationResult(pageResult).stream()
-                .map(r->mapper.entityToDTO(r,ListingListDTO.class))
+                .map(r -> mapper.entityToDTO(r, ListingListDTO.class))
                 .collect(Collectors.toList());
     }
 }
