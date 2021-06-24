@@ -5,4 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST,reason = "Incorrect amount value!")
 public class TransactionIncorrectAmountException extends RuntimeException{
+    public TransactionIncorrectAmountException() {
+        super("Incorrect amount value!");
+    }
 }

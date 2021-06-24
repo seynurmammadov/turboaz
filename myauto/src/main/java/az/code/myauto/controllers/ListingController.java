@@ -24,6 +24,11 @@ public class ListingController {
 
     Logger logger = LoggerFactory.getLogger(ListingController.class);
 
+    @ExceptionHandler(ListingNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ListingNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ListingGetDTO> getListingById(@PathVariable long id) throws ListingNotFoundException {
         logger.info("Getting listing (by id) by unregistered user");
