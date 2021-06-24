@@ -22,7 +22,7 @@ public interface ProfileService {
      * @return
      * @throws FreeListingAlreadyPostedException
      */
-    ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException;
+    ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException, TransactionIncorrectAmountException, ListingNotFoundException, TransactionInsufficientFundsException;
 
     /**
      * This method is for updating listing by registered user.
@@ -48,7 +48,7 @@ public interface ProfileService {
      * if user has sufficient amount of money in balance.
      * @param id
      * @param user
-     * @param lisitngType
+     * @param
      * @return
      * @throws ListingNotFoundException
      * @throws TransactionIncorrectAmountException
@@ -63,7 +63,7 @@ public interface ProfileService {
      * @param imageDTO
      * @return
      */
-    ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO);
+    ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO) throws ListingNotFoundException;
 
     /**
      * This method is for getting listings by registered user

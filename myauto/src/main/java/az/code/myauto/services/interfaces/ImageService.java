@@ -1,5 +1,6 @@
 package az.code.myauto.services.interfaces;
 
+import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.ThumbnailNotFoundException;
 import az.code.myauto.models.Image;
 import az.code.myauto.models.dtos.ImageDTO;
@@ -41,7 +42,7 @@ public interface ImageService {
      * @param url
      * @return
      */
-    ImageDTO addImageToListing(Long id, UserDTO user, String url);
+    ImageDTO addImageToListing(Long id, UserDTO user, String url) throws ListingNotFoundException;
 
     /**
      * This method is for checking if image exists or not.

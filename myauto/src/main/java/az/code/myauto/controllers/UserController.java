@@ -1,13 +1,20 @@
 package az.code.myauto.controllers;
 
+import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.dtos.UserRegistrationDTO;
 import az.code.myauto.services.interfaces.UserConfirmationService;
 import az.code.myauto.services.interfaces.UserService;
+import org.keycloak.authorization.client.AuthzClient;
+import org.keycloak.representations.AccessTokenResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -35,5 +42,12 @@ public class UserController {
     public ResponseEntity confirmUserAccount(@RequestParam("token") String confirmationToken) {
         userConfirmationService.verifyToken(confirmationToken);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+
+    @PostMapping(path = "/login")
+    public ResponseEntity<AccessTokenResponse> login(@RequestBody UserRegistrationDTO userDTO) {
+        AccessTokenResponse response =  userService.login(userDTO);
+        return ResponseEntity.ok(response);
     }
 }

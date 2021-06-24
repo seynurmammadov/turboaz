@@ -53,7 +53,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException {
+    public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException, TransactionIncorrectAmountException, ListingNotFoundException, TransactionInsufficientFundsException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
         Listing newListing = new Listing();
         if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) == 1
@@ -95,7 +95,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 
     @Override
-    public ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO) {
+    public ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO) throws ListingNotFoundException {
         Listing listing = isListingExist(id, user);
         listing.getImages().get(0).setName(imageDTO.getName());
         return mapper.entityToDTO(listingRepo.save(listing), ListingGetDTO.class);

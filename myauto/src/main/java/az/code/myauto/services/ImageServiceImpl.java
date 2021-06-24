@@ -1,6 +1,7 @@
 package az.code.myauto.services;
 
 import az.code.myauto.config.FireBaseProperties;
+import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.ThumbnailNotFoundException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.Image;
@@ -64,7 +65,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageDTO addImageToListing(Long id, UserDTO user, String url) {
+    public ImageDTO addImageToListing(Long id, UserDTO user, String url) throws ListingNotFoundException {
         Listing listing = profileService.isListingExist(id, user);
         Image image = imageRepo.save(Image.builder().name(url).listing(listing).build());
         return mapperModel.entityToDTO(image, ImageDTO.class);

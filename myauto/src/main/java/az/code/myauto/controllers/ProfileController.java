@@ -1,5 +1,6 @@
 package az.code.myauto.controllers;
 
+import az.code.myauto.exceptions.FreeListingAlreadyPostedException;
 import az.code.myauto.exceptions.ListingNotFoundException;
 import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
@@ -46,6 +47,11 @@ public class ProfileController {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(FreeListingAlreadyPostedException.class)
+    public ResponseEntity<String> handleNotFound(FreeListingAlreadyPostedException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ListingGetDTO> getUserListingsById(@PathVariable long id, @RequestAttribute UserDTO user)
                                                                                     throws ListingNotFoundException {
@@ -56,8 +62,7 @@ public class ProfileController {
     @GetMapping("")
     public ResponseEntity<List<ListingListDTO>> getUserListingsById(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
                                                  @RequestParam(required = false, defaultValue = "10") Integer itemsCount,
-                                                 @RequestParam(required = false,
-                                                         defaultValue = "updatedAt") String sortBy,
+                                                 @RequestParam(required = false, defaultValue = "updatedAt") String sortBy,
                                                  @RequestAttribute UserDTO user) {
         logger.info("Getting user listings by registered user");
         List<ListingListDTO> listings=profileService.getUserListings(
@@ -68,7 +73,7 @@ public class ProfileController {
     @Transactional
     @PostMapping("")
     public ResponseEntity<ListingGetDTO> getUser(@RequestBody ListingCreationDTO listingCreationDTO,
-                                                 @RequestAttribute UserDTO user) {
+                                                 @RequestAttribute UserDTO user) throws FreeListingAlreadyPostedException, TransactionIncorrectAmountException, ListingNotFoundException, TransactionInsufficientFundsException {
         logger.info("Post: New listing by user");
         return new ResponseEntity<>(profileService.create(listingCreationDTO, user), HttpStatus.CREATED);
     }
@@ -100,7 +105,7 @@ public class ProfileController {
 
     @PutMapping("/{id}/makepaid")
     public ResponseEntity<ListingGetDTO> makePaid(@PathVariable long id,
-                                                  @RequestAttribute UserDTO user) {
+                                                  @RequestAttribute UserDTO user) throws TransactionIncorrectAmountException, ListingNotFoundException, TransactionInsufficientFundsException {
         logger.info("Making listing paid by registered user");
         return new ResponseEntity<>(profileService.updateStatus(id, user, ListingType.STANDARD), HttpStatus.OK);
     }
