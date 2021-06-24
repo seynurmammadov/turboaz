@@ -27,6 +27,11 @@ public class TransactionController {
 
     Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
+    @ExceptionHandler(TransactionIncorrectAmountException.class)
+    public ResponseEntity<String> handleNotFound(TransactionIncorrectAmountException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/wallet")
     public ResponseEntity<Double> getBalance(@RequestAttribute UserDTO user) {
         logger.info("Getting balance by registered user");

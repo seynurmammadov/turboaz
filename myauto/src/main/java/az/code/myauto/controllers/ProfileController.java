@@ -34,6 +34,21 @@ public class ProfileController {
 
     Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
+    @ExceptionHandler(ListingNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ListingNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TransactionIncorrectAmountException.class)
+    public ResponseEntity<String> handleNotFound(TransactionIncorrectAmountException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TransactionInsufficientFundsException.class)
+    public ResponseEntity<String> handleNotFound(TransactionInsufficientFundsException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ListingGetDTO> getUserListingsById(@PathVariable long id,
                                                              @RequestAttribute UserDTO user) throws ListingNotFoundException {
