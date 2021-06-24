@@ -5,6 +5,9 @@ import az.code.myauto.models.enums.BodyType;
 import az.code.myauto.models.enums.FuelType;
 import org.springframework.data.jpa.domain.Specification;
 
+/**
+ * This class is for defining specification methods for detailed search.
+ */
 public class SpecificationUtil {
 
     public static Specification<Listing> sameAuto(String name,String data) {

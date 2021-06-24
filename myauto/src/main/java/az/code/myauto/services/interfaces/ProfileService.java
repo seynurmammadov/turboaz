@@ -14,22 +14,86 @@ import java.util.List;
 @Service
 public interface ProfileService {
 
+    /**
+     * This method is for creating listing by registered user.
+     * @param listing
+     * @param user
+     * @return
+     * @throws FreeListingAlreadyPostedException
+     */
     ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException;
 
+    /**
+     * This method is for updating listing by registered user.
+     * @param id
+     * @param listing
+     * @param user
+     * @return
+     * @throws ListingNotFoundException
+     */
     ListingGetDTO update(long id, ListingCreationDTO listing, UserDTO user) throws ListingNotFoundException;
 
+    /**
+     * This method is for deleting listing by registered user.
+     * @param id
+     * @param user
+     * @throws ListingNotFoundException
+     */
     void delete(long id, UserDTO user) throws ListingNotFoundException;
 
+    /**
+     * This method is for making listing VIP by registered user
+     * if user has sufficient amount of money in balance.
+     * @param id
+     * @param user
+     * @return
+     * @throws ListingNotFoundException
+     * @throws TransactionIncorrectAmountException
+     * @throws TransactionInsufficientFundsException
+     */
     ListingGetDTO makeVip(long id, UserDTO user) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException;
 
+    /**
+     * This method is for making listing Paid by registered user
+     * @param id
+     * @param user
+     * @return
+     */
     ListingGetDTO makePaid(long id, UserDTO user);
 
+    /**
+     * This method is for setting new thumbnail to listing by registered user
+     * @param id
+     * @param user
+     * @param imageDTO
+     * @return
+     */
     ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO);
 
+    /**
+     * This method is for getting listings by registered user
+     * @param pageable
+     * @param user
+     * @return
+     */
     List<ListingListDTO> getUserListings(Pageable pageable, UserDTO user);
 
+    /**
+     * This method is for getting listing by id by registered user
+     * @param id
+     * @param user
+     * @return
+     * @throws ListingNotFoundException
+     */
     ListingGetDTO getUserListingById(long id, UserDTO user) throws ListingNotFoundException;
 
+    /**
+     * This method is for checking if listing exists by registered user
+     * @param id
+     * @param user
+     * @return
+     * @throws ListingNotFoundException
+     */
     Listing isListingExist(long id, UserDTO user) throws ListingNotFoundException;
 
 }

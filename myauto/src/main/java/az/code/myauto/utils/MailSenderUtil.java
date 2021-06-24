@@ -14,6 +14,12 @@ public class MailSenderUtil {
         this.javaMailSender = javaMailSender;
     }
 
+    /**
+     * This method is for sending emails to users.
+     * @param to
+     * @param subject
+     * @param content
+     */
     public void sendEmail(String to, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);

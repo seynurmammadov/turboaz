@@ -30,6 +30,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+/**
+ * This class is for creating connection between Firebase and our application.
+ */
 @Component
 public class FileUploadUtil {
     final
