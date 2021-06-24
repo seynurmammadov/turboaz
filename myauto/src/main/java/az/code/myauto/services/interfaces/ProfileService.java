@@ -6,6 +6,7 @@ import az.code.myauto.exceptions.TransactionIncorrectAmountException;
 import az.code.myauto.exceptions.TransactionInsufficientFundsException;
 import az.code.myauto.models.Listing;
 import az.code.myauto.models.dtos.*;
+import az.code.myauto.models.enums.ListingType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,7 @@ public interface ProfileService {
 
     void delete(long id, UserDTO user) throws ListingNotFoundException;
 
-    ListingGetDTO makeVip(long id, UserDTO user) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException;
-
-    ListingGetDTO makePaid(long id, UserDTO user);
+    ListingGetDTO updateStatus(long id, UserDTO user, ListingType listingType) throws ListingNotFoundException, TransactionIncorrectAmountException, TransactionInsufficientFundsException;
 
     ListingGetDTO setNewThumbnail(long id, UserDTO user, ImageDTO imageDTO);
 

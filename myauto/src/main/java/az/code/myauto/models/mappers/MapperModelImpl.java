@@ -21,8 +21,7 @@ public class MapperModelImpl implements MapperModel {
     @Override
     public <T, Y> T entityToDTO(Y data, Class<T> entityClass) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-        T dto = modelMapper.map(data, entityClass);
-        return dto;
+        return modelMapper.map(data, entityClass);
     }
 
     @Override

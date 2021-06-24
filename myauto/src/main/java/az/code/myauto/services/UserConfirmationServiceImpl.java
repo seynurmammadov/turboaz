@@ -20,7 +20,8 @@ public class UserConfirmationServiceImpl implements UserConfirmationService {
     MessageUtil messageUtil;
     final
     UserRepo userRepo;
-    public UserConfirmationServiceImpl(UserConfirmationTokenRepo userConfirmationTokenRepo, MessageUtil messageUtil, UserRepo userRepo) {
+    public UserConfirmationServiceImpl(UserConfirmationTokenRepo userConfirmationTokenRepo,
+                                       MessageUtil messageUtil, UserRepo userRepo) {
         this.userConfirmationTokenRepo = userConfirmationTokenRepo;
         this.messageUtil = messageUtil;
         this.userRepo = userRepo;
@@ -29,7 +30,10 @@ public class UserConfirmationServiceImpl implements UserConfirmationService {
     @Override
     public void createVerifyToken(User user){
         String token = userConfirmationTokenRepo
-                            .save(UserConfirmationToken.builder().user(user).confirmationToken(UUID.randomUUID().toString()).build())
+                            .save(UserConfirmationToken.builder()
+                                    .user(user)
+                                    .confirmationToken(UUID.randomUUID().toString())
+                                    .build())
                             .getConfirmationToken();
         messageUtil.regVerifyNotification(user,token);
     }
