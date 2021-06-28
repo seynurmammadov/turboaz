@@ -25,7 +25,7 @@ public class Auto {
     private long id;
     @ManyToOne
     @JoinColumn(name = "makeId")
-    private Make make = new Make();
+    private Make make;
     private int year;
     private int price;
     private int mileage;

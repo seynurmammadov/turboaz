@@ -81,8 +81,8 @@ public class SearchController {
                                                        Integer pageNo) {
         logger.info("Getting all listings (detailed search) by unregistered user");
         return new ResponseEntity<>(searchService.search(
-                sameAuto("make", make)
-                        .and(sameAuto("model", model))
+                sameAutoParam("make", make)
+                        .and(sameAutoParam("model", model))
                         .and(sameCity(location))
                         .and(between("year", minYear, maxYear))
                         .and(between("price", minPrice, maxPrice))

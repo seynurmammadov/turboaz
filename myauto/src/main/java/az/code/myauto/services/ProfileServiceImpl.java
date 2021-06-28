@@ -53,25 +53,31 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException, TransactionIncorrectAmountException, ListingNotFoundException, TransactionInsufficientFundsException {
+    public ListingGetDTO create(ListingCreationDTO listing, UserDTO user) throws FreeListingAlreadyPostedException,
+                                                                                TransactionIncorrectAmountException,
+                                                                                ListingNotFoundException,
+                                                                                TransactionInsufficientFundsException {
         LocalDateTime minusMonths = LocalDateTime.now().minusMonths(1);
         Listing newListing = new Listing();
         if (listingRepo.countOfDefaultUserListings(user.getUsername(), minusMonths, ListingType.DEFAULT) == 1
                 && listing.getType().equals(ListingType.DEFAULT.name())) {
             throw new FreeListingAlreadyPostedException();
         } else if (listing.getType().equals(ListingType.STANDARD.name())) {
-            newListing = listingRepo.save(mapper.createListDTOToList(listing, newListing, user));
+            newListing = listingRepo.saveAndFlush(mapper.createListDTOToList(listing, newListing, user));
             updateStatus(newListing.getId(),user,ListingType.STANDARD);
         } else {
-            newListing = listingRepo.save(mapper.createListDTOToList(listing, newListing, user));
+            newListing = listingRepo.saveAndFlush(mapper.createListDTOToList(listing, newListing, user));
         }
+        listingRepo.refresh(newListing);
         return mapper.entityToDTO(newListing, ListingGetDTO.class);
     }
 
     @Override
     public ListingGetDTO update(long id, ListingCreationDTO listing, UserDTO user) throws ListingNotFoundException {
         Listing dbListing = isListingExist(id, user);
-        return mapper.entityToDTO(listingRepo.save(mapper.updateListDTOToList(listing, dbListing))
+        dbListing =listingRepo.saveAndFlush(mapper.updateListDTOToList(listing, dbListing));
+        listingRepo.refresh(dbListing);
+        return mapper.entityToDTO(dbListing
                 , ListingGetDTO.class);
     }
 

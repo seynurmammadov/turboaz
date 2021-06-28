@@ -41,7 +41,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             throw new SubscriptionLimitException();
         }
         Subscription newSub = new Subscription();
-        newSub = subscriptionRepo.save(mapperModel.createSubDTOToSub(subscription, newSub, user));
+        newSub = subscriptionRepo.saveAndFlush(mapperModel.createSubDTOToSub(subscription, newSub, user));
+        subscriptionRepo.refresh(newSub);
         return mapperModel.entityToDTO(newSub, SubscriptionListDTO.class);
     }
 
@@ -54,7 +55,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public SubscriptionListDTO updateSubscriptionById(long id, SubscriptionDTO subscription, UserDTO user) throws SubscriptionNotFoundException {
         Subscription dbSub = subsCheck(id, user);
         Subscription updatedSub = mapperModel.updateSubDTOToSub(subscription, dbSub);
-        return mapperModel.entityToDTO(subscriptionRepo.save(updatedSub), SubscriptionListDTO.class);
+        dbSub =subscriptionRepo.saveAndFlush(updatedSub);
+        subscriptionRepo.refresh(dbSub);
+        return mapperModel.entityToDTO(dbSub, SubscriptionListDTO.class);
     }
 
     @Override
