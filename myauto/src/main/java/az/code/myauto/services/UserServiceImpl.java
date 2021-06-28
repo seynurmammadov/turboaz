@@ -2,7 +2,6 @@ package az.code.myauto.services;
 
 import az.code.myauto.controllers.SubscriptionController;
 import az.code.myauto.models.User;
-import az.code.myauto.models.dtos.UserDTO;
 import az.code.myauto.models.dtos.UserRegistrationDTO;
 import az.code.myauto.models.mappers.MapperModel;
 import az.code.myauto.repositories.UserRepo;
@@ -24,7 +23,6 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.keycloak.authorization.client.AuthzClient;
 import org.keycloak.authorization.client.Configuration;
 import org.springframework.stereotype.Service;
 
@@ -136,9 +134,7 @@ public class UserServiceImpl implements UserService {
 
         Configuration configuration = new Configuration(authServerUrl, realm, clientId, clientCredentials, null);
         AuthzClient authzClient = AuthzClient.create(configuration);
-
-        AccessTokenResponse response = authzClient.obtainAccessToken(userDTO.getEmail(), userDTO.getPassword());
-        return response;
+        return authzClient.obtainAccessToken(userDTO.getEmail(), userDTO.getPassword());
     }
 
 }

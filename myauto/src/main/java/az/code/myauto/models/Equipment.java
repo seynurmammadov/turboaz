@@ -3,6 +3,7 @@ package az.code.myauto.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity

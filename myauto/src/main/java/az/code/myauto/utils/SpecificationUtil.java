@@ -10,17 +10,18 @@ import org.springframework.data.jpa.domain.Specification;
  */
 public class SpecificationUtil {
 
-    public static Specification<Listing> sameAuto(String name,String data) {
-        return (root, query, criteriaBuilder) -> {
-            if (data != null)
-                return criteriaBuilder.equal(root.get("auto").get(name).get("name"), data);
-            return criteriaBuilder.conjunction();
-        };
-    }
     public static Specification<Listing> sameOption(String name,Boolean option) {
         return (root, query, criteriaBuilder) -> {
             if (option != null)
                 return criteriaBuilder.equal(root.get(name), option);
+            return criteriaBuilder.conjunction();
+        };
+    }
+
+    public static Specification<Listing> sameAutoParam(String name, String data) {
+        return (root, query, criteriaBuilder) -> {
+            if (data != null)
+                return criteriaBuilder.equal(root.get("auto").get(name).get("name"), data);
             return criteriaBuilder.conjunction();
         };
     }
@@ -41,6 +42,7 @@ public class SpecificationUtil {
             return criteriaBuilder.conjunction();
         };
     }
+
     public static Specification<Listing> sameBodyType(String bodyType) {
         return (root, query, criteriaBuilder) -> {
             if (bodyType != null)

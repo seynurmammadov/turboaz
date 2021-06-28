@@ -31,6 +31,14 @@ public class ImageController {
         this.imageService = imageService;
     }
 
+    @ExceptionHandler(ListingNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ListingNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(ThumbnailNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ThumbnailNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
     @PutMapping("profile/listings/{id}/image")
     public ResponseEntity<ImageDTO> addImageToListing(@PathVariable long id,
                                                       @RequestBody ImageDTO imageDTO,
@@ -41,7 +49,7 @@ public class ImageController {
 
     @PutMapping("add/image")
     public ResponseEntity<String> addImageToFirebase(@RequestParam("file") MultipartFile multipartFile,
-                                                     @RequestAttribute UserDTO user) throws ListingNotFoundException {
+                                                     @RequestAttribute UserDTO user){
         logger.info("Uploading image to Firebase");
         return new ResponseEntity<>(imageService.uploadImageToFireBase(user, multipartFile), HttpStatus.OK);
     }
@@ -49,8 +57,7 @@ public class ImageController {
     @DeleteMapping("profile/listings/{listingId}/image/{imageId}")
     public ResponseEntity deleteImageFromListing(@PathVariable Long listingId,
                                                  @PathVariable Long imageId,
-                                                 @RequestAttribute UserDTO user) throws ListingNotFoundException,
-                                                                                        ThumbnailNotFoundException {
+                                                 @RequestAttribute UserDTO user) throws ThumbnailNotFoundException {
         logger.info("Deleting image from listing");
         imageService.deleteImage(user, listingId, imageId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -64,8 +71,7 @@ public class ImageController {
     }
 
     @GetMapping("listings/{id}/images")
-    public ResponseEntity<List<ImageDTO>> getImagesByListingId(@PathVariable long id) throws ListingNotFoundException,
-                                                                                             ThumbnailNotFoundException {
+    public ResponseEntity<List<ImageDTO>> getImagesByListingId(@PathVariable long id) throws  ThumbnailNotFoundException {
         logger.info("Getting images by listing id");
         return new ResponseEntity<>(imageService.getImagesByListingId(id), HttpStatus.OK);
     }
