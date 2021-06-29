@@ -3,12 +3,14 @@ package az.code.myauto;
 import az.code.myauto.models.*;
 import az.code.myauto.models.dtos.ListingCreationDTO;
 import az.code.myauto.models.mappers.MapperModelImpl;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
@@ -56,8 +58,15 @@ public class MockitoMapperModelTest {
         listing1.setAuto(new Auto());
         listing1.setImages(Arrays.asList(new Image()));
 
-        assertEquals(mapperModel.updateListDTOToList(listingCreationDTO, listing1), entity);
+//        assertEquals(mapperModel.updateListDTOToList(listingCreationDTO, listing1), entity);
+        Assert.assertEquals(mapperModel.updateListDTOToList(listingCreationDTO, listing1), entity);
 
 
+    }
+    @Test
+    public void entityToDTO(){
+         Listing listing = Mockito.mock(Listing.class);
+        ListingCreationDTO listingCreationDTO2 = mapperModel.entityToDTO(listing, ListingCreationDTO.class);
+        assertEquals(listingCreationDTO2.getClass(), ListingCreationDTO.class);
     }
 }
