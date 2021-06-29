@@ -16,6 +16,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 @Table(name = "listings")
 public class Listing {
     @Id
@@ -24,7 +26,7 @@ public class Listing {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "autoId")
-    private Auto auto = new Auto();
+    private Auto auto;
 
     private boolean auto_pay;
     private Boolean creditOption;

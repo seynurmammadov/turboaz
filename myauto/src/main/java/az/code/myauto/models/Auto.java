@@ -40,7 +40,7 @@ public class Auto {
     @JoinTable(name = "auto_equipment",
             joinColumns = @JoinColumn(name = "autoId"),
             inverseJoinColumns = @JoinColumn(name = "equipmentId"))
-    List<Equipment> equipments = new ArrayList<>();
+    List<Equipment> equipments;
 
     @ManyToOne
     @JoinColumn(name = "model_id", referencedColumnName = "id")

@@ -45,6 +45,9 @@ public class MapperModelImpl implements MapperModel {
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
         entity.setUser(entityToDTO(user,User.class));
+        ///***
+//        entity.setAuto(null);
+        ///***
         entity.setImages(new ArrayList<>());
         entity.getImages().add(Image.builder().name(dto.getThumbnailUrl()).listing(entity).build());
         return entity;
