@@ -62,7 +62,6 @@ public class MapperModelImpl implements MapperModel {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.map(dto, sub);
-        sub.setCreatedAt(LocalDateTime.now());
         return sub;
     }
 
@@ -71,8 +70,14 @@ public class MapperModelImpl implements MapperModel {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.map(dto, entity);
+        entity.getMake().setName(null);
+        entity.getModel().setName(null);
+        entity.getModel().setMake(null);
+        entity.getCity().setName(null);
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUser(entityToDTO(user,User.class));
+        entity.getUser().setName(null);
         return entity;
     }
+
 }

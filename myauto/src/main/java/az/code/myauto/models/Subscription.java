@@ -19,6 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString
+@EqualsAndHashCode
 @Builder(toBuilder = true)
 @Table(name = "subscriptions")
 public class Subscription {

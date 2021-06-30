@@ -6,6 +6,8 @@ import lombok.*;
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString
+@EqualsAndHashCode
 @Builder(toBuilder = true)
 public class UserDTO {
     private String fullName;
