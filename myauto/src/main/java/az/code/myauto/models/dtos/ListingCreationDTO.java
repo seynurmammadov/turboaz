@@ -2,16 +2,15 @@ package az.code.myauto.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder(toBuilder = true)
 @ToString
 public class ListingCreationDTO {
