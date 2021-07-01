@@ -1,12 +1,12 @@
 package az.code.myauto.models.enums;
 
 public enum BodyType {
-    SEDAN("Sedan"),
+    SEDAN("SEDAN"),
     SUV("SUV"),
-    HATCHBACK("Hatchback"),
-    PICKUP("Pickup"),
-    CABRIOLET("Cabriolet"),
-    COUPE("Coupe");
+    HATCHBACK("HATCHBACK"),
+    PICKUP("PICKUP"),
+    CABRIOLET("CABRIOLET"),
+    COUPE("COUPE");
     private final String name;
     BodyType(String name) {
         this.name=name;

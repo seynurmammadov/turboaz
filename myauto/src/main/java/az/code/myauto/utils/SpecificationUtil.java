@@ -54,7 +54,7 @@ public class SpecificationUtil {
     public static Specification<Listing> sameFuelType(String fuelType) {
         return (root, query, criteriaBuilder) -> {
             if (fuelType != null)
-                return criteriaBuilder.equal(root.get("auto").get("fuelType"), FuelType.valueOf(fuelType));
+                return criteriaBuilder.equal(root.get("auto").get("fueltype"), FuelType.valueOf(fuelType));
             return criteriaBuilder.conjunction();
         };
     }

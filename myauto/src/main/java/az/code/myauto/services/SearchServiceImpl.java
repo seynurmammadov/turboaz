@@ -13,6 +13,7 @@ import az.code.myauto.repositories.CityRepo;
 import az.code.myauto.repositories.MakeRepo;
 import az.code.myauto.repositories.ModelRepo;
 import az.code.myauto.services.interfaces.SearchService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,7 +35,7 @@ public class SearchServiceImpl implements SearchService {
     ModelRepo modelRepo;
     final
     ListingRepo listingRepo;
-    final
+    @Autowired
     MapperModel mapper;
 
     public SearchServiceImpl(CityRepo cityRepo, MakeRepo makeRepo, ModelRepo modelRepo, ListingRepo listingRepo, MapperModel mapper) {

@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder(toBuilder = true)
+@ToString
 public class ListingListDTO {
     Long id;
     String makeName;

@@ -36,7 +36,7 @@ public class Listing {
     private String description;
     ListingType type;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listing")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listing",fetch = FetchType.EAGER)
     private List<Image> images = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -22,7 +22,7 @@ public class Make {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "make")
+    @OneToMany( mappedBy = "make")
     private List<Model> models = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "make")

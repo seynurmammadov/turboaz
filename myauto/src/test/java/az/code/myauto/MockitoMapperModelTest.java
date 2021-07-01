@@ -160,7 +160,6 @@ public class MockitoMapperModelTest {
         subscriptionDTO.setEquipments(new ArrayList<>(Arrays.asList(carSpecDTO1, carSpecDTO2)));
         subscriptionDTO.setColor("SILVER");
         subscriptionDTO.setCreatedAt(LocalDateTime.now());
-
         subscriptionEntity.setName("Test123");
         subscriptionEntity.setMake(new Make());
         subscriptionEntity.getMake().setId(1l);
@@ -183,11 +182,8 @@ public class MockitoMapperModelTest {
         Subscription subscription2 = new Subscription();
 
         Subscription subscription3 = mapperModel.createSubDTOToSub(subscriptionDTO, subscription2, userDTO);
-
         subscription3.getUser().setCreatedAt(subscriptionEntity.getUser().getCreatedAt());
         subscription3.setCreatedAt(subscriptionEntity.getCreatedAt());
-
         assertEquals(subscription3, subscriptionEntity);
-
     }
 }
